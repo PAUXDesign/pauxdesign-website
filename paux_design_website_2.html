@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paux Design — Product Designer for Startups</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Manrope:wght@300;400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Exact colors from paulaalonso.framer.website */
+  --dark:      #261E48;
+  --mid:       #655F8C;
+  --light:     #9B98B8;
+  --bg:        #ffffff;
+  --bg-soft:   #FAFAFC;
+  --bg-tint:   #F5F6FF;
+  --bg-accent: #E2E5FD;
+  --border:    rgba(38, 30, 72, 0.08);
+  --border2:   rgba(38, 30, 72, 0.14);
+  --green:     #58DB69;
+  --accent:    #7059DC;
+
+  /* Gradient from framer site */
+  --grad-hero: radial-gradient(225% 69% at 54.2% 100%, rgb(203, 206, 250) 0%, rgb(245, 246, 255) 24.6%);
+  --grad-soft: radial-gradient(50% 42% at 50% 58.6%, rgb(203, 206, 250) 0%, rgba(245, 246, 255, 0.75) 100%);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ─── SCROLL ANIMATIONS ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.65s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-d1 { transition-delay: 0.1s; }
+.reveal-d2 { transition-delay: 0.2s; }
+.reveal-d3 { transition-delay: 0.3s; }
+.reveal-d4 { transition-delay: 0.4s; }
+.reveal-d5 { transition-delay: 0.5s; }
+
+/* Fade in only (no translateY) */
+.reveal-fade {
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+.reveal-fade.visible { opacity: 1; }
+
+/* Scale in for cards */
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.97) translateY(16px);
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+.reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
+
+@keyframes pulseGreen { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.85); } }
+@keyframes marquee   { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+@keyframes floatUp   { 0%,100% { transform:translateY(0px); } 50% { transform:translateY(-7px); } }
+@keyframes fadeSlideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+/* PAGE SYSTEM */
+.page-view { display: none; }
+.page-view.active { display: block; }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 52px;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-logo {
+  font-family: 'Merriweather', serif;
+  font-size: 18px; font-weight: 700;
+  color: var(--dark); cursor: pointer; letter-spacing: -0.3px;
+}
+.nav-logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links a {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 13px; font-weight: 500;
+  color: var(--mid); transition: color 0.2s; cursor: pointer;
+}
+.nav-links a:hover { color: var(--dark); }
+.nav-available {
+  display: flex; align-items: center; gap: 7px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 12px; font-weight: 600;
+  background: rgba(88,219,105,0.1);
+  color: #1ea84d;
+  padding: 6px 14px; border-radius: 999px;
+  border: 1px solid rgba(88,219,105,0.25);
+}
+.nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulseGreen 2s infinite; }
+
+/* ─── SHARED ─── */
+section { padding: 96px 52px; }
+.container { max-width: 1080px; margin: 0 auto; }
+
+.label {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 10px;
+}
+.label::before { content: ''; width: 28px; height: 1.5px; background: var(--accent); border-radius: 2px; }
+
+h2 {
+  font-family: 'Merriweather', serif;
+  font-size: clamp(26px, 3vw, 38px);
+  font-weight: 700; color: var(--dark);
+  letter-spacing: -0.5px; line-height: 1.2;
+  margin-bottom: 14px;
+}
+h2 em { font-style: italic; color: var(--mid); }
+
+.sub {
+  font-family: 'Manrope', sans-serif;
+  font-size: 15.5px; color: var(--mid);
+  line-height: 1.75; max-width: 500px;
+}
+
+/* ─── BUTTONS — exact Framer hero style ─── */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px; font-weight: 400;
+  padding: 14px 48px; border-radius: 18px;
+  transition: transform 0.22s cubic-bezier(0.25,0.46,0.45,0.94),
+              box-shadow 0.22s ease, opacity 0.2s;
+  cursor: pointer; border: none; letter-spacing: 0;
+  white-space: nowrap;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn-dark {
+  background: var(--dark); color: white;
+  box-shadow: rgba(84,53,222,0.12) 0px 2px 4px,
+              rgba(84,53,222,0.1) 0px 8px 20px;
+}
+.btn-dark:hover {
+  box-shadow: rgba(84,53,222,0.2) 0px 4px 8px,
+              rgba(84,53,222,0.16) 0px 16px 32px;
+}
+.btn-outline {
+  background: transparent; color: var(--dark);
+  border: 1.5px solid var(--border2);
+}
+.btn-outline:hover { background: var(--bg-tint); }
+.btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+
+/* ─── ABOUT SECTION ─── */
+.about { background: var(--bg); }
+.about-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+/* Photo side */
+.about-photo-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+}
+/* Circular photo — exact Framer style: 50% radius, layered shadow */
+.about-photo {
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: rgba(0,0,0,0.18) 0px 8px 32px 0px;
+  position: relative; z-index: 2;
+  flex-shrink: 0;
+}
+.about-photo-placeholder {
+  width: 100%; height: 100%;
+  background: var(--grad-hero);
+  display: flex; align-items: center; justify-content: center;
+}
+.about-photo-initials {
+  font-family: 'Merriweather', serif;
+  font-size: 52px; font-weight: 700;
+  color: var(--dark); opacity: 0.5;
+  letter-spacing: -2px;
+}
+
+/* Floating cards — exact bg-accent color + multilayer lavender shadow */
+.about-card {
+  position: absolute;
+  background: var(--bg-accent);
+  border-radius: 20px;
+  padding: 20px 24px;
+  box-shadow:
+    rgba(81,97,219,0.08) 0px 0.6px 1.57px -0.5px,
+    rgba(81,97,219,0.10) 0px 2.29px 5.95px -1px,
+    rgba(81,97,219,0.18) 0px 10px 26px -1.5px;
+  /* stagger animation */
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.25,0.46,0.45,0.94),
+              transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+  z-index: 3;
+  min-width: 160px;
+}
+.about-card.visible { opacity: 1; transform: translateY(0); }
+.about-card:nth-child(2) { transition-delay: 0.15s; }
+.about-card:nth-child(3) { transition-delay: 0.30s; }
+.about-card:nth-child(4) { transition-delay: 0.45s; }
+
+/* Card positions around the photo */
+.about-card-1 { top: 20px; right: -10px; }
+.about-card-2 { bottom: 60px; right: -20px; }
+.about-card-3 { bottom: 10px; left: 0px; }
+
+.about-card-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: white; display: flex; align-items: center;
+  justify-content: center; margin-bottom: 10px;
+}
+.about-card-icon svg { width: 16px; height: 16px; stroke: var(--dark); fill: none; stroke-width: 1.8; stroke-linecap: round; }
+.about-card-title {
+  font-family: 'Merriweather', serif;
+  font-size: 12px; font-weight: 600;
+  color: var(--dark); margin-bottom: 3px; line-height: 1.3;
+}
+.about-card-sub {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10.5px; color: var(--mid);
+  font-weight: 500; line-height: 1.4;
+}
+
+/* Text side */
+.about-text { }
+.about-body {
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px; color: var(--mid);
+  line-height: 1.8; margin-bottom: 16px;
+}
+.about-body strong { color: var(--dark); font-weight: 600; }
+.about-tools {
+  display: flex; flex-wrap: wrap; gap: 7px;
+  margin-top: 28px; margin-bottom: 32px;
+}
+.about-tool {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11px; font-weight: 600;
+  color: var(--mid); background: var(--bg-soft);
+  border: 1px solid var(--border2);
+  padding: 5px 12px; border-radius: 999px;
+}
+
+@media (max-width: 900px) {
+  .about-inner { grid-template-columns: 1fr; gap: 48px; }
+  .about-photo-wrap { min-height: 320px; }
+  .about-card-1 { top: 0; right: 0; }
+  .about-card-2 { bottom: 20px; right: 0; }
+  .about-card-3 { bottom: -20px; left: 10px; }
+}
+
+/* ─── HERO ─── */
+.hero {
+  padding-top: 140px; padding-bottom: 80px;
+  background: var(--grad-hero);
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, white);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11.5px; font-weight: 600;
+  color: #1ea84d; background: rgba(88,219,105,0.1);
+  border: 1px solid rgba(88,219,105,0.25);
+  padding: 6px 14px; border-radius: 999px;
+  margin-bottom: 28px;
+}
+.hero-badge .nav-dot { animation: pulseGreen 2s infinite; }
+
+h1 {
+  font-family: 'Merriweather', serif;
+  font-size: clamp(34px, 4.5vw, 58px);
+  font-weight: 700; color: var(--dark);
+  letter-spacing: -1.5px; line-height: 1.1;
+  margin-bottom: 20px; max-width: 760px;
+}
+h1 em { font-style: italic; color: var(--mid); font-weight: 300; }
+
+.hero-sub {
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px; color: var(--mid);
+  line-height: 1.8; max-width: 540px;
+  margin-bottom: 36px;
+}
+.hero-actions { display: flex; gap: 12px; align-items: center; margin-bottom: 64px; }
+.hero-stats {
+  display: flex; gap: 0;
+  border-top: 1px solid var(--border2); padding-top: 36px;
+}
+.stat { padding-right: 40px; margin-right: 40px; border-right: 1px solid var(--border); }
+.stat:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Merriweather', serif;
+  font-size: 26px; font-weight: 700;
+  color: var(--dark); letter-spacing: -0.5px; line-height: 1;
+}
+.stat-num em { font-style: normal; color: var(--accent); }
+.stat-label {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11.5px; color: var(--light);
+  font-weight: 500; margin-top: 5px;
+}
+
+/* ─── MARQUEE ─── */
+.marquee-wrap {
+  padding: 0; overflow: hidden;
+  background: var(--dark);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.marquee-track { display: flex; animation: marquee 28s linear infinite; white-space: nowrap; }
+.marquee-item {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 15px 32px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  border-right: 1px solid rgba(255,255,255,0.07);
+  flex-shrink: 0;
+}
+.mdot { width: 3px; height: 3px; border-radius: 50%; background: rgba(112,89,220,0.7); flex-shrink: 0; }
+
+/* ─── PAIN POINTS ─── */
+.pain { background: var(--bg-soft); }
+.pain-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-top: 52px; }
+.pain-card { background: var(--bg-soft); padding: 40px 36px; transition: background 0.25s; }
+.pain-card:hover { background: var(--bg-tint); }
+.pain-icon {
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--bg-accent); display: flex;
+  align-items: center; justify-content: center; margin-bottom: 18px;
+}
+.pain-icon svg { width: 18px; height: 18px; stroke: var(--dark); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.pain-title {
+  font-family: 'Merriweather', serif;
+  font-size: 15px; font-weight: 600;
+  color: var(--dark); margin-bottom: 10px; line-height: 1.4;
+}
+.pain-desc { font-size: 13.5px; color: var(--mid); line-height: 1.72; }
+
+/* ─── WHY ─── */
+.why { background: var(--bg); }
+.why-grid { display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: start; margin-top: 52px; }
+.why-item { display: flex; gap: 16px; align-items: flex-start; padding: 20px 0; border-bottom: 1px solid var(--border); }
+.why-item:first-child { padding-top: 0; }
+.why-check {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--bg-accent); border: 1px solid var(--bg-accent);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.why-check svg { width: 10px; height: 10px; stroke: var(--dark); stroke-width: 2.5; fill: none; }
+.why-text { font-size: 14px; color: var(--mid); line-height: 1.7; }
+.why-text strong { color: var(--dark); font-weight: 600; }
+
+.why-panel {
+  background: var(--bg-tint); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 36px; position: sticky; top: 88px;
+}
+.why-panel-title {
+  font-family: 'Merriweather', serif;
+  font-size: 19px; font-weight: 700;
+  color: var(--dark); margin-bottom: 10px; line-height: 1.3;
+}
+.why-panel-sub { font-size: 13.5px; color: var(--mid); line-height: 1.7; margin-bottom: 24px; }
+.why-panel-quote {
+  font-size: 13px; color: var(--dark); font-style: italic;
+  line-height: 1.75; padding: 18px 20px;
+  background: white; border-left: 2px solid var(--bg-accent);
+  border-radius: 0 10px 10px 0; margin-bottom: 28px;
+}
+
+/* ─── SERVICES ─── */
+.services { background: var(--bg-soft); }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 52px; }
+.svc {
+  background: white; border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px 28px;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.svc:hover {
+  border-color: var(--bg-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(38,30,72,0.08);
+}
+.svc-num {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 0.18em; color: var(--light);
+  text-transform: uppercase; margin-bottom: 18px;
+}
+.svc-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--bg-accent); display: flex;
+  align-items: center; justify-content: center; margin-bottom: 18px;
+}
+.svc-icon svg { width: 20px; height: 20px; stroke: var(--dark); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.svc-title {
+  font-family: 'Merriweather', serif;
+  font-size: 16px; font-weight: 600;
+  color: var(--dark); margin-bottom: 10px; line-height: 1.3;
+}
+.svc-desc { font-size: 13px; color: var(--mid); line-height: 1.72; margin-bottom: 20px; }
+.svc-list { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+.svc-list li {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 12.5px; color: var(--light);
+  padding-left: 14px; position: relative; font-weight: 500;
+}
+.svc-list li::before { content: ''; position: absolute; left: 0; top: 8px; width: 5px; height: 1px; background: var(--bg-accent); }
+
+/* ─── PACKAGES ─── */
+.packages { background: var(--bg); }
+.pkg-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 52px; }
+.pkg {
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px 28px;
+  display: flex; flex-direction: column; position: relative;
+  transition: border-color 0.25s;
+}
+.pkg.featured {
+  background: var(--dark); border-color: var(--dark);
+}
+.pkg.featured * { --dark: #fff; --mid: rgba(255,255,255,0.6); --light: rgba(255,255,255,0.4); --border: rgba(255,255,255,0.12); }
+.pkg-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.12em;
+  text-transform: uppercase; background: var(--accent);
+  color: white; padding: 4px 14px; border-radius: 999px; white-space: nowrap;
+}
+.pkg-tier {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  color: var(--light); text-transform: uppercase; margin-bottom: 10px;
+}
+.pkg.featured .pkg-tier { color: rgba(255,255,255,0.45); }
+.pkg-title {
+  font-family: 'Merriweather', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--dark); margin-bottom: 8px; letter-spacing: -0.3px;
+}
+.pkg.featured .pkg-title { color: white; }
+.pkg-for { font-size: 13px; color: var(--mid); margin-bottom: 24px; line-height: 1.55; }
+.pkg.featured .pkg-for { color: rgba(255,255,255,0.55); }
+.pkg-divider { height: 1px; background: var(--border); margin-bottom: 20px; }
+.pkg.featured .pkg-divider { background: rgba(255,255,255,0.12); }
+.pkg-label {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--light); margin-bottom: 14px;
+}
+.pkg.featured .pkg-label { color: rgba(255,255,255,0.4); }
+.pkg-items { list-style: none; display: flex; flex-direction: column; gap: 9px; flex: 1; margin-bottom: 28px; }
+.pkg-items li {
+  font-size: 13.5px; color: var(--mid);
+  padding-left: 18px; position: relative; line-height: 1.5;
+}
+.pkg.featured .pkg-items li { color: rgba(255,255,255,0.7); }
+.pkg-items li::before {
+  content: ''; position: absolute; left: 0; top: 8px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--bg-accent); border: 1px solid var(--border2);
+}
+.pkg.featured .pkg-items li::before { background: rgba(255,255,255,0.2); border-color: rgba(255,255,255,0.3); }
+
+/* ─── PROCESS ─── */
+.process { background: var(--bg-soft); }
+.ps { display: grid; grid-template-columns: 72px 1fr; gap: 0; border-top: 1px solid var(--border); padding: 30px 0; transition: padding 0.2s; }
+.ps:last-child { border-bottom: 1px solid var(--border); }
+.ps:hover { padding-left: 8px; }
+.ps-num {
+  font-family: 'Merriweather', serif;
+  font-size: 13px; font-weight: 300;
+  color: var(--light); padding-top: 4px; font-style: italic;
+}
+.ps-title {
+  font-family: 'Merriweather', serif;
+  font-size: 16px; font-weight: 600;
+  color: var(--dark); margin-bottom: 8px;
+}
+.ps-desc { font-size: 13.5px; color: var(--mid); line-height: 1.72; max-width: 600px; }
+.ps-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+.ps-tag {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10.5px; font-weight: 600;
+  color: var(--mid); background: white;
+  border: 1px solid var(--border); padding: 3px 9px; border-radius: 999px;
+}
+
+/* ─── WORK ─── */
+.work { background: var(--bg); }
+.work-featured { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 52px; margin-bottom: 16px; }
+.work-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.wcard {
+  background: var(--bg-soft); border: 1px solid var(--border);
+  border-radius: 20px; overflow: hidden;
+  display: flex; flex-direction: column; cursor: pointer;
+  transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
+}
+.wcard:hover {
+  border-color: var(--bg-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(38,30,72,0.1);
+}
+.wthumb {
+  height: 160px; display: flex; align-items: center;
+  justify-content: center; border-bottom: 1px solid var(--border);
+}
+.wthumb.t1 { background: radial-gradient(50% 42% at 50% 60%, rgb(203,206,250) 0%, rgb(245,246,255) 100%); }
+.wthumb.t2 { background: radial-gradient(50% 42% at 50% 60%, rgb(179,213,255) 0%, rgb(240,246,255) 100%); }
+.wthumb.t3 { background: radial-gradient(50% 42% at 50% 60%, rgb(179,240,200) 0%, rgb(240,255,245) 100%); }
+.wthumb.t4 { background: var(--bg-tint); }
+.wthumb-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  animation: floatUp 4s ease-in-out infinite;
+}
+.wthumb-icon svg { width: 26px; height: 26px; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.wthumb.t1 .wthumb-icon { background: var(--bg-accent); } .wthumb.t1 .wthumb-icon svg { stroke: var(--dark); }
+.wthumb.t2 .wthumb-icon { background: #C8DFFF; } .wthumb.t2 .wthumb-icon svg { stroke: #1a5ca0; }
+.wthumb.t3 .wthumb-icon { background: #C0F0D0; } .wthumb.t3 .wthumb-icon svg { stroke: #156b35; }
+.wthumb.t4 .wthumb-icon { background: var(--bg-accent); } .wthumb.t4 .wthumb-icon svg { stroke: var(--mid); }
+.wcbody { padding: 24px 28px 28px; display: flex; flex-direction: column; flex: 1; }
+.wc-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.wc-tag {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.09em;
+  text-transform: uppercase; padding: 3px 9px; border-radius: 999px;
+  background: white; color: var(--mid); border: 1px solid var(--border);
+}
+.wc-tag.ac { color: var(--accent); background: var(--bg-tint); border-color: var(--bg-accent); }
+.wc-tag.bl { color: #1a5ca0; background: #EEF5FF; border-color: #C8DFFF; }
+.wc-tag.gr { color: #156b35; background: #EEFAF2; border-color: #C0F0D0; }
+.wc-title {
+  font-family: 'Merriweather', serif;
+  font-size: 16px; font-weight: 600;
+  color: var(--dark); margin-bottom: 8px; line-height: 1.35;
+}
+.wc-desc { font-size: 13px; color: var(--mid); line-height: 1.72; margin-bottom: 18px; flex: 1; }
+.wc-metrics { display: flex; gap: 20px; padding: 14px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 18px; }
+.wc-mn {
+  font-family: 'Merriweather', serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--dark); letter-spacing: -0.5px; line-height: 1;
+}
+.wc-ml {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11px; color: var(--light); font-weight: 500; margin-top: 3px; line-height: 1.3;
+}
+.wc-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 12.5px; font-weight: 600; color: var(--accent);
+  transition: gap 0.2s;
+}
+.wc-link svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.wcard:hover .wc-link { gap: 10px; }
+
+/* ─── FAQ ─── */
+.faq { background: var(--bg-soft); }
+.faq-list { margin-top: 52px; display: flex; flex-direction: column; max-width: 760px; }
+.faq-item { border-top: 1px solid var(--border); }
+.faq-item:last-child { border-bottom: 1px solid var(--border); }
+.faq-q { display: flex; justify-content: space-between; align-items: center; padding: 22px 0; cursor: pointer; gap: 20px; }
+.faq-q-text {
+  font-family: 'Merriweather', serif;
+  font-size: 14.5px; font-weight: 600; color: var(--dark); line-height: 1.4;
+}
+.faq-icon {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: white; border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+.faq-icon svg { width: 10px; height: 10px; stroke: var(--mid); fill: none; stroke-width: 2.5; stroke-linecap: round; transition: transform 0.3s; }
+.faq-item.open .faq-icon { background: var(--bg-accent); border-color: var(--bg-accent); }
+.faq-item.open .faq-icon svg { transform: rotate(45deg); stroke: var(--dark); }
+.faq-a { font-size: 14px; color: var(--mid); line-height: 1.78; max-height: 0; overflow: hidden; transition: max-height 0.38s ease, padding 0.3s; }
+.faq-item.open .faq-a { max-height: 300px; padding-bottom: 22px; }
+
+/* ─── CTA ─── */
+.cta-section { background: var(--bg); }
+.cta-box {
+  background: var(--grad-soft);
+  border: 1px solid var(--border2); border-radius: 24px;
+  padding: 64px 56px; text-align: center; max-width: 720px; margin: 0 auto;
+}
+.cta-box h2 { margin-bottom: 14px; }
+.cta-box p { font-size: 15.5px; color: var(--mid); max-width: 420px; margin: 0 auto 40px; line-height: 1.75; }
+.cta-checks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 36px; text-align: left; }
+.cta-check { display: flex; gap: 10px; align-items: flex-start; }
+.cta-check-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: white; border: 1px solid var(--border2);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px;
+}
+.cta-check-dot svg { width: 9px; height: 9px; stroke: var(--dark); stroke-width: 2.5; fill: none; }
+.cta-check-text { font-size: 13.5px; color: var(--mid); line-height: 1.5; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--dark); padding: 44px 52px;
+  display: flex; justify-content: space-between; align-items: center; gap: 24px;
+}
+.footer-logo {
+  font-family: 'Merriweather', serif;
+  font-size: 17px; font-weight: 700; color: white; cursor: pointer;
+}
+.footer-logo span { color: var(--bg-accent); }
+.footer-links { display: flex; gap: 24px; list-style: none; }
+.footer-links a {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 12.5px; color: rgba(255,255,255,0.4); font-weight: 500; cursor: pointer;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: rgba(255,255,255,0.8); }
+.footer-copy {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 11.5px; color: rgba(255,255,255,0.25);
+}
+
+/* ─── CASE STUDY PAGES ─── */
+.cs-page { padding-top: 88px; }
+.cs-hero { padding: 64px 52px 52px; border-bottom: 1px solid var(--border); background: var(--grad-hero); }
+.cs-back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 13px; font-weight: 600; color: var(--mid);
+  margin-bottom: 32px; cursor: pointer; transition: color 0.2s;
+}
+.cs-back:hover { color: var(--dark); }
+.cs-back svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
+.cs-htags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.cs-htag {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; padding: 4px 11px; border-radius: 999px;
+  background: white; color: var(--mid); border: 1px solid var(--border2);
+}
+.cs-title {
+  font-family: 'Merriweather', serif;
+  font-size: clamp(26px, 3.5vw, 42px); font-weight: 700;
+  color: var(--dark); letter-spacing: -0.8px; line-height: 1.15;
+  margin-bottom: 14px; max-width: 820px;
+}
+.cs-subtitle { font-size: 16px; color: var(--mid); line-height: 1.75; max-width: 640px; margin-bottom: 36px; }
+.cs-meta { display: flex; gap: 36px; flex-wrap: wrap; }
+.cs-meta-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--light); margin-bottom: 4px; }
+.cs-meta-value { font-family: 'Hanken Grotesk', sans-serif; font-size: 13px; font-weight: 600; color: var(--dark); }
+
+.cs-banner { height: 260px; display: flex; align-items: center; justify-content: center; }
+.cs-banner.b1 { background: radial-gradient(50% 50% at 50% 50%, rgb(203,206,250) 0%, rgb(245,246,255) 100%); }
+.cs-banner.b2 { background: radial-gradient(50% 50% at 50% 50%, rgb(179,213,255) 0%, rgb(240,246,255) 100%); }
+.cs-banner.b3 { background: radial-gradient(50% 50% at 50% 50%, rgb(179,240,200) 0%, rgb(240,255,245) 100%); }
+.cs-banner-icon { width: 88px; height: 88px; border-radius: 22px; display: flex; align-items: center; justify-content: center; animation: floatUp 4s ease-in-out infinite; }
+.cs-banner-icon svg { width: 40px; height: 40px; fill: none; stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; }
+.cs-banner.b1 .cs-banner-icon { background: var(--bg-accent); } .cs-banner.b1 .cs-banner-icon svg { stroke: var(--dark); }
+.cs-banner.b2 .cs-banner-icon { background: #C8DFFF; } .cs-banner.b2 .cs-banner-icon svg { stroke: #1a5ca0; }
+.cs-banner.b3 .cs-banner-icon { background: #C0F0D0; } .cs-banner.b3 .cs-banner-icon svg { stroke: #156b35; }
+
+.cs-body { max-width: 820px; margin: 0 auto; padding: 60px 52px; }
+.cs-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; margin-bottom: 52px; }
+.cs-metric { background: var(--bg-soft); padding: 26px 28px; text-align: center; }
+.cs-metric-num {
+  font-family: 'Merriweather', serif;
+  font-size: 30px; font-weight: 700; color: var(--accent);
+  letter-spacing: -1px; line-height: 1;
+}
+.cs-metric-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 11.5px; color: var(--mid); font-weight: 500; margin-top: 6px; line-height: 1.4; }
+.cs-section { margin-bottom: 48px; }
+.cs-section-title {
+  font-family: 'Merriweather', serif;
+  font-size: 18px; font-weight: 700; color: var(--dark);
+  margin-bottom: 16px; letter-spacing: -0.2px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.cs-text { font-size: 14.5px; color: var(--mid); line-height: 1.8; margin-bottom: 14px; }
+.cs-text strong { color: var(--dark); font-weight: 600; }
+.cs-quote {
+  background: var(--bg-tint); border-left: 2px solid var(--bg-accent);
+  border-radius: 0 12px 12px 0; padding: 20px 24px; margin: 18px 0;
+  font-family: 'Merriweather', serif;
+  font-size: 14.5px; font-style: italic; color: var(--dark); line-height: 1.75; font-weight: 400;
+}
+.cs-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.cs-col { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+.cs-col.before { border-left: 2px solid rgba(200,80,80,0.4); }
+.cs-col.after  { border-left: 2px solid rgba(88,219,105,0.5); }
+.cs-col-label { font-family: 'Hanken Grotesk', sans-serif; font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px; }
+.cs-col.before .cs-col-label { color: #b05050; }
+.cs-col.after  .cs-col-label { color: #1ea84d; }
+.cs-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.cs-col ul li { font-size: 13px; color: var(--mid); padding-left: 12px; position: relative; line-height: 1.55; }
+.cs-col ul li::before { content: ''; position: absolute; left: 0; top: 7px; width: 4px; height: 1px; background: var(--light); }
+.cs-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.cs-step { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 20px 22px; }
+.cs-step-num { font-family: 'Hanken Grotesk', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--accent); text-transform: uppercase; margin-bottom: 8px; }
+.cs-step-title { font-family: 'Merriweather', serif; font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 8px; line-height: 1.3; }
+.cs-step-desc { font-size: 13px; color: var(--mid); line-height: 1.65; }
+.cs-insight { background: var(--bg-soft); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; margin-bottom: 10px; display: flex; gap: 14px; align-items: flex-start; }
+.cs-insight-i { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.cs-insight-t { font-size: 13.5px; color: var(--mid); line-height: 1.65; }
+.cs-insight-t strong { color: var(--dark); font-weight: 600; }
+.cs-nda { background: #fffbee; border: 1px solid #f0dca0; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #8a7020; margin-bottom: 28px; line-height: 1.6; }
+.cs-cta {
+  background: var(--grad-soft); border: 1px solid var(--border2);
+  border-radius: 20px; padding: 44px; text-align: center; margin-top: 52px;
+}
+.cs-cta h3 { font-family: 'Merriweather', serif; font-size: 24px; font-weight: 700; color: var(--dark); margin-bottom: 10px; letter-spacing: -0.3px; }
+.cs-cta p { font-size: 14px; color: var(--mid); margin-bottom: 24px; line-height: 1.65; }
+
+@media (max-width: 900px) {
+  nav { padding: 16px 20px; } .nav-links { display: none; }
+  section { padding: 72px 20px; } h1 { font-size: 32px; letter-spacing: -0.8px; }
+  .pain-grid, .why-grid, .services-grid, .pkg-grid, .work-featured, .work-row, .cta-checks { grid-template-columns: 1fr; }
+  .why-panel { position: static; }
+  footer { flex-direction: column; text-align: center; padding: 36px 20px; }
+  .hero-stats { flex-direction: column; gap: 20px; }
+  .stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 20px; padding-right: 0; margin-right: 0; }
+  .cs-hero, .cs-body { padding-left: 20px; padding-right: 20px; }
+  .cs-metrics, .cs-two, .cs-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo" onclick="showPage('home')">Paux<span>.</span></div>
+  <ul class="nav-links">
+    <li><a onclick="showPage('home'); goTo('about')">About</a></li>
+    <li><a onclick="showPage('home'); goTo('services')">Services</a></li>
+    <li><a onclick="showPage('home'); goTo('process')">Process</a></li>
+    <li><a onclick="showPage('home'); goTo('work')">Work</a></li>
+    <li><a onclick="showPage('home'); goTo('faq')">FAQ</a></li>
+  </ul>
+  <div class="nav-available"><div class="nav-dot"></div>Available for projects</div>
+</nav>
+
+<!-- ══════════════ HOME ══════════════ -->
+<div id="page-home" class="page-view active">
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge reveal"><div class="nav-dot"></div>Open to new projects · London &amp; remote</div>
+    <h1 class="reveal reveal-d1">Your product deserves design<br>that <em>actually works.</em></h1>
+    <p class="hero-sub reveal reveal-d2">I help startups and founders audit, redesign and build digital products that convert — from UX strategy and SaaS platforms to websites that tell the right story.</p>
+    <div class="hero-actions reveal reveal-d3">
+      <a href="mailto:paulaalonso.design@gmail.com?subject=Free audit call" class="btn btn-dark">Book a free audit call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
+      <span class="btn btn-outline" onclick="goTo('work')">View work</span>
+    </div>
+    <div class="hero-stats reveal reveal-d4">
+      <div class="stat"><div class="stat-num"><em>85%</em></div><div class="stat-label">Usability improvement · Mila AI</div></div>
+      <div class="stat"><div class="stat-num"><em>60%</em></div><div class="stat-label">Task success rate · JobLink</div></div>
+      <div class="stat"><div class="stat-num"><em>10</em></div><div class="stat-label">Modules designed · Data Hatch</div></div>
+      <div class="stat"><div class="stat-num">London</div><div class="stat-label">Working globally, remotely</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item"><span class="mdot"></span>UX Audit</div>
+    <div class="marquee-item"><span class="mdot"></span>Product Design</div>
+    <div class="marquee-item"><span class="mdot"></span>B2B SaaS</div>
+    <div class="marquee-item"><span class="mdot"></span>Mobile Apps</div>
+    <div class="marquee-item"><span class="mdot"></span>Web Design</div>
+    <div class="marquee-item"><span class="mdot"></span>Design Systems</div>
+    <div class="marquee-item"><span class="mdot"></span>Figma · Framer</div>
+    <div class="marquee-item"><span class="mdot"></span>AI Products</div>
+    <div class="marquee-item"><span class="mdot"></span>UX Audit</div>
+    <div class="marquee-item"><span class="mdot"></span>Product Design</div>
+    <div class="marquee-item"><span class="mdot"></span>B2B SaaS</div>
+    <div class="marquee-item"><span class="mdot"></span>Mobile Apps</div>
+    <div class="marquee-item"><span class="mdot"></span>Web Design</div>
+    <div class="marquee-item"><span class="mdot"></span>Design Systems</div>
+    <div class="marquee-item"><span class="mdot"></span>Figma · Framer</div>
+    <div class="marquee-item"><span class="mdot"></span>AI Products</div>
+  </div>
+</div>
+
+<!-- ══ ABOUT ══ -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-inner">
+
+      <!-- Photo + floating cards -->
+      <div class="about-photo-wrap">
+
+        <!-- Circular photo -->
+        <div class="about-photo reveal">
+          <div class="about-photo-placeholder">
+            <span class="about-photo-initials">PA</span>
+          </div>
+        </div>
+
+        <!-- Floating card 1 — top right -->
+        <div class="about-card about-card-1">
+          <div class="about-card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <div class="about-card-title">Product thinking</div>
+          <div class="about-card-sub">UX architecture<br>from day one</div>
+        </div>
+
+        <!-- Floating card 2 — bottom right -->
+        <div class="about-card about-card-2">
+          <div class="about-card-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+          <div class="about-card-title">User-centred</div>
+          <div class="about-card-sub">Research &amp;<br>usability testing</div>
+        </div>
+
+        <!-- Floating card 3 — bottom left -->
+        <div class="about-card about-card-3">
+          <div class="about-card-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div class="about-card-title">Scalable design</div>
+          <div class="about-card-sub">Systems &amp;<br>developer handoff</div>
+        </div>
+
+      </div>
+
+      <!-- Text -->
+      <div class="about-text">
+        <div class="label reveal">About me</div>
+        <h2 class="reveal reveal-d1">Designing products<br><em>with intention</em></h2>
+        <p class="about-body reveal reveal-d2">I'm Paula, a Product Designer based in London, specialised in building <strong>scalable SaaS platforms, AI products and digital experiences</strong> for startups and founders.</p>
+        <p class="about-body reveal reveal-d3">With a background in graphic design and people operations, I bring a rare combination of visual craft, systems thinking and organisational understanding. I've designed across compliance, enterprise management, AI mobile apps and web — always working end-to-end, from research through to developer handoff.</p>
+        <p class="about-body reveal reveal-d4">I believe design is not just a visual layer — it's a <strong>strategic tool that drives clarity, adoption and impact.</strong></p>
+        <div class="about-tools reveal reveal-d5">
+          <span class="about-tool">Figma</span>
+          <span class="about-tool">FigJam</span>
+          <span class="about-tool">Framer</span>
+          <span class="about-tool">Adobe CC</span>
+          <span class="about-tool">Maze</span>
+          <span class="about-tool">Notion</span>
+          <span class="about-tool">Jira</span>
+          <span class="about-tool">Claude AI</span>
+          <span class="about-tool">Cursor</span>
+          <span class="about-tool">HTML / CSS</span>
+        </div>
+        <div class="reveal reveal-d5">
+          <a href="mailto:paulaalonso.design@gmail.com?subject=Free audit call" class="btn btn-dark">Let's work together</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="pain" id="pain">
+  <div class="container">
+    <div class="label reveal">Sound familiar?</div>
+    <h2 class="reveal reveal-d1">Which of these is<br><em>holding you back?</em></h2>
+    <div class="pain-grid">
+      <div class="pain-card reveal-scale">
+        <div class="pain-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg></div>
+        <div class="pain-title">You're launching a product and don't know where to start</div>
+        <p class="pain-desc">You have a great idea but turning it into a real, usable product feels overwhelming. You're not sure what to build first, how to structure the UX, or how to communicate the vision to developers.</p>
+      </div>
+      <div class="pain-card reveal-scale reveal-d1">
+        <div class="pain-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="pain-title">Your product isn't converting or retaining users</div>
+        <p class="pain-desc">Users sign up but don't activate. They get stuck, confused, or drop off. You know something's wrong but can't pinpoint it — and you can't afford to keep guessing.</p>
+      </div>
+      <div class="pain-card reveal-scale reveal-d2">
+        <div class="pain-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <div class="pain-title">You've been let down by agencies or generic freelancers</div>
+        <p class="pain-desc">You hired an agency and got overpriced, generic work. Or a freelancer who disappeared halfway through. Now you need someone who understands your product, your users, and your goals.</p>
+      </div>
+      <div class="pain-card reveal-scale reveal-d3">
+        <div class="pain-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+        <div class="pain-title">Your website doesn't reflect your product's quality</div>
+        <p class="pain-desc">Your product is solid but your website doesn't show it. Visitors bounce. Investors don't get it. You need a better story told visually — one that builds trust immediately.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="why" id="why">
+  <div class="container">
+    <div class="label reveal">Why work with Paux</div>
+    <h2 class="reveal reveal-d1">What you'll get<br>when we work together</h2>
+    <div class="why-grid">
+      <div class="why-list">
+        <div class="why-item reveal"><div class="why-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div><div class="why-text"><strong>You work directly with me</strong> — not a junior handed your brief after a kickoff call. Every decision, screen and strategy call is me.</div></div>
+        <div class="why-item reveal reveal-d1"><div class="why-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div><div class="why-text"><strong>No bloated agency overhead</strong> — senior-level output at a fraction of the cost, with no account manager, no middleman, no inflated budget.</div></div>
+        <div class="why-item reveal reveal-d2"><div class="why-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div><div class="why-text"><strong>UX and visual design in one</strong> — I don't hand off wireframes to a different designer. The experience and the interface come from the same thinking.</div></div>
+        <div class="why-item reveal reveal-d3"><div class="why-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div><div class="why-text"><strong>I understand compliance and enterprise complexity</strong> — having designed for GDPR and regulated platforms, I know how to handle legal constraints without sacrificing usability.</div></div>
+        <div class="why-item reveal reveal-d4"><div class="why-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div><div class="why-text"><strong>Fixed scope, clear milestones</strong> — no open-ended retainers where costs spiral. We agree upfront and you always know what's coming next.</div></div>
+        <div class="why-item reveal reveal-d5"><div class="why-check"><svg viewBox="0 0 10 10"><polyline points="2,5 4,7 8,3"/></svg></div><div class="why-text"><strong>Fast, responsive communication</strong> — I respond within hours, not days. You'll always know where the project stands.</div></div>
+      </div>
+      <div class="reveal reveal-d2">
+        <div class="why-panel">
+          <div class="why-panel-title">Not just a designer.<br>A product partner.</div>
+          <p class="why-panel-sub">Most designers hand you screens. I help you think through the whole problem — what to build, for whom, and why — before a single frame is opened.</p>
+          <div class="why-panel-quote">"I don't offer one-size-fits-all solutions. Every startup is different. That's why I start with your goals and your users — not a template."</div>
+          <a href="mailto:paulaalonso.design@gmail.com?subject=Free audit call" class="btn btn-dark" style="width:100%; justify-content:center;">Book a free 30-min call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="services">
+  <div class="container">
+    <div class="label reveal">What I offer</div>
+    <h2 class="reveal reveal-d1">Three ways I can<br><em>help your product</em></h2>
+    <p class="sub reveal reveal-d2" style="margin-bottom:52px">From a quick audit to a full product build — I work from where you are, not from a fixed template.</p>
+    <div class="services-grid">
+      <div class="svc reveal-scale">
+        <div class="svc-num">01</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
+        <div class="svc-title">UX Audit</div>
+        <p class="svc-desc">A structured review of your existing product or website. I map exactly what's broken, why users drop off, and what to fix first to move the needle.</p>
+        <ul class="svc-list"><li>Heuristic evaluation against UX principles</li><li>User flow and conversion analysis</li><li>Prioritised action report with recommendations</li><li>30-min call to walk through findings together</li></ul>
+      </div>
+      <div class="svc reveal-scale reveal-d1">
+        <div class="svc-num">02</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+        <div class="svc-title">Product Design</div>
+        <p class="svc-desc">End-to-end design for your SaaS, mobile app or digital product — from information architecture through to high-fidelity UI ready for your development team.</p>
+        <ul class="svc-list"><li>UX research and information architecture</li><li>Wireframes and interactive prototypes in Figma</li><li>High-fidelity UI design (desktop and mobile)</li><li>Design system and developer handoff</li></ul>
+      </div>
+      <div class="svc reveal-scale reveal-d2">
+        <div class="svc-num">03</div>
+        <div class="svc-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+        <div class="svc-title">Web Design &amp; Build</div>
+        <p class="svc-desc">A high-converting website designed for your brand and built in Framer — fast to ship, easy to edit, and designed to tell your story clearly.</p>
+        <ul class="svc-list"><li>Brand direction and visual identity</li><li>Copy structure and messaging framework</li><li>Framer build with animations and interactions</li><li>SEO setup and performance optimisation</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="packages" id="packages">
+  <div class="container">
+    <div class="label reveal">Choose your path</div>
+    <h2 class="reveal reveal-d1">This depends on<br><em>where you are right now</em></h2>
+    <p class="sub reveal reveal-d2" style="margin-bottom:52px">Pick the package that matches your stage. Not sure? Book a free call and we'll figure it out together.</p>
+    <div class="pkg-grid">
+      <div class="pkg featured reveal-scale">
+        <div class="pkg-badge">Most popular</div>
+        <div class="pkg-tier">Premium</div>
+        <div class="pkg-title" style="color:white">Brand + Full Product</div>
+        <p class="pkg-for" style="color:rgba(255,255,255,0.55)">For founders building from scratch — no brand, no SaaS, no website yet</p>
+        <div class="pkg-divider" style="background:rgba(255,255,255,0.12)"></div>
+        <div class="pkg-label" style="color:rgba(255,255,255,0.4)">What's included</div>
+        <ul class="pkg-items" style="--mid:rgba(255,255,255,0.7)">
+          <li style="color:rgba(255,255,255,0.7)">Discovery &amp; UX audit</li>
+          <li style="color:rgba(255,255,255,0.7)">Strategy calls throughout</li>
+          <li style="color:rgba(255,255,255,0.7)">Information architecture</li>
+          <li style="color:rgba(255,255,255,0.7)">Wireframes and prototype</li>
+          <li style="color:rgba(255,255,255,0.7)">Brand identity creation</li>
+          <li style="color:rgba(255,255,255,0.7)">Design direction</li>
+          <li style="color:rgba(255,255,255,0.7)">Full UI — desktop &amp; mobile</li>
+          <li style="color:rgba(255,255,255,0.7)">Developer handoff</li>
+        </ul>
+        <a href="mailto:paulaalonso.design@gmail.com?subject=Brand+Full Product" class="btn" style="background:white;color:var(--dark);width:100%;justify-content:center;border-radius:18px">Book a call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
+      </div>
+      <div class="pkg reveal-scale reveal-d1">
+        <div class="pkg-tier">Essential</div>
+        <div class="pkg-title">Full Product</div>
+        <p class="pkg-for">For founders who have a brand but need a SaaS, website or app built</p>
+        <div class="pkg-divider"></div>
+        <div class="pkg-label">What's included</div>
+        <ul class="pkg-items">
+          <li>Discovery &amp; UX audit</li>
+          <li>Strategy calls throughout</li>
+          <li>Information architecture</li>
+          <li>Wireframes and prototype</li>
+          <li>Design direction</li>
+          <li>Full UI — desktop &amp; mobile</li>
+          <li>Developer handoff</li>
+        </ul>
+        <a href="mailto:paulaalonso.design@gmail.com?subject=Full Product" class="btn btn-outline" style="width:100%;justify-content:center;border-radius:18px">Book a call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
+      </div>
+      <div class="pkg reveal-scale reveal-d2">
+        <div class="pkg-tier">Lite</div>
+        <div class="pkg-title">UX Audit</div>
+        <p class="pkg-for">For founders with an existing product that needs better UX and conversion</p>
+        <div class="pkg-divider"></div>
+        <div class="pkg-label">What's included</div>
+        <ul class="pkg-items">
+          <li>Discovery &amp; full UX audit</li>
+          <li>Strategy call</li>
+          <li>Sitemap and IA review</li>
+          <li>Wireframes for key flows</li>
+          <li>Prioritised recommendations report</li>
+        </ul>
+        <a href="mailto:paulaalonso.design@gmail.com?subject=UX Audit" class="btn btn-outline" style="width:100%;justify-content:center;border-radius:18px">Book a call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="container">
+    <div class="label reveal">How it works</div>
+    <h2 class="reveal reveal-d1">From first call<br>to finished product</h2>
+    <div class="process-steps" style="margin-top:52px">
+      <div class="ps reveal"><div class="ps-num">01</div><div class="ps-body"><div class="ps-title">Discovery</div><p class="ps-desc">A 30-minute call where I review your product, understand your users and identify your biggest friction points. This shapes everything that follows — no assumptions, no templates.</p><div class="ps-tags"><span class="ps-tag">UX audit</span><span class="ps-tag">Strategy call</span><span class="ps-tag">Moodboard</span></div></div></div>
+      <div class="ps reveal"><div class="ps-num">02</div><div class="ps-body"><div class="ps-title">UX &amp; Architecture</div><p class="ps-desc">I map the information architecture, user flows and structure before touching visual design. This is where most products go wrong — and where we get it right.</p><div class="ps-tags"><span class="ps-tag">Information architecture</span><span class="ps-tag">User flows</span><span class="ps-tag">Wireframes</span><span class="ps-tag">Prototype</span></div></div></div>
+      <div class="ps reveal"><div class="ps-num">03</div><div class="ps-body"><div class="ps-title">Brand &amp; Direction</div><p class="ps-desc">If needed, I establish or review visual identity — colours, typography, brand — before applying it to the product. You see the look and feel before full execution.</p><div class="ps-tags"><span class="ps-tag">Brand identity</span><span class="ps-tag">Colour &amp; typography</span><span class="ps-tag">Design direction</span></div></div></div>
+      <div class="ps reveal"><div class="ps-num">04</div><div class="ps-body"><div class="ps-title">UI Design</div><p class="ps-desc">The approved direction is applied across all screens — desktop and mobile. Every component, every state, every edge case. Clean Figma files ready for your developers.</p><div class="ps-tags"><span class="ps-tag">High-fidelity UI</span><span class="ps-tag">Design system</span><span class="ps-tag">Developer handoff</span></div></div></div>
+      <div class="ps reveal"><div class="ps-num">05</div><div class="ps-body"><div class="ps-title">Build &amp; Launch (optional)</div><p class="ps-desc">For web projects, I can take designs through to a live Framer site — with animations, interactions and SEO — so you can launch without needing a separate developer.</p><div class="ps-tags"><span class="ps-tag">Framer build</span><span class="ps-tag">Animations</span><span class="ps-tag">SEO</span><span class="ps-tag">Live site</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="work" id="work">
+  <div class="container">
+    <div class="label reveal">Selected work</div>
+    <h2 class="reveal reveal-d1">Products I've helped<br><em>design and build</em></h2>
+    <div class="work-featured">
+      <div class="wcard reveal-scale" onclick="showPage('cs-saas')">
+        <div class="wthumb t1"><div class="wthumb-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div></div>
+        <div class="wcbody"><div class="wc-tags"><span class="wc-tag ac">Enterprise SaaS</span><span class="wc-tag ac">Lead Designer</span><span class="wc-tag">2024–2025</span></div><div class="wc-title">Compliance &amp; Business Management Platform</div><p class="wc-desc">850 rows of Excel and dense legal documents → an enterprise SaaS non-technical users navigate with confidence. GDPR, HR, occupational health, training and more.</p><div class="wc-metrics"><div><div class="wc-mn">10</div><div class="wc-ml">Modules designed</div></div><div><div class="wc-mn">0</div><div class="wc-ml">Non-compliant paths</div></div></div><span class="wc-link">Read case study <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></span></div>
+      </div>
+      <div class="wcard reveal-scale reveal-d1" onclick="showPage('cs-mila')">
+        <div class="wthumb t2"><div class="wthumb-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div></div>
+        <div class="wcbody"><div class="wc-tags"><span class="wc-tag bl">AI · Mobile</span><span class="wc-tag bl">iOS</span><span class="wc-tag">2024</span></div><div class="wc-title">Mila AI — Language Learning App</div><p class="wc-desc">Redesigned a web platform into an AI-driven iOS app. Rebuilt full IA, adaptive learning roadmap and personalised onboarding — making AI visible, not hidden.</p><div class="wc-metrics"><div><div class="wc-mn">85%</div><div class="wc-ml">Usability improvement</div></div><div><div class="wc-mn">AI</div><div class="wc-ml">Personalisation made visible</div></div></div><span class="wc-link">Read case study <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></span></div>
+      </div>
+    </div>
+    <div class="work-row">
+      <div class="wcard reveal-scale" onclick="showPage('cs-joblink')">
+        <div class="wthumb t3"><div class="wthumb-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div></div>
+        <div class="wcbody"><div class="wc-tags"><span class="wc-tag gr">UX Research</span><span class="wc-tag gr">Mobile</span><span class="wc-tag">2023</span></div><div class="wc-title">JobLink — Multi-Profile Job Search</div><p class="wc-desc">43% of job seekers apply across 2+ industries. Full UX research, A/B testing and iOS design for a smarter job app that respects their time.</p><div class="wc-metrics"><div><div class="wc-mn">60%</div><div class="wc-ml">Task success rate</div></div><div><div class="wc-mn">98%</div><div class="wc-ml">Rated intuitive</div></div></div><span class="wc-link">Read case study <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></span></div>
+      </div>
+      <div class="wcard reveal-scale reveal-d1">
+        <div class="wthumb t4"><div class="wthumb-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div></div>
+        <div class="wcbody"><div class="wc-tags"><span class="wc-tag">Web Design</span><span class="wc-tag">Branding</span><span class="wc-tag">2021–Present</span></div><div class="wc-title">Freelance Client Projects</div><p class="wc-desc">Websites, brand identities and digital products for founders and small businesses. Full process from discovery through to design, build and launch.</p><div class="wc-metrics"><div><div class="wc-mn">3+</div><div class="wc-ml">Years delivering projects</div></div><div><div class="wc-mn">Web</div><div class="wc-ml">Framer · Figma · Brand</div></div></div><a href="mailto:paulaalonso.design@gmail.com" class="wc-link" onclick="event.stopPropagation()">Get in touch <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="label reveal">Common questions</div>
+    <h2 class="reveal reveal-d1">Things founders<br><em>often ask me</em></h2>
+    <div class="faq-list">
+      <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">What's the difference between working with you vs a design agency?</span><div class="faq-icon"><svg viewBox="0 0 10 10"><path d="M5 2v6M2 5h6"/></svg></div></div><div class="faq-a">Agencies charge for account managers, project managers and overhead you never see. You often end up with junior designers on the actual files. With me, you work directly with a senior designer on every decision — and you pay for the work, not the overhead. That means faster delivery, clearer communication, and a result that's coherent.</div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">How long does a typical project take?</span><div class="faq-icon"><svg viewBox="0 0 10 10"><path d="M5 2v6M2 5h6"/></svg></div></div><div class="faq-a">A UX audit typically takes 1–2 weeks. A full product design project runs 4–10 weeks depending on scope. A Framer website build is usually 2–4 weeks. I work in clear stages with deliverables at each step, so you always know where things stand.</div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">How does pricing work?</span><div class="faq-icon"><svg viewBox="0 0 10 10"><path d="M5 2v6M2 5h6"/></svg></div></div><div class="faq-a">I work on fixed-scope projects — so you always know what you're paying for before we start. A 50% deposit starts the project, with the balance due on delivery. Book a free call and I'll give you a clear price range within 24 hours.</div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">What if I only need part of the process?</span><div class="faq-icon"><svg viewBox="0 0 10 10"><path d="M5 2v6M2 5h6"/></svg></div></div><div class="faq-a">That's completely fine. If you already have wireframes and need UI design, we start there. If you have a design but need the Framer build, I can step in at that point. The process is a framework, not a rigid contract.</div></div>
+      <div class="faq-item reveal"><div class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-text">What does the free audit call actually involve?</span><div class="faq-icon"><svg viewBox="0 0 10 10"><path d="M5 2v6M2 5h6"/></svg></div></div><div class="faq-a">A 30-minute video call where I look at your product or website live and give you honest, specific feedback. You'll leave with at least 3 concrete things to fix — regardless of whether we work together afterwards. No pitch, no pressure.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box reveal">
+      <div class="label" style="justify-content:center; display:flex">Free 30-min call</div>
+      <h2>Ready to build something<br><em>that actually works?</em></h2>
+      <p>Let's look at your product together. I'll tell you exactly what's holding it back — no strings attached.</p>
+      <div class="cta-checks">
+        <div class="cta-check"><div class="cta-check-dot"><svg viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2"/></svg></div><span class="cta-check-text">Live review of your product or site</span></div>
+        <div class="cta-check"><div class="cta-check-dot"><svg viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2"/></svg></div><span class="cta-check-text">Top 3 UX problems identified</span></div>
+        <div class="cta-check"><div class="cta-check-dot"><svg viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2"/></svg></div><span class="cta-check-text">Clear next steps, no jargon</span></div>
+        <div class="cta-check"><div class="cta-check-dot"><svg viewBox="0 0 8 8"><polyline points="1,4 3,6 7,2"/></svg></div><span class="cta-check-text">No pitch, no pressure</span></div>
+      </div>
+      <a href="mailto:paulaalonso.design@gmail.com?subject=Free audit call" class="btn btn-dark">Book my free call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo" onclick="showPage('home')">Paux<span>.</span></div>
+  <ul class="footer-links"><li><a href="https://www.linkedin.com/in/paula-alonso-design/" target="_blank">LinkedIn</a></li><li><a href="https://www.instagram.com/pauxdesign/" target="_blank">Instagram</a></li><li><a href="mailto:paulaalonso.design@gmail.com">Contact</a></li></ul>
+  <div class="footer-copy">© 2026 Paula Alonso · @paux.design</div>
+</footer>
+</div><!-- end home -->
+
+<!-- ══════════════ CS: SAAS ══════════════ -->
+<div id="page-cs-saas" class="page-view cs-page">
+<div class="cs-hero"><div class="container"><div class="cs-back" onclick="showPage('home')"><svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg> Back to work</div><div class="cs-htags"><span class="cs-htag">Enterprise SaaS</span><span class="cs-htag">Lead Product Designer</span><span class="cs-htag">UX Architecture</span></div><div class="cs-title">Enterprise Compliance &amp; Business Management Platform</div><p class="cs-subtitle">Designing a compliance-first SaaS that transforms dense legal complexity into intuitive workflows non-technical users can navigate confidently.</p><div class="cs-meta"><div><div class="cs-meta-label">Role</div><div class="cs-meta-value">Lead Product Designer / UX Architect</div></div><div><div class="cs-meta-label">Scope</div><div class="cs-meta-value">End-to-end product design</div></div><div><div class="cs-meta-label">Team</div><div class="cs-meta-value">Stakeholders + Engineering</div></div><div><div class="cs-meta-label">Year</div><div class="cs-meta-value">2024–2025</div></div></div></div></div>
+<div class="cs-banner b1"><div class="cs-banner-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div></div>
+<div class="cs-body">
+  <div class="cs-nda">Visual designs and proprietary workflows omitted under NDA. This case study documents design thinking, system architecture and compliance-driven UX approach in full.</div>
+  <div class="cs-metrics"><div class="cs-metric"><div class="cs-metric-num">10</div><div class="cs-metric-label">Specialised modules across regulatory domains</div></div><div class="cs-metric"><div class="cs-metric-num">0</div><div class="cs-metric-label">Non-compliant user paths — embedded in UX structure</div></div><div class="cs-metric"><div class="cs-metric-num">850+</div><div class="cs-metric-label">Excel rows replaced by guided digital workflows</div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Overview</div><p class="cs-text">A SaaS platform for organisational management and regulatory compliance including GDPR and occupational health regulations. Required <strong>granular access control, strict data separation, and auditability by design</strong>.</p><p class="cs-text">I led the project end-to-end, translating legal requirements into product decisions — not just screens.</p></div>
+  <div class="cs-section"><div class="cs-section-title">The challenge</div><div class="cs-quote">"How do you translate 850 rows of Excel and dense legal documents — written for lawyers — into a system non-technical users can follow without ever making a compliance error?"</div><div class="cs-two"><div class="cs-col before"><div class="cs-col-label">Before — problems</div><ul><li>850+ Excel rows tracking certifications manually</li><li>Legal documents written for lawyers, not end users</li><li>Manual email reminders for every deadline</li><li>No visibility into who approved or signed what</li><li>Undocumented, complex audit processes</li></ul></div><div class="cs-col after"><div class="cs-col-label">After — vision</div><ul><li>Guided workflows enforce compliance automatically</li><li>Legal requirements translated into step-by-step UI</li><li>System-triggered notifications by real-time status</li><li>Audit trail integrated into every action</li><li>Role-based access for each organisation type</li></ul></div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Design approach</div><div class="cs-steps"><div class="cs-step"><div class="cs-step-num">Strategy 01</div><div class="cs-step-title">Legal requirements as UX constraints</div><p class="cs-step-desc">Analysed regulatory frameworks to extract mandatory processes — then designed the UX to enforce them invisibly, not through warnings.</p></div><div class="cs-step"><div class="cs-step-num">Strategy 02</div><div class="cs-step-title">Information architecture as a safety layer</div><p class="cs-step-desc">Structured navigation to prevent unauthorised actions — through structure, not error messages.</p></div><div class="cs-step"><div class="cs-step-num">Strategy 03</div><div class="cs-step-title">Role-based mental models</div><p class="cs-step-desc">Roles as configurable containers, not fixed profiles — transforming complex permission matrices into something admins could manage confidently.</p></div><div class="cs-step"><div class="cs-step-num">Strategy 04</div><div class="cs-step-title">Guided workflows</div><p class="cs-step-desc">Users couldn't take non-compliant paths — not because the interface blocked them, but because those paths simply didn't exist in the system.</p></div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Key decisions</div><div class="cs-insight"><div class="cs-insight-i">🏗️</div><div class="cs-insight-t"><strong>System-first architecture:</strong> 10 interconnected modules sharing unified logic with strict data separation — designed as a system, not a collection of screens.</div></div><div class="cs-insight"><div class="cs-insight-i">🔐</div><div class="cs-insight-t"><strong>Role-based access:</strong> Configurable containers rather than fixed profiles — non-technical admins could manage permissions without needing to understand the data model.</div></div><div class="cs-insight"><div class="cs-insight-i">⚙️</div><div class="cs-insight-t"><strong>Automated compliance workflows:</strong> Document assignment, review, approval and signature structured through predefined flows that enforce correct actor involvement.</div></div><div class="cs-insight"><div class="cs-insight-i">👤</div><div class="cs-insight-t"><strong>Designing for non-technical users:</strong> The UX had to provide clear mental models and guide high-stakes actions without ambiguity — embedding compliance into the product itself.</div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Key learnings</div><div class="cs-insight"><div class="cs-insight-i">📖</div><div class="cs-insight-t"><strong>Translating legal complexity:</strong> Reading GDPR and extracting what needs to be enforced through design — not documentation.</div></div><div class="cs-insight"><div class="cs-insight-i">🔗</div><div class="cs-insight-t"><strong>Systems over screens:</strong> The challenge was architecting how 10 modules share data, enforce permissions and maintain audit trails across complex journeys.</div></div><div class="cs-insight"><div class="cs-insight-i">🤝</div><div class="cs-insight-t"><strong>Stakeholder translation:</strong> Bridging legal experts and engineers — with design as the common language.</div></div></div>
+  <div class="cs-cta"><h3>Have a complex product challenge?</h3><p>I specialise in turning regulatory and operational complexity into products people can actually use.</p><a href="mailto:paulaalonso.design@gmail.com?subject=Project enquiry" class="btn btn-dark">Book a free call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a></div>
+</div>
+<footer><div class="footer-logo" onclick="showPage('home')">Paux<span>.</span></div><ul class="footer-links"><li><a onclick="showPage('home'); goTo('work')">All work</a></li><li><a href="mailto:paulaalonso.design@gmail.com">Contact</a></li></ul><div class="footer-copy">© 2026 Paula Alonso</div></footer>
+</div>
+
+<!-- ══════════════ CS: MILA ══════════════ -->
+<div id="page-cs-mila" class="page-view cs-page">
+<div class="cs-hero"><div class="container"><div class="cs-back" onclick="showPage('home')"><svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg> Back to work</div><div class="cs-htags"><span class="cs-htag">AI Product</span><span class="cs-htag">Mobile · iOS</span><span class="cs-htag">UX Architecture</span></div><div class="cs-title">Mila AI — Your Personal AI Language Teacher</div><p class="cs-subtitle">Redesigning a web-based platform into an AI-driven mobile app — reducing friction and making personalisation visible to the user.</p><div class="cs-meta"><div><div class="cs-meta-label">Role</div><div class="cs-meta-value">Product Designer / UX Architect</div></div><div><div class="cs-meta-label">Scope</div><div class="cs-meta-value">End-to-end product design</div></div><div><div class="cs-meta-label">Platform</div><div class="cs-meta-value">iOS mobile app</div></div><div><div class="cs-meta-label">Year</div><div class="cs-meta-value">2024</div></div></div></div></div>
+<div class="cs-banner b2"><div class="cs-banner-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M9 7h6M9 11h6M9 15h4"/></svg></div></div>
+<div class="cs-body">
+  <div class="cs-metrics"><div class="cs-metric"><div class="cs-metric-num">85%</div><div class="cs-metric-label">Usability improvement in structured testing</div></div><div class="cs-metric"><div class="cs-metric-num">↓</div><div class="cs-metric-label">Navigation depth to reach a lesson reduced to one tap</div></div><div class="cs-metric"><div class="cs-metric-num">AI</div><div class="cs-metric-label">Personalisation made visible — not hidden in the backend</div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Overview</div><p class="cs-text">Mila AI is a language learning platform for Chinese and Japanese students. The goal was to launch a mobile-first experience and reposition AI personalisation as a visible value proposition — not a hidden backend feature.</p><p class="cs-text">I led the end-to-end UX and UI. <strong>The challenge wasn't adapting the web to mobile — it was rethinking how progression, personalisation and continuity should work in short, on-the-go sessions.</strong></p></div>
+  <div class="cs-section"><div class="cs-section-title">The challenge</div><div class="cs-quote">"Users had to navigate multiple menus just to reach a lesson. There was no clear learning roadmap, and students lost their place after every interruption."</div><div class="cs-two"><div class="cs-col before"><div class="cs-col-label">Problems identified</div><ul><li>Multiple menus to reach a single lesson</li><li>No learning roadmap or visible progression</li><li>Users lost context after every interruption</li><li>AI personalisation invisible to users</li><li>UI designed for desktop, not mobile sessions</li></ul></div><div class="cs-col after"><div class="cs-col-label">Client goals</div><ul><li>Modernised UI for current mobile standards</li><li>Clear communication of AI personalisation</li><li>Experience adapted for short, on-the-go sessions</li><li>Seamless continuation between sessions</li></ul></div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Design strategy</div><div class="cs-steps"><div class="cs-step"><div class="cs-step-num">Strategy 01</div><div class="cs-step-title">Mobile-first architecture</div><p class="cs-step-desc">Rebuilt IA around quick access and clear progression. Fewer steps to the lesson, clearer sense of where you are.</p></div><div class="cs-step"><div class="cs-step-num">Strategy 02</div><div class="cs-step-title">Personalised onboarding</div><p class="cs-step-desc">Users define goals and level on first launch. The system adapts immediately, creating ownership from day one.</p></div><div class="cs-step"><div class="cs-step-num">Strategy 03</div><div class="cs-step-title">Adaptive learning roadmap</div><p class="cs-step-desc">A dynamic roadmap that unlocks based on progress and makes AI-driven adaptation visible — turning AI from backend logic into a feature the user can see.</p></div><div class="cs-step"><div class="cs-step-num">Strategy 04</div><div class="cs-step-title">Resume &amp; continuity</div><p class="cs-step-desc">Progress saves automatically. "Continue Learning" is the primary action. Users re-enter without losing context — one tap to resume.</p></div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Outcome</div><div class="cs-insight"><div class="cs-insight-i">✅</div><div class="cs-insight-t"><strong>85% usability improvement</strong> in structured testing with early users.</div></div><div class="cs-insight"><div class="cs-insight-i">✅</div><div class="cs-insight-t"><strong>Improved clarity in progression</strong> — users knew where they were and what to do next without guidance.</div></div><div class="cs-insight"><div class="cs-insight-i">✅</div><div class="cs-insight-t"><strong>AI adaptation perceived as visible</strong> — users reported the app felt like it was "learning them", not serving generic content.</div></div></div>
+  <div class="cs-cta"><h3>Building an AI-powered product?</h3><p>Making AI feel useful and visible to non-technical users is one of the hardest UX challenges. It's one I specialise in.</p><a href="mailto:paulaalonso.design@gmail.com?subject=Project enquiry" class="btn btn-dark">Book a free call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a></div>
+</div>
+<footer><div class="footer-logo" onclick="showPage('home')">Paux<span>.</span></div><ul class="footer-links"><li><a onclick="showPage('home'); goTo('work')">All work</a></li><li><a href="mailto:paulaalonso.design@gmail.com">Contact</a></li></ul><div class="footer-copy">© 2026 Paula Alonso</div></footer>
+</div>
+
+<!-- ══════════════ CS: JOBLINK ══════════════ -->
+<div id="page-cs-joblink" class="page-view cs-page">
+<div class="cs-hero"><div class="container"><div class="cs-back" onclick="showPage('home')"><svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg> Back to work</div><div class="cs-htags"><span class="cs-htag">UX Research</span><span class="cs-htag">Mobile · iOS</span><span class="cs-htag">A/B Testing</span></div><div class="cs-title">JobLink — Multi-Profile Job Search App</div><p class="cs-subtitle">Redesigning job search for the 43% of people who apply across two or more industries — but have only ever been offered one career identity.</p><div class="cs-meta"><div><div class="cs-meta-label">Role</div><div class="cs-meta-value">UX Designer (end-to-end)</div></div><div><div class="cs-meta-label">Scope</div><div class="cs-meta-value">Research, UX strategy, UI design</div></div><div><div class="cs-meta-label">Platform</div><div class="cs-meta-value">iOS mobile app</div></div><div><div class="cs-meta-label">Year</div><div class="cs-meta-value">2023</div></div></div></div></div>
+<div class="cs-banner b3"><div class="cs-banner-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div></div>
+<div class="cs-body">
+  <div class="cs-metrics"><div class="cs-metric"><div class="cs-metric-num">60%</div><div class="cs-metric-label">Task success rate vs competing platforms</div></div><div class="cs-metric"><div class="cs-metric-num">98%</div><div class="cs-metric-label">Rated intuitive — vs 67% for Indeed</div></div><div class="cs-metric"><div class="cs-metric-num">3 min</div><div class="cs-metric-label">To set up a second profile and apply (vs 8+ min)</div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Overview</div><p class="cs-text">JobLink lets users manage multiple career profiles and apply across industries without switching accounts. The key insight: <strong>43% of job seekers apply across 2+ industries but every platform assumes one career identity.</strong></p><p class="cs-text">I ran the full process — user research, competitive analysis, card sorting, wireframing, A/B testing and high-fidelity iOS UI.</p></div>
+  <div class="cs-section"><div class="cs-section-title">The problem</div><div class="cs-quote">"Users were spending 15+ hours a week just customising applications. Many gave up on roles they were qualified for — it was simply too much work."</div><div class="cs-two"><div class="cs-col before"><div class="cs-col-label">User pain points</div><ul><li>Creating multiple accounts (against platform policies)</li><li>Rewriting profiles for every industry</li><li>One-size-fits-all CV that stands out nowhere</li><li>15+ hours/week lost to customisation</li><li>Abandoning qualified roles — too much friction</li></ul></div><div class="cs-col after"><div class="cs-col-label">Research findings</div><ul><li>59% wanted multiple career profiles</li><li>70% passively job hunting — time is scarce</li><li>98% search for jobs near their location</li><li>Users want quick-scan cards, not descriptions upfront</li><li>Profile switching mental model already known (Instagram)</li></ul></div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Design process</div><div class="cs-steps"><div class="cs-step"><div class="cs-step-num">Phase 01</div><div class="cs-step-title">User research &amp; surveys</div><p class="cs-step-desc">Key insight: the biggest pain wasn't finding jobs — it was the time cost of tailoring each application.</p></div><div class="cs-step"><div class="cs-step-num">Phase 02</div><div class="cs-step-title">Competitive analysis</div><p class="cs-step-desc">Analysed Indeed and TotalJobs. Gaps: no multi-profile support, poor tracking, no distance search — these became JobLink's differentiators.</p></div><div class="cs-step"><div class="cs-step-num">Phase 03</div><div class="cs-step-title">Card sorting &amp; IA</div><p class="cs-step-desc">Organised into four sections: Home, Applications, Messages, Profile. Flowcharts and wireframes to validate navigation before visuals.</p></div><div class="cs-step"><div class="cs-step-num">Phase 04</div><div class="cs-step-title">A/B testing</div><p class="cs-step-desc">My assumption — detailed descriptions upfront — was wrong. Users wanted quick-scan cards to filter fast. This changed the entire IA.</p></div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Impact on behaviour</div><div class="cs-two"><div class="cs-col before"><div class="cs-col-label">Before JobLink</div><ul><li>3 resumes in Google Drive, manually managed</li><li>20+ minutes per application, customising everything</li><li>Often abandoned mid-application — decision fatigue</li></ul></div><div class="cs-col after"><div class="cs-col-label">After JobLink</div><ul><li>2 profiles created once, one-tap apply</li><li>5 jobs applied in the time it used to take for 1</li><li>Users reported feeling "in control" of their search</li></ul></div></div></div>
+  <div class="cs-section"><div class="cs-section-title">Key learnings</div><div class="cs-insight"><div class="cs-insight-i">🔍</div><div class="cs-insight-t"><strong>Design for the exception, not the average:</strong> Identify the underserved edge case and design for them first — career changers, multi-skilled professionals.</div></div><div class="cs-insight"><div class="cs-insight-i">🧪</div><div class="cs-insight-t"><strong>A/B testing proved my assumptions wrong:</strong> Always test before committing to an IA decision.</div></div><div class="cs-insight"><div class="cs-insight-i">✂️</div><div class="cs-insight-t"><strong>Reducing cognitive load beats adding features:</strong> Profile switching and one-tap apply were loved. Smart suggestions were ignored. Simplicity is the feature.</div></div></div>
+  <div class="cs-cta"><h3>Need a smarter product experience?</h3><p>From research to high-fidelity design — I run the full UX process so you ship something that actually works for your users.</p><a href="mailto:paulaalonso.design@gmail.com?subject=Project enquiry" class="btn btn-dark">Book a free call <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a></div>
+</div>
+<footer><div class="footer-logo" onclick="showPage('home')">Paux<span>.</span></div><ul class="footer-links"><li><a onclick="showPage('home'); goTo('work')">All work</a></li><li><a href="mailto:paulaalonso.design@gmail.com">Contact</a></li></ul><div class="footer-copy">© 2026 Paula Alonso</div></footer>
+</div>
+
+<script>
+// Page routing
+function showPage(id) {
+  document.querySelectorAll('.page-view').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(initReveal, 100);
+}
+function goTo(id) {
+  setTimeout(() => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  }, 60);
+}
+
+// FAQ accordion
+function toggleFaq(el) {
+  const item = el.parentElement;
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// Scroll reveal — Framer-style: opacity + translateY, triggered on scroll
+function initReveal() {
+  // Standard reveal elements
+  const els = document.querySelectorAll('.reveal, .reveal-fade, .reveal-scale');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  els.forEach(el => observer.observe(el));
+
+  // About floating cards — staggered by index, exact Framer behaviour
+  const cards = document.querySelectorAll('.about-card');
+  const cardObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        // Stagger each card based on its position in the DOM
+        const allCards = [...document.querySelectorAll('.about-card')];
+        const idx = allCards.indexOf(entry.target);
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, idx * 150);
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+  cards.forEach(card => cardObserver.observe(card));
+}
+
+// Hero animate on load immediately (no scroll needed)
+window.addEventListener('load', () => {
+  document.querySelectorAll('.hero .reveal, .hero .reveal-d1, .hero .reveal-d2, .hero .reveal-d3, .hero .reveal-d4').forEach(el => {
+    el.classList.add('visible');
+  });
+  initReveal();
+});
+</script>
+</body>
+</html>
