@@ -976,10 +976,22 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
   justify-content: center;
 }
 .pain-card--closing .pain-headline {
-  max-width: 22ch;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
 }
 .pain-card--closing .pain-footer {
   justify-content: center;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pain-card--closing .pain-symptoms {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  flex-grow: 0;
+  text-align: left;
 }
 
 /* ─── PAIN ILLUSTRATION KEYFRAMES ─── */
@@ -1503,7 +1515,7 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
 }
 .wc-title {
   font-family: var(--font-serif);
-  font-size: clamp(20px, 2.2vw, 26px);
+  font-size: 23px;
   font-weight: 700;
   color: var(--dark);
   margin-bottom: 12px;
@@ -1835,11 +1847,11 @@ footer {
   .stat { border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 20px; padding-right: 0; margin-right: 0; }
 
   /* ── Problems / Stack cards ── */
-  .problems-scroll-space { min-height: auto; }
-  .problems-inner { position: static; height: auto; padding: 64px 20px; }
-  .problems-inner .container { flex-direction: column; gap: 32px; padding: 0; }
-  .problems-stack { height: auto !important; }
-  .stack-card { position: static !important; opacity: 1 !important; transform: none !important; margin-bottom: 16px; }
+  .problems-scroll-space { min-height: 320vh; }
+  .problems-inner { position: sticky; top: 0; height: 100vh; padding: 0 20px; }
+  .problems-inner .container { flex-direction: column; gap: 28px; padding: 0; }
+  .problems-stack { height: 260px; }
+  .stack-card { position: absolute; margin-bottom: 0; }
   .pain-card { grid-template-columns: 1fr; }
   .pain-illo-panel { min-height: 180px; border-left: none; border-top: 1px solid rgba(112,89,220,0.09); }
 
@@ -2358,13 +2370,12 @@ footer {
           <div class="stack-card pain-card pain-card--closing">
             <div class="pain-card-body">
               <div class="pain-persona"><span class="pain-persona-dot"></span>Let's work together</div>
-              <div class="pain-headline">Need a senior designer who can move fast and think strategically?</div>
+              <div class="pain-headline">Need a Senior Designer <br> who can move fast and think strategically?</div>
               <ul class="pain-symptoms">
                 <li>I partner directly with founders and product teams</li>
                 <li>Clear process, clear priorities, no agency overhead</li>
                 <li>From audit to execution, focused on business outcomes</li>
               </ul>
-              <div class="pain-footer">→ If this sounds like your team, let's talk.</div>
               <div class="pain-actions">
                 <a href="./contact.html?topic=start-project" class="btn btn-dark">Let's work together</a>
               </div>
@@ -2754,9 +2765,9 @@ footer {
 <section class="cta-section">
   <div class="container">
     <div class="cta-box reveal">
-      <h2>Ready to fix your UX?</h2>
+      <h2>Ready to build or fix something?</h2>
       <p>Tell me about your product idea or what you're trying to improve. <br>I'll get back to you within 24 hours, no sales pressure.<br></p>
-      <a href="./contact.html" class="btn btn-dark">Let's talk <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
+      <a href="./contact.html" class="btn btn-dark">Start a project <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
     </div>
   </div>
 </section>
@@ -2881,9 +2892,6 @@ function initStackCards() {
     window.removeEventListener('scroll', window._stackScrollHandler);
     window._stackScrollHandler = null;
   }
-
-  // On mobile the cards are static — skip scroll logic
-  if (window.innerWidth <= 900) return;
 
   // Measure actual card height once rendered
   function getStackHeight() {
