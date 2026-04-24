@@ -1128,11 +1128,17 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
 .audit { background: var(--bg-soft); }
 .audit-inner {
   display: grid;
-  grid-template-columns: 1fr 500px;
+  grid-template-columns: 1fr;
   gap: 64px;
   align-items: start;
 }
 .audit-content { }
+.audit-content .audit-photo-wrap {
+  position: static;
+  top: auto;
+  align-self: auto;
+  margin: 0 0 56px;
+}
 .audit-cards-grid {
   display: flex;
   flex-direction: column;
@@ -1905,7 +1911,7 @@ footer {
   .nav-hamburger { display: flex; }
 
   /* ── Sections ── */
-  section { padding: 64px 20px; }
+  section { padding: 84px 20px; }
   h1 { font-size: 32px; letter-spacing: -0.8px; }
 
   /* ── Hero ── */

@@ -1229,11 +1229,17 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
 .audit { background: var(--bg); }
 .audit-inner {
   display: grid;
-  grid-template-columns: 1fr 500px;
+  grid-template-columns: 1fr;
   gap: 64px;
   align-items: start;
 }
 .audit-content { }
+.audit-content .audit-photo-wrap {
+  position: static;
+  top: auto;
+  align-self: auto;
+  margin: 0 0 84px;
+}
 .audit-cards-grid {
   display: flex;
   flex-direction: column;
@@ -1838,7 +1844,7 @@ footer {
   .nav-hamburger { display: flex; }
 
   /* ── Sections ── */
-  section { padding: 64px 20px; }
+  section { padding: 84px 20px; }
   h1 { font-size: 32px; letter-spacing: -0.8px; }
 
   /* ── Hero ── */
@@ -2005,7 +2011,7 @@ footer {
       <p class="hero-sub reveal reveal-d2">From <em>SaaS platforms</em> to <em>mobile apps</em> and <em>AI-powered workflows</em>, I design products that convert, retain and scale. Whether you're building from scratch or fixing what's already live, I'll find what's broken and fix it right.</p>
       <div class="hero-actions reveal reveal-d3">
         <a href="./contact.html?topic=start-project" class="btn btn-dark">Start a project</a>
-        <span class="btn btn-outline" onclick="goTo('work')">See my work</span>
+        <a href="./work.html" class="btn btn-outline">See my work</a>
       </div>
     </div>
 
@@ -2788,6 +2794,9 @@ footer {
         <span onclick="goTo('faq')">FAQ</span>
         <span onclick="goTo('process')">Process</span>
         <a href="./contact.html">Contact</a>
+        <a href="./cs-saas.html">Enterprise SaaS</a>
+        <a href="./cs-mila.html">Mila AI</a>
+        <a href="./cs-joblink.html">JobLink</a>
       </div>
     </div>
     <div class="footer-right">
@@ -3155,6 +3164,13 @@ function initProcessSteps() {
 
 // ─── AUDIT ILLUSTRATION ENTRY ───
 function initAuditIllustration() {
+  const auditContent = document.querySelector('.audit .audit-content');
+  const auditVisual = document.querySelector('.audit > .container > .audit-inner > .audit-photo-wrap');
+  const auditCards = auditContent ? auditContent.querySelector('.audit-cards-grid') : null;
+  if (auditContent && auditVisual && auditCards && auditVisual.parentElement !== auditContent) {
+    auditContent.insertBefore(auditVisual, auditCards);
+  }
+
   const wrap = document.getElementById('ailWrap');
   if (!wrap) return;
 
