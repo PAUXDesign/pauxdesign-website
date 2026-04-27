@@ -243,6 +243,7 @@ nav {
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  max-width: fit-content;
   height: 44px;
   padding: 0 18px;
   cursor: pointer;
