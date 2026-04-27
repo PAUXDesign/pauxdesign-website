@@ -2956,7 +2956,11 @@ function initStackCards() {
     const rawIndex = progress * n;
     const activeIndex = Math.min(n - 1, Math.floor(rawIndex));
     // Sub-progress within the current card transition (0→1)
-    const subProgress = rawIndex - Math.floor(rawIndex);
+    let subProgress = rawIndex - Math.floor(rawIndex);
+    // Keep first/last cards fully visible at scroll boundaries.
+    if (progress <= 0 || progress >= 1) {
+      subProgress = 1;
+    }
 
     // Update container height to match tallest revealed card
     const stackEl = scrollSpace.querySelector('.problems-stack');
