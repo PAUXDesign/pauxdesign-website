@@ -711,12 +711,20 @@
     </div>
 
     <!-- ── CTA ── -->
-    <div class="cs-cta">
-      <h3>Need a smarter product experience?</h3>
-      <p>From research to high-fidelity design — I run the full UX process so you ship something that actually works for your users.</p>
-      <a href="/contact/?topic=project-enquiry" class="btn btn-dark">
-        Let's talk
-      </a>
+    <div class="cta-scroll-wrap">
+      <div class="cta-sticky">
+        <div class="cs-cta">
+          <div class="cs-cta-orb cs-cta-orb-1"></div>
+          <div class="cs-cta-orb cs-cta-orb-2"></div>
+          <div class="cs-cta-inner">
+            <div class="cs-cta-avail"><span style="width:6px;height:6px;border-radius:50%;background:#58DB69;display:inline-block"></span>Available for new projects</div>
+            <h3>Need a smarter product experience?</h3>
+            <p>From research to high-fidelity design — I run the full UX process so you ship something that actually works for your users.</p>
+            <a href="/contact/?topic=project-enquiry" class="btn-white">Let's talk →</a>
+            <p class="cs-cta-note">30-min call · No commitment · Honest feedback</p>
+          </div>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -793,6 +801,38 @@ window.addEventListener('load', () => {
   if (!nav) return;
   const s = () => nav.classList.toggle('nav--scrolled', window.scrollY > 8);
   s(); window.addEventListener('scroll', s, { passive: true });
+})();
+(function initCtaStack() {
+  const wraps = [...document.querySelectorAll('.cta-scroll-wrap')];
+  if (!wraps.length) return;
+  function update() {
+    wraps.forEach((wrap) => {
+      const section = wrap.querySelector('.cta-section, .cs-cta');
+      if (!section) return;
+      const rect = wrap.getBoundingClientRect();
+      const scrollable = wrap.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) {
+        section.style.setProperty('--cta-accent-op', '0');
+        section.style.setProperty('--cta-bg-op', '0');
+        section.style.setProperty('--cta-ease', '1');
+        section.classList.remove('cta-founder-tone', 'cta-footer-tone');
+        return;
+      }
+      const scrolled = Math.max(0, -rect.top);
+      const progress = Math.min(1, scrolled / scrollable);
+      const ease = 1 - Math.pow(1 - progress, 2.5);
+      const accentOp = Math.min(1, Math.max(0, 4 * ease * (1 - ease)));
+      const bgOp = Math.min(1, ease * ease * 1.08);
+      section.style.setProperty('--cta-accent-op', String(accentOp));
+      section.style.setProperty('--cta-bg-op', String(bgOp));
+      section.style.setProperty('--cta-ease', String(ease));
+      section.classList.toggle('cta-founder-tone', accentOp > 0.3 && bgOp < 0.5);
+      section.classList.toggle('cta-footer-tone', bgOp >= 0.5);
+    });
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
+  update();
 })();
 </script>
 </body>

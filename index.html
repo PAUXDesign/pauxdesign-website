@@ -549,57 +549,210 @@ h2 em {
 
 /* ─── HERO ─── */
 .hero {
-  padding-top: 220px; padding-bottom: 68px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 52px 110px;
+  text-align: center;
   background: var(--bg);
-  position: relative; overflow: hidden;
+  position: relative;
+  overflow: hidden;
 }
-.hero::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 80px;
-  background: linear-gradient(to bottom, transparent,var(--bg-soft));
+
+.hero .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 860px;
+  gap: 0;
+  position: relative;
+  z-index: 3;
+}
+
+.hero .container h1 {
+  text-align: center;
+  max-width: 860px;
+  margin-bottom: 32px;
+}
+
+/* ─── Hero background orbs ─── */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  z-index: 1;
+}
+.hero-orb-1 {
+  width: 760px; height: 760px;
+  background: radial-gradient(circle, rgba(112,89,220,0.20) 0%, rgba(112,89,220,0.04) 55%, transparent 70%);
+  top: -220px; right: -220px;
+  animation: orbDrift1 16s ease-in-out infinite;
+}
+.hero-orb-2 {
+  width: 560px; height: 560px;
+  background: radial-gradient(circle, rgba(203,206,250,0.36) 0%, transparent 65%);
+  bottom: -120px; left: -140px;
+  animation: orbDrift2 13s ease-in-out infinite 2s;
+}
+.hero-orb-3 {
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, rgba(88,219,105,0.10) 0%, transparent 65%);
+  top: 40%; left: 30%;
+  filter: blur(100px);
+  animation: orbDrift3 19s ease-in-out infinite 5s;
+}
+/* Soft center glow — blooms behind the title */
+.hero-orb-4 {
+  width: 600px; height: 400px;
+  background: radial-gradient(ellipse, rgba(203,206,250,0.22) 0%, transparent 68%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(60px);
+  animation: orbDrift3 22s ease-in-out infinite 8s;
+}
+@keyframes orbDrift1 {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(-50px, 30px); }
+  66%       { transform: translate(25px, -20px); }
+}
+@keyframes orbDrift2 {
+  0%, 100% { transform: translate(0, 0); }
+  33%       { transform: translate(35px, -45px); }
+  66%       { transform: translate(-25px, 25px); }
+}
+@keyframes orbDrift3 {
+  0%, 100% { transform: translate(0, 0); }
+  50%       { transform: translate(50px, 35px); }
+}
+
+/* ─── AMBIENT SIDE CARDS ─── */
+.ha-outer {
+  position: absolute;
+  pointer-events: none;
+  z-index: 2;
+}
+/* Bring cards closer to the title — tighter horizontal inset, vertically clustered */
+.ha-o1 { top: 20%; left: 9%;    animation: hsF2 6.2s ease-in-out infinite; }
+.ha-o2 { top: 46%; left: 7%;    animation: hsF3 7.0s 1.1s ease-in-out infinite; }
+.ha-o3 { top: 70%; left: 9.5%;  animation: hsF1 5.6s 2.2s ease-in-out infinite; }
+.ha-o4 { top: 16%; right: 9%;   animation: hsF1 5.6s 0.4s ease-in-out infinite; }
+.ha-o5 { top: 44%; right: 7%;   animation: hsF2 6.2s 1.6s ease-in-out infinite; }
+.ha-o6 { top: 70%; right: 9.5%; animation: hsF3 7.0s 2.8s ease-in-out infinite; }
+
+.ha-card { width: 112px; position: static !important; }
+
+/* Cards fade in + rise from below, staggered */
+.ha-o1 .ha-card { animation: haCardIn 0.85s 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+.ha-o2 .ha-card { animation: haCardIn 0.85s 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+.ha-o3 .ha-card { animation: haCardIn 0.85s 0.75s cubic-bezier(0.22,1,0.36,1) both; }
+.ha-o4 .ha-card { animation: haCardIn 0.85s 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+.ha-o5 .ha-card { animation: haCardIn 0.85s 0.65s cubic-bezier(0.22,1,0.36,1) both; }
+.ha-o6 .ha-card { animation: haCardIn 0.85s 0.85s cubic-bezier(0.22,1,0.36,1) both; }
+
+@keyframes haCardIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.94); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Hide side cards below 1100px */
+@media (max-width: 1100px) {
+  .ha-outer { display: none; }
+}
+
+/* ─── Hero floating cards — mobile row below CTA (replaces side cards) ─── */
+.hero-mobile-cards {
+  display: none;
+  width: 100%;
+  max-width: 420px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px 12px;
+  margin-top: 28px;
+  padding: 4px 12px 0;
   pointer-events: none;
 }
+@media (max-width: 1100px) {
+  .hero-mobile-cards { display: flex; }
+}
+.hero-mcard {
+  flex: 0 0 auto;
+}
+.hero-mcard.hmf-1 { animation: hsF1 5.6s ease-in-out infinite; }
+.hero-mcard.hmf-2 { animation: hsF2 6.2s ease-in-out infinite 0.35s; }
+.hero-mcard.hmf-3 { animation: hsF3 6.8s ease-in-out infinite 0.7s; }
+.hero-mcard.hmf-4 { animation: hsF1 5.6s ease-in-out infinite 0.2s; }
+.hero-mcard.hmf-5 { animation: hsF2 6.2s ease-in-out infinite 0.55s; }
+.hero-mcard.hmf-6 { animation: hsF3 6.8s ease-in-out infinite 0.9s; }
+.hero-mobile-cards .ha-card {
+  width: 100px;
+  transform-origin: center;
+}
+.hero-mobile-cards .hs-mini-label { font-size: 6.5px; margin-bottom: 4px; }
+.hero-mobile-cards .hs-card { padding: 6px 8px; border-radius: 8px; }
+.hmf-1 .ha-card { animation: haCardIn 0.85s 0.2s cubic-bezier(0.22,1,0.36,1) both; }
+.hmf-2 .ha-card { animation: haCardIn 0.85s 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+.hmf-3 .ha-card { animation: haCardIn 0.85s 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+.hmf-4 .ha-card { animation: haCardIn 0.85s 0.28s cubic-bezier(0.22,1,0.36,1) both; }
+.hmf-5 .ha-card { animation: haCardIn 0.85s 0.42s cubic-bezier(0.22,1,0.36,1) both; }
+.hmf-6 .ha-card { animation: haCardIn 0.85s 0.55s cubic-bezier(0.22,1,0.36,1) both; }
 
-/* Two-column hero layout */
-.hero .container {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  align-items: center;
-  gap: 64px;
+/* ─── PERSONA SWITCHER ─── */
+.persona-switch {
+  display: inline-flex;
+  background: rgba(38,30,72,0.05);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
+  margin-bottom: 28px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--border2);
+}
+.persona-btn {
+  padding: 8px 22px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mid);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.persona-btn.active {
+  background: white;
+  color: var(--dark);
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(38,30,72,0.12);
 }
 
-.hero-content { display: flex; flex-direction: column; }
-
-.hero-visual {
-  position: relative;
+/* ─── STATS BAR (pinned to bottom of hero) ─── */
+.hero-stats-bottom {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
-  will-change: transform;
+  gap: 0;
+  z-index: 3;
+  padding: 24px 52px;
+  border-top: 1px solid var(--border2);
+  background: rgba(245,246,255,0.6);
+  backdrop-filter: blur(12px);
 }
-
-.hero-img-float {
-  animation: heroImgFloat 6.5s ease-in-out infinite;
-  will-change: transform;
+.hero-stats-bottom .stat {
+  padding: 0 44px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+  flex-shrink: 0;
 }
-@keyframes heroImgFloat {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-14px); }
-}
-
-/* ════ Animated Hero Scene ════ */
-.hero-scene {
-  position: relative;
-  width: 480px;
-  height: 480px;
-  opacity: 0;
-  transform: translateX(44px) scale(0.96);
-  transition: opacity 0.9s cubic-bezier(0.22,1,0.36,1),
-              transform 0.9s cubic-bezier(0.22,1,0.36,1);
-  transition-delay: 0.28s;
-}
-.hero-scene.loaded { opacity: 1; transform: translateX(0) scale(1); }
+.hero-stats-bottom .stat:first-child { padding-left: 0; }
+.hero-stats-bottom .stat:last-child  { border-right: none; padding-right: 0; }
 
 /* SVG connecting lines layer */
 .hs-lines {
@@ -795,28 +948,19 @@ h2 em {
 }
 
 /* Responsive */
-@media (max-width: 860px) {
-  .hero .container { grid-template-columns: 1fr; gap: 40px; }
-  .hero-scene { width: 300px; height: 300px; }
-  .hs-main  { width: 116px; height: 116px; border-radius: 26px; }
-  .hs-logo  { width: 56px; height: 56px; }
-  .hs-card  { transform: scale(0.72); transform-origin: top left; }
-  .hs-tl { top: 30px;    left: 12px; }
-  .hs-tr { top: 18px;    right: 8px; }
-  .hs-ml { top: 118px;   left: 0; }
-  .hs-mr { top: 112px;   right: 4px; }
-  .hs-bl { bottom: 28px; left: 12px; }
-  .hs-br { bottom: 22px; right: 6px; }
-
-  /* Hero buttons — stacked, full width */
-  .hero-actions { flex-direction: column; gap: 10px; width: 100%; margin-bottom: 40px; }
+@media (max-width: 900px) {
+  .hero { padding: 120px 24px 90px; }
+  .hero-stats-bottom { padding: 18px 20px; }
+  .hero-stats-bottom .stat { padding: 0 20px; }
+  .hero-actions { flex-direction: column; gap: 10px; width: 100%; }
   .hero-actions .btn { width: 100%; justify-content: center; padding: 16px 24px; }
-
-  /* All buttons full width on mobile */
   .btn { width: 100%; justify-content: center; }
-  /* Exceptions: nav hamburger area keeps its own sizing */
   .nav-cta .btn { width: auto; }
   .nav-mobile-overlay .btn { width: auto; max-width: 260px; }
+}
+@media (max-width: 560px) {
+  .hero-stats-bottom { display: none; }
+  .persona-btn { padding: 8px 14px; font-size: 12px; }
 }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 8px;
@@ -841,11 +985,15 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
 .hero-sub {
   font-family: var(--font-sans);
   font-size: 14px; color: var(--mid);
-  line-height: 1.8; max-width: 540px;
+  line-height: 1.8; max-width: 520px;
   margin-bottom: 36px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  transition: opacity 0.22s ease;
 }
 .hero-sub em { font-style: normal; color: var(--mid); font-weight: 600; }
-.hero-actions { display: flex; gap: 12px; align-items: center; margin-bottom: 64px; }
+.hero-actions { display: flex; gap: 12px; align-items: center; justify-content: center; margin-bottom: 0; }
 .hero-stats {
   display: flex; gap: 0;
   border-top: 1px solid var(--border2); padding-top: 36px;
@@ -867,7 +1015,7 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
 /* ─── MARQUEE ─── */
 .marquee-wrap {
   padding: 0; overflow: hidden;
-  background: var(--grad-hero);
+  background: var(--bg 0.1%);
 
 }
 .marquee-track { display: flex; animation: marquee 80s linear infinite; white-space: nowrap; }
@@ -881,6 +1029,135 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
   flex-shrink: 0;
 }
 .mdot { width: 3px; height: 3px; border-radius: 50%; background: rgba(112,89,220,0.7); flex-shrink: 0; }
+
+/* ─── AUDIENCE SCROLL STACK ─── */
+.audience-wrap { position: relative; height: 200vh; }
+.audience-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+.audience-panel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px 10%;
+}
+.audience-panel-2 {
+  transform: translateY(100%);
+  will-change: transform;
+}
+.audience-company { background: var(--mid); }
+.audience-founder { background: var(--bg-accent); }
+.audience-panel-bg-num {
+  font-family: var(--font-serif);
+  font-size: 200px;
+  font-weight: 800;
+  line-height: 1;
+  position: absolute;
+  bottom: -30px; right: 20px;
+  letter-spacing: -10px;
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.05;
+}
+.audience-company .audience-panel-bg-num { color: white; }
+.audience-founder .audience-panel-bg-num { color: var(--dark); }
+.audience-panel-label {
+  font-family: var(--font-meta);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  opacity: 0.45;
+}
+.audience-company .audience-panel-label { color: white; }
+.audience-founder .audience-panel-label { color: var(--dark); }
+.audience-panel-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(26px, 2.8vw, 42px);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.5px;
+  margin-bottom: 32px;
+}
+.audience-company .audience-panel-headline { color: white; }
+.audience-founder .audience-panel-headline { color: var(--dark); }
+.audience-panel-points {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 44px;
+  max-width: 560px;
+}
+.audience-panel-points li {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.7;
+  padding-left: 22px;
+  position: relative;
+}
+.audience-company .audience-panel-points li { color: rgba(255,255,255,0.62); }
+.audience-founder .audience-panel-points li { color: var(--mid); }
+.audience-panel-points li::before {
+  content: '→';
+  position: absolute;
+  left: 0; top: 0;
+  font-size: 12px;
+  opacity: 0.45;
+}
+.audience-panel-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: gap 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  padding: 12px 24px;
+  border-radius: 10px;
+  max-width: fit-content;
+}
+.audience-panel-cta:hover { gap: 14px; }
+.audience-company .audience-panel-cta {
+  background: rgba(255,255,255,0.10);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.audience-company .audience-panel-cta:hover {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.32);
+}
+.audience-founder .audience-panel-cta {
+  background: var(--dark);
+  color: white;
+  border: 1px solid var(--dark);
+}
+.audience-founder .audience-panel-cta:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+@media (max-width: 900px) {
+  .audience-wrap { height: auto; }
+  .audience-sticky { position: static; height: auto; overflow: visible; }
+  .audience-panel {
+    position: relative !important;
+    inset: auto !important;
+    transform: none !important;
+    height: auto !important;
+    padding: 60px 24px !important;
+    min-height: 50vh;
+  }
+}
 
 /* ─── PROBLEMS (sticky scroll stack) ─── */
 .problems { background: var(--bg); padding: 0; }
@@ -1180,6 +1457,128 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
   margin-top: 22px;
   display: flex;
   justify-content: flex-start;
+}
+
+/* ─── SERVICES ACCORDION LIST ─── */
+.svc-list {
+  margin-top: 56px;
+  border-top: 1px solid var(--border);
+}
+.svc-item {
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.svc-item:hover { background: rgba(112,89,220,0.02); }
+.svc-item-header {
+  display: grid;
+  grid-template-columns: 56px 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 0;
+  user-select: none;
+}
+.svc-item-num {
+  font-family: var(--font-meta);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+.svc-item.open .svc-item-num,
+.svc-item:hover .svc-item-num { opacity: 1; }
+.svc-item-main { display: flex; flex-direction: column; gap: 5px; }
+.svc-item-tag-line {
+  font-family: var(--font-meta);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--light);
+}
+.svc-item-name {
+  font-family: var(--font-serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: -0.5px;
+  line-height: 1.1;
+  transition: color 0.2s;
+}
+.svc-item:hover .svc-item-name,
+.svc-item.open .svc-item-name { color: var(--accent); }
+.svc-item-toggle {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.35s cubic-bezier(0.34,1.3,0.64,1);
+}
+.svc-item:hover .svc-item-toggle {
+  border-color: rgba(112,89,220,0.35);
+  background: rgba(112,89,220,0.05);
+}
+.svc-item.open .svc-item-toggle {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: rotate(45deg);
+}
+.svc-item-toggle svg {
+  width: 14px; height: 14px;
+  stroke: var(--mid);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: stroke 0.2s;
+}
+.svc-item.open .svc-item-toggle svg { stroke: white; }
+.svc-item-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding: 0 0 0 80px;
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.55s cubic-bezier(0.25,0.46,0.45,0.94),
+              opacity 0.4s ease,
+              padding-bottom 0.45s ease;
+}
+.svc-item.open .svc-item-body {
+  max-height: 500px;
+  opacity: 1;
+  padding-bottom: 40px;
+}
+.svc-item-desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.75;
+}
+.svc-item-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-top: 22px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  transition: gap 0.2s;
+}
+.svc-item-link:hover { gap: 12px; }
+@media (max-width: 900px) {
+  .svc-item-header { grid-template-columns: 40px 1fr auto; gap: 14px; }
+  .svc-item-body { grid-template-columns: 1fr; padding-left: 54px; gap: 24px; }
+}
+@media (max-width: 560px) {
+  .svc-item-body { padding-left: 0; }
 }
 
 /* ─── PROCESS ─── */
@@ -1660,31 +2059,235 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
 .faq-a { font-size: 14px; color: var(--mid); line-height: 1.78; max-height: 0; overflow: hidden; transition: max-height 0.38s ease, padding 0.3s; }
 .faq-item.open .faq-a { max-height: 300px; padding-bottom: 22px; }
 
-/* ─── CTA ─── */
-.cta-section { background: var(--grad-soft); }
-.cta-box {
-  background: #ffffff77;
-  border: 1px solid var(--border); border-radius: 24px;
-  padding: 64px 56px; text-align: center; max-width: 800px; margin: 0 auto;
-  box-shadow: 0 16px 40px rgba(190,195,230,0.55);
+/* ─── CTA — scroll stack + viewport-tied background (desktop, mirrors audience panels) ─── */
+.cta-scroll-wrap {
   position: relative;
-  isolation: isolate;
+  height: 135vh;
 }
-.cta-box > * { position: relative; z-index: 2; }
-.cta-box::before {
+.cta-sticky {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@media (min-width: 901px) {
+  .cta-scroll-wrap {
+    height: 200vh;
+  }
+  .cta-sticky {
+    height: 100vh;
+  }
+}
+.cta-section {
+  --cta-accent-op: 0;
+  --cta-bg-op: 0;
+  --cta-ease: 1;
+  background-color: var(--mid);
+  background-image:
+    radial-gradient(ellipse min(130vw, 1000px) min(92vh, 820px) at 50% clamp(28vh, 38vw, 52vh), rgba(203, 206, 250, 0.28) 0%, transparent 66%),
+    radial-gradient(circle clamp(280px, 58vw, 620px) at min(92vw, calc(100% - 24px)) clamp(10vh, 120px, 22vh), rgba(112, 89, 220, 0.38) 0%, transparent 62%);
+  background-attachment: fixed;
+  min-height: 80vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 100px 52px;
+}
+@media (min-width: 901px) {
+  .cta-section { min-height: 100vh; }
+}
+.cta-section::before {
   content: '';
   position: absolute;
-  inset: 12px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(38, 30, 72, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 8px 20px rgba(38, 30, 72, 0.08);
-  z-index: 0;
+  inset: 0;
+  background: var(--bg-accent);
+  opacity: calc(var(--cta-accent-op) * 0.92);
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.12s linear;
 }
-.cta-box h2 { margin-bottom: 14px; }
-.cta-box p { font-size: 15.5px; color: var(--mid); max-width: 600px; margin: 0 auto 40px; line-height: 1.50; }
+.cta-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  opacity: calc(var(--cta-bg-op) * 0.97);
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.12s linear;
+}
+.cta-bg-orb { z-index: 3; transition: opacity 0.2s linear; }
+.cta-section.cta-footer-tone .cta-bg-orb { opacity: 0.42; }
+.cta-section > .container { position: relative; z-index: 4; }
+@media (max-width: 900px) {
+  .cta-section {
+    background-attachment: scroll;
+    background-image:
+      radial-gradient(ellipse 140% 70% at 50% min(35vh, 240px), rgba(203, 206, 250, 0.26) 0%, transparent 65%),
+      radial-gradient(circle min(72vw, 420px) at 88% min(12vh, 96px), rgba(112, 89, 220, 0.34) 0%, transparent 60%);
+  }
+}
+.cta-section.cta-founder-tone .cta-big-headline {
+  color: var(--dark);
+}
+.cta-section.cta-founder-tone .cta-big-headline em {
+  color: var(--accent);
+}
+.cta-section.cta-founder-tone .cta-big-sub {
+  color: var(--mid);
+}
+.cta-section.cta-founder-tone .cta-avail-badge {
+  color: var(--dark);
+  background: rgba(255, 255, 255, 0.82);
+  border-color: rgba(38, 30, 72, 0.14);
+}
+.cta-section.cta-founder-tone .btn-white {
+  background: var(--dark);
+  color: white;
+  box-shadow: 0 4px 22px rgba(38, 30, 72, 0.18);
+}
+.cta-section.cta-founder-tone .btn-white:hover {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 8px 28px rgba(112, 89, 220, 0.35);
+}
+.cta-section.cta-founder-tone .cta-small-note {
+  color: rgba(38, 30, 72, 0.38);
+}
+.cta-section.cta-footer-tone .cta-big-headline {
+  color: var(--dark);
+}
+.cta-section.cta-footer-tone .cta-big-headline em {
+  color: var(--accent);
+}
+.cta-section.cta-footer-tone .cta-big-sub {
+  color: var(--mid);
+}
+.cta-section.cta-footer-tone .cta-avail-badge {
+  color: var(--dark);
+  background: rgba(255, 255, 255, 0.92);
+  border-color: var(--border2);
+}
+.cta-section.cta-footer-tone .btn-white {
+  background: var(--dark);
+  color: white;
+  box-shadow: 0 4px 22px rgba(38, 30, 72, 0.18);
+}
+.cta-section.cta-footer-tone .btn-white:hover {
+  background: var(--accent);
+  color: white;
+  box-shadow: 0 8px 28px rgba(112, 89, 220, 0.35);
+}
+.cta-section.cta-footer-tone .cta-small-note {
+  color: rgba(95, 91, 140, 0.55);
+}
+.cta-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(90px);
+}
+.cta-bg-orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(112,89,220,0.3) 0%, transparent 65%);
+  top: -150px; right: -150px;
+  animation: orbDrift1 14s ease-in-out infinite;
+}
+.cta-bg-orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(203,206,250,0.12) 0%, transparent 65%);
+  bottom: -100px; left: -80px;
+  animation: orbDrift2 11s ease-in-out infinite 3s;
+}
+.cta-inner-dark {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: translateY(calc((1 - var(--cta-ease)) * 44px));
+  transition: transform 0.08s linear;
+}
+.cta-avail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  color: #261e48c3 ;
+  background-color: var(--light);
+  padding: 6px 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 999px;
+  margin-bottom: 32px;
+}
+.cta-big-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(36px, 5.5vw, 72px);
+  font-weight: 700;
+  color: white;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin-bottom: 24px;
+}
+.cta-big-headline em {
+  font-style: italic;
+  color: rgba(203,206,250,0.82);
+}
+.cta-big-sub {
+  font-family: var(--font-sans);
+  font-size: 15.5px;
+  color: #ffffff8c;
+  line-height: 1.75;
+  max-width: 460px;
+  margin: 0 auto 48px;
+}
+.cta-btn-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.btn-white {
+  background: white;
+  color: var(--dark);
+  font-weight: 600;
+  box-shadow: 0 4px 20px rgba(255,255,255,0.12);
+}
+.btn-white:hover {
+  background: #f0f1ff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(255,255,255,0.18);
+}
+.btn-outline-white {
+  background: transparent;
+  color: rgba(255,255,255,0.68);
+  border: 1.5px solid rgba(255,255,255,0.2);
+}
+.btn-outline-white:hover {
+  border-color: rgba(255,255,255,0.5);
+  color: white;
+}
+.cta-small-note {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: rgba(255,255,255,0.26);
+  letter-spacing: 0.05em;
+}
+@media (max-width: 900px) {
+  .cta-section { padding: 80px 24px; min-height: 100vh; }
+  .cta-btn-row { flex-direction: column; align-items: stretch; }
+  .cta-btn-row .btn { width: 100%; justify-content: center; }
+}
 
 /* ─── FOOTER ─── */
 footer {
@@ -2023,125 +2626,162 @@ footer {
 <div id="page-home" class="page-view active">
 
 <section class="hero">
-  <div class="container">
+  <!-- Background orbs -->
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-orb hero-orb-4"></div>
 
-    <!-- Left: text content -->
-    <div class="hero-content">
-      <div class="hero-badge reveal"><div class="nav-dot"></div>Available for new projects - London - Remote</div>
-            <h1 class="reveal reveal-d1">Design for users, <br>structure for<br><em>digital products.</em></h1>
-      <p class="hero-sub reveal reveal-d2">From <em>SaaS platforms</em> to <em>mobile apps</em> and <em>AI-powered workflows</em>, I design products that convert, retain and scale. Whether you're building from scratch or fixing what's already live, I'll find what's broken and fix it right.</p>
-      <div class="hero-actions reveal reveal-d3">
-        <a href="/contact/?topic=start-project" class="btn btn-dark">Start a project</a>
-        <a href="/work/" class="btn btn-outline">See my work</a>
+  <!-- Ambient left cards -->
+  <div class="ha-outer ha-o1">
+    <div class="hs-card ha-card">
+      <span class="hs-mini-label">UX research</span>
+      <div style="display:flex;gap:3px;margin-bottom:6px">
+        <div style="width:4px;height:4px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
+        <div style="width:4px;height:4px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
+        <div style="width:4px;height:4px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
       </div>
+      <div class="sk sk-d" style="width:64px"></div>
+      <div class="sk" style="width:50px"></div>
+      <div class="sk" style="width:40px;margin-bottom:0"></div>
+    </div>
+  </div>
+
+  <div class="ha-outer ha-o2">
+    <div class="hs-card ha-card">
+      <span class="hs-mini-label">Tasks completed</span>
+      <div class="sk-row">
+        <div class="sk-box" style="width:18px;height:18px;flex-shrink:0;border-radius:50%"></div>
+        <div style="flex:1">
+          <div class="sk sk-d" style="width:100%;margin-bottom:4px"></div>
+          <div class="sk" style="width:75%;margin-bottom:0"></div>
+        </div>
+      </div>
+      <div class="sk" style="width:100%;margin-top:5px;margin-bottom:0"></div>
+    </div>
+  </div>
+
+  <div class="ha-outer ha-o3">
+    <div class="hs-card ha-card">
+      <span class="hs-mini-label">Design system</span>
+      <div class="sk sk-d" style="width:52px;margin-bottom:7px"></div>
+      <div class="sk-row"><div class="sk-dot"></div><div class="sk" style="flex:1;margin:0"></div></div>
+      <div class="sk-row"><div class="sk-dot"></div><div class="sk" style="flex:1;margin:0"></div></div>
+      <div class="sk-row"><div class="sk-dot" style="background:rgba(88,219,105,0.45)"></div><div class="sk" style="flex:1;margin:0"></div></div>
+    </div>
+  </div>
+
+  <!-- Ambient right cards -->
+  <div class="ha-outer ha-o4">
+    <div class="hs-card ha-card">
+      <span class="hs-mini-label">Client satisfaction</span>
+      <div class="sk sk-d" style="width:32px;margin-bottom:7px"></div>
+      <div class="sk" style="width:62px"></div>
+      <div class="sk" style="width:50px"></div>
+      <div class="sk-a" style="width:60px;margin-top:7px"></div>
+    </div>
+  </div>
+
+  <div class="ha-outer ha-o5">
+    <div class="hs-card ha-card">
+      <span class="hs-mini-label">UX audit</span>
+      <div class="sk" style="width:40px;margin-bottom:6px"></div>
+      <div style="font-family:var(--font-meta);font-size:16px;font-weight:700;color:rgba(112,89,220,0.68);line-height:1;margin-bottom:5px">94%</div>
+      <div class="sk" style="width:54px;margin-bottom:0"></div>
+    </div>
+  </div>
+
+  <div class="ha-outer ha-o6">
+    <div class="hs-card ha-card">
+      <span class="hs-mini-label">Product strategy</span>
+      <div class="sk" style="width:62px;margin-bottom:5px"></div>
+      <div class="sk" style="width:52px;margin-bottom:5px"></div>
+      <div class="sk-a" style="width:66px;margin-top:5px"></div>
+    </div>
+  </div>
+
+  <!-- Centered content -->
+  <div class="container">
+    <div class="hero-badge reveal"><div class="nav-dot"></div>Available for new projects — London · Remote</div>
+
+    <h1 class="reveal reveal-d1">Design for users,<br>structure for<br><em>digital products.</em></h1>
+
+    <div class="persona-switch reveal reveal-d2">
+      <button class="persona-btn active" data-persona="founder">For founders</button>
+      <button class="persona-btn" data-persona="company">For companies</button>
     </div>
 
-    <!-- Right: animated scene (no background) -->
-    <div class="hero-visual" id="heroVisual">
-      <div class="hero-img-float">
-        <div class="hero-scene" id="heroScene">
+    <p class="hero-sub reveal reveal-d2" id="heroSub"></p>
 
-          <!-- Particle canvas (background layer) -->
-          <canvas class="hs-canvas" id="hsCanvas"></canvas>
+    <div class="hero-actions reveal reveal-d3">
+      <a href="/contact/?topic=start-project" class="btn btn-dark" id="heroCtaPrimary">Start a project</a>
+      <a href="/work/" class="btn btn-outline">See my work</a>
+    </div>
 
-          <!-- Dashed connecting lines (SVG layer) -->
-          <svg class="hs-lines" viewBox="0 0 480 480" fill="none">
-            <path d="M104 94 C160 120 200 170 240 240"  stroke="rgba(112,89,220,0.13)" stroke-width="1.2" stroke-dasharray="4 5"/>
-            <path d="M376 76 C326 110 290 172 240 240"  stroke="rgba(112,89,220,0.13)" stroke-width="1.2" stroke-dasharray="4 5"/>
-            <path d="M88 240 C140 240 185 240 240 240"  stroke="rgba(112,89,220,0.10)" stroke-width="1.2" stroke-dasharray="4 5"/>
-            <path d="M392 230 C346 232 296 237 240 240" stroke="rgba(112,89,220,0.10)" stroke-width="1.2" stroke-dasharray="4 5"/>
-            <path d="M104 388 C152 358 200 310 240 240" stroke="rgba(112,89,220,0.11)" stroke-width="1.2" stroke-dasharray="4 5"/>
-            <path d="M368 394 C324 360 284 308 240 240" stroke="rgba(112,89,220,0.11)" stroke-width="1.2" stroke-dasharray="4 5"/>
-            <!-- connection dots at card ends -->
-            <circle cx="104" cy="94"  r="3" fill="rgba(112,89,220,0.18)"/>
-            <circle cx="376" cy="76"  r="3" fill="rgba(112,89,220,0.18)"/>
-            <circle cx="88"  cy="240" r="3" fill="rgba(112,89,220,0.15)"/>
-            <circle cx="392" cy="230" r="3" fill="rgba(112,89,220,0.15)"/>
-            <circle cx="104" cy="388" r="3" fill="rgba(112,89,220,0.15)"/>
-            <circle cx="368" cy="394" r="3" fill="rgba(112,89,220,0.15)"/>
-          </svg>
-
-          <!-- TL card: browser window -->
-          <div class="hs-card hs-tl hs-f2">
-            <span class="hs-mini-label">UX research</span>
-            <div style="display:flex;gap:3px;margin-bottom:6px">
-              <div style="width:4px;height:4px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
-              <div style="width:4px;height:4px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
-              <div style="width:4px;height:4px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
-            </div>
-            <div class="sk sk-d" style="width:64px"></div>
-            <div class="sk" style="width:50px"></div>
-            <div class="sk" style="width:56px"></div>
-            <div class="sk" style="width:40px;margin-bottom:0"></div>
+    <div class="hero-mobile-cards" aria-hidden="true">
+      <div class="hero-mcard hmf-1">
+        <div class="hs-card ha-card">
+          <span class="hs-mini-label">UX research</span>
+          <div style="display:flex;gap:2px;margin-bottom:4px">
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
+            <div style="width:3px;height:3px;border-radius:50%;background:rgba(112,89,220,0.22)"></div>
           </div>
-
-          <!-- TR card: card with CTA -->
-          <div class="hs-card hs-tr hs-f1">
-            <span class="hs-mini-label">Client satisfaction</span>
-            <div class="sk sk-d" style="width:32px;margin-bottom:7px"></div>
-            <div class="sk" style="width:62px"></div>
-            <div class="sk" style="width:50px"></div>
-            <div class="sk-a" style="width:60px;margin-top:7px"></div>
-          </div>
-
-          <!-- ML card: user / avatar row -->
-          <div class="hs-card hs-ml hs-f3">
-            <span class="hs-mini-label">Tasks completed</span>
-            <div class="sk-row">
-              <div class="sk-box" style="width:20px;height:20px;flex-shrink:0;border-radius:50%"></div>
-              <div style="flex:1">
-                <div class="sk sk-d" style="width:100%;margin-bottom:4px"></div>
-                <div class="sk" style="width:75%;margin-bottom:0"></div>
-              </div>
-            </div>
-            <div class="sk" style="width:100%;margin-top:5px;margin-bottom:0"></div>
-          </div>
-
-          <!-- MR card: metric -->
-          <div class="hs-card hs-mr hs-f2">
-            <span class="hs-mini-label">UX audit</span>
-            <div class="sk" style="width:40px;margin-bottom:6px"></div>
-            <div style="font-family:var(--font-meta);font-size:16px;font-weight:700;color:rgba(112,89,220,0.68);line-height:1;margin-bottom:5px">94%</div>
-            <div class="sk" style="width:54px;margin-bottom:0"></div>
-          </div>
-
-          <!-- BL card: checklist -->
-          <div class="hs-card hs-bl hs-f1">
-            <span class="hs-mini-label">Design system</span>
-            <div class="sk sk-d" style="width:52px;margin-bottom:7px"></div>
-            <div class="sk-row"><div class="sk-dot"></div><div class="sk" style="flex:1;margin:0"></div></div>
-            <div class="sk-row"><div class="sk-dot"></div><div class="sk" style="flex:1;margin:0"></div></div>
-            <div class="sk-row"><div class="sk-dot" style="background:rgba(88,219,105,0.45)"></div><div class="sk" style="flex:1;margin:0"></div></div>
-          </div>
-
-          <!-- BR card: form rows -->
-          <div class="hs-card hs-br hs-f3">
-            <span class="hs-mini-label">Product strategy</span>
-            <div class="sk" style="width:62px;margin-bottom:5px"></div>
-            <div class="sk" style="width:52px;margin-bottom:5px"></div>
-            <div class="sk-a" style="width:66px;margin-top:5px"></div>
-          </div>
-
-          <!-- ── Central 3D glass card ── -->
-          <div class="hs-main-wrap">
-            <div class="hs-main-glow"></div>
-            <div class="hs-main" id="hsMain">
-              <div class="hs-main-layer"></div>
-              <img class="hs-logo" src="/Public/Images/logo.png" alt="Paux Design mark">
+          <div class="sk sk-d" style="width:52px"></div>
+          <div class="sk" style="width:40px"></div>
+          <div class="sk" style="width:34px;margin-bottom:0"></div>
+        </div>
+      </div>
+      <div class="hero-mcard hmf-2">
+        <div class="hs-card ha-card">
+          <span class="hs-mini-label">Tasks completed</span>
+          <div class="sk-row">
+            <div class="sk-box" style="width:14px;height:14px;flex-shrink:0;border-radius:50%"></div>
+            <div style="flex:1">
+              <div class="sk sk-d" style="width:100%;margin-bottom:3px"></div>
+              <div class="sk" style="width:72%;margin-bottom:0"></div>
             </div>
           </div>
-
-          <!-- Mouse cursor (position driven by JS on hover) -->
-          <svg class="hs-cursor" id="hsCursor" viewBox="0 0 16 20" fill="none">
-            <path d="M1.5 1.5 L1.5 15.5 L5.2 11.2 L8.2 18 L10.8 16.8 L7.8 10 L13.5 10 Z"
-                  fill="#261E48" stroke="white" stroke-width="0.9" stroke-linejoin="round"/>
-          </svg>
-
+          <div class="sk" style="width:100%;margin-top:3px;margin-bottom:0"></div>
+        </div>
+      </div>
+      <div class="hero-mcard hmf-3">
+        <div class="hs-card ha-card">
+          <span class="hs-mini-label">Design system</span>
+          <div class="sk sk-d" style="width:44px;margin-bottom:5px"></div>
+          <div class="sk-row"><div class="sk-dot"></div><div class="sk" style="flex:1;margin:0"></div></div>
+          <div class="sk-row"><div class="sk-dot"></div><div class="sk" style="flex:1;margin:0"></div></div>
+          <div class="sk-row"><div class="sk-dot" style="background:rgba(88,219,105,0.45)"></div><div class="sk" style="flex:1;margin:0"></div></div>
+        </div>
+      </div>
+      <div class="hero-mcard hmf-4">
+        <div class="hs-card ha-card">
+          <span class="hs-mini-label">Client satisfaction</span>
+          <div class="sk sk-d" style="width:28px;margin-bottom:5px"></div>
+          <div class="sk" style="width:52px"></div>
+          <div class="sk" style="width:42px"></div>
+          <div class="sk-a" style="width:48px;margin-top:5px"></div>
+        </div>
+      </div>
+      <div class="hero-mcard hmf-5">
+        <div class="hs-card ha-card">
+          <span class="hs-mini-label">UX audit</span>
+          <div class="sk" style="width:34px;margin-bottom:4px"></div>
+          <div style="font-family:var(--font-meta);font-size:13px;font-weight:700;color:rgba(112,89,220,0.68);line-height:1;margin-bottom:4px">94%</div>
+          <div class="sk" style="width:46px;margin-bottom:0"></div>
+        </div>
+      </div>
+      <div class="hero-mcard hmf-6">
+        <div class="hs-card ha-card">
+          <span class="hs-mini-label">Product strategy</span>
+          <div class="sk" style="width:52px;margin-bottom:4px"></div>
+          <div class="sk" style="width:44px;margin-bottom:4px"></div>
+          <div class="sk-a" style="width:54px;margin-top:4px"></div>
         </div>
       </div>
     </div>
-
   </div>
+
 </section>
 
 <div class="marquee-wrap">
@@ -2165,8 +2805,45 @@ footer {
   </div>
 </div>
 
-<!-- ══ PROBLEMS ══ -->
-<section class="problems" id="problems">
+<!-- ══ AUDIENCE SCROLL STACK ══ -->
+<section id="problems" style="padding:0">
+  <div class="audience-wrap">
+    <div class="audience-sticky">
+
+      <!-- Panel 1: Companies -->
+      <div class="audience-panel audience-company audience-panel-1">
+        <div class="audience-panel-bg-num">01</div>
+        <div class="audience-panel-label">For companies &amp; product teams</div>
+        <h2 class="audience-panel-headline">A designer who thinks<br>beyond the brief.</h2>
+        <ul class="audience-panel-points">
+          <li>3+ years working across SaaS, mobile, and AI products — I know how to ramp up fast and integrate into existing teams.</li>
+          <li>I work directly with PMs, engineers, and stakeholders</li>
+          <li>Based in London. Remote-friendly. Available for a conversation now </li>
+          <li>Clear scope, clear timeline. You always know what's happening and when.</li>
+        </ul>
+        <a href="/contact/?topic=hiring" class="audience-panel-cta">Talk about working together →</a>
+      </div>
+
+      <!-- Panel 2: Founders (slides up on scroll) -->
+      <div class="audience-panel audience-founder audience-panel-2" id="audiencePanel2">
+        <div class="audience-panel-bg-num">02</div>
+        <div class="audience-panel-label">For founders building a product</div>
+        <h2 class="audience-panel-headline">You have the vision.<br>I'll make it real.</h2>
+        <ul class="audience-panel-points">
+          <li>Not sure what to design first — I map it so nothing gets wasted.</li>
+          <li>Launched but not converting? I find exactly where the experience breaks.</li>
+          <li>The AI feature is live but confusing? I close the gap between tech and user.</li>
+          <li>From zero to something investors and early users can navigate.</li>
+        </ul>
+        <a href="/contact/?topic=start-project" class="audience-panel-cta">Start a project →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- OLD PROBLEMS (hidden for JS compatibility) -->
+<section class="problems" id="problems-old" style="display:none">
   <div class="problems-scroll-space">
     <div class="problems-inner">
       <div class="container">
@@ -2421,58 +3098,126 @@ footer {
   <div class="container">
     <div class="label reveal">What I do</div>
     <h2 class="reveal reveal-d1">Three ways I can help your product</h2>
-    <p class="sub reveal reveal-d2" style="margin-bottom:52px">From a UX audit to a full product build or a new website, I work from where you are, not from a fixed template.</p>
-    <div class="services-grid">
+    <p class="sub reveal reveal-d2">From a UX audit to a full product build or a new website, I work from where you are, not from a fixed template.</p>
 
-      <!-- Card 1: UX Audit -->
-      <div class="svc reveal-scale" data-n="01">
-        <div class="svc-tag">Quick win</div>
-        <div class="svc-title">UX Audit</div>
-        <p class="svc-for">Your product is live but something's off — users aren't converting, activating, or staying the way you expected. I find exactly what's breaking and why.</p>
-        <div class="svc-divider"></div>
-        <div class="svc-includes-label">What's included</div>
-        <ul class="svc-items">
-          <li>Discovery &amp; full UX audit</li>
-          <li>Heuristic evaluation</li>
-          <li>User flow &amp; conversion analysis</li>
-          <li>Prioritised action report</li>
-          <li>30-min walkthrough call</li>
-        </ul>
-        <a href="/contact/?topic=ux-audit" class="svc-cta">Get an audit <span class="svc-cta-arrow">→</span></a>
+    <div class="svc-list">
+
+      <!-- 01 UX Audit -->
+      <div class="svc-item reveal" onclick="toggleService(this)">
+        <div class="svc-item-header">
+          <div class="svc-item-num">01</div>
+          <div class="svc-item-main">
+            <span class="svc-item-tag-line">Quick win</span>
+            <div class="svc-item-name">UX Audit</div>
+          </div>
+          <div class="svc-item-toggle">
+            <svg viewBox="0 0 14 14"><path d="M7 2v10M2 7h10"/></svg>
+          </div>
+        </div>
+        <div class="svc-item-body">
+          <div class="svc-item-desc">
+            <p>Your product is live but something's off — users aren't converting, activating, or staying the way you expected. I find exactly what's breaking and why.</p>
+            <a href="/contact/?topic=ux-audit" class="svc-item-link">Get an audit →</a>
+          </div>
+          <div>
+            <div class="svc-includes-label">What's included</div>
+            <ul class="svc-items">
+              <li>Discovery &amp; full UX audit</li>
+              <li>Heuristic evaluation</li>
+              <li>User flow &amp; conversion analysis</li>
+              <li>Prioritised action report</li>
+              <li>30-min walkthrough call</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <!-- Card 2: Product Design (featured) -->
-      <div class="svc svc-dark reveal-scale reveal-d1" data-n="02">
-        <div class="svc-badge">Most popular</div>
-        <div class="svc-tag">End-to-end</div>
-        <div class="svc-title">Product Design</div>
-        <p class="svc-for">For founders building a SaaS, app or AI-powered product. From zero to a high-fidelity UI your dev team can build from, and your users can actually navigate.</p>
-        <div class="svc-divider"></div>
-        <div class="svc-includes-label">What's included</div>
-        <ul class="svc-items">
-          <li>Discovery &amp; UX audit</li>
-          <li>Information architecture</li>
-          <li>Wireframes &amp; prototype</li>
-          <li>High-fidelity UI — desktop &amp; mobile</li>
-          <li>Design system &amp; developer handoff</li>
-        </ul>
-        <a href="/contact/?topic=product-design" class="svc-cta">Start a project <span class="svc-cta-arrow">→</span></a>
+      <!-- 02 Product Design -->
+      <div class="svc-item reveal" onclick="toggleService(this)">
+        <div class="svc-item-header">
+          <div class="svc-item-num">02</div>
+          <div class="svc-item-main">
+            <span class="svc-item-tag-line">End-to-end · Most popular</span>
+            <div class="svc-item-name">Product Design</div>
+          </div>
+          <div class="svc-item-toggle">
+            <svg viewBox="0 0 14 14"><path d="M7 2v10M2 7h10"/></svg>
+          </div>
+        </div>
+        <div class="svc-item-body">
+          <div class="svc-item-desc">
+            <p>For founders building a SaaS, app or AI-powered product. From zero to a high-fidelity UI your dev team can build from, and your users can actually navigate.</p>
+            <a href="/contact/?topic=product-design" class="svc-item-link">Start a project →</a>
+          </div>
+          <div>
+            <div class="svc-includes-label">What's included</div>
+            <ul class="svc-items">
+              <li>Discovery &amp; UX audit</li>
+              <li>Information architecture</li>
+              <li>Wireframes &amp; prototype</li>
+              <li>High-fidelity UI — desktop &amp; mobile</li>
+              <li>Design system &amp; developer handoff</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
-      <!-- Card 3: Web Design -->
-      <div class="svc reveal-scale reveal-d2" data-n="03">
-        <div class="svc-tag">Full presence</div>
-        <div class="svc-title">Web Design &amp; Build</div>
-        <p class="svc-for">For businesses that need a website that actually does work — sharp messaging, strong visual identity, and a Framer build that's ready to launch.</p>
-        <div class="svc-divider"></div>
-        <div class="svc-includes-label">What's included</div>
-        <ul class="svc-items">
-          <li>Brand direction &amp; visual identity</li>
-          <li>Copy structure &amp; messaging</li>
-          <li>Framer build with animations</li>
-          <li>SEO setup &amp; performance</li>
-        </ul>
-        <a href="/contact/?topic=web-design" class="svc-cta">Get a website <span class="svc-cta-arrow">→</span></a>
+      <!-- 03 Web Design -->
+      <div class="svc-item reveal" onclick="toggleService(this)">
+        <div class="svc-item-header">
+          <div class="svc-item-num">03</div>
+          <div class="svc-item-main">
+            <span class="svc-item-tag-line">Full presence</span>
+            <div class="svc-item-name">Web Design &amp; Build</div>
+          </div>
+          <div class="svc-item-toggle">
+            <svg viewBox="0 0 14 14"><path d="M7 2v10M2 7h10"/></svg>
+          </div>
+        </div>
+        <div class="svc-item-body">
+          <div class="svc-item-desc">
+            <p>For businesses that need a website that actually does work — sharp messaging, strong visual identity, ready to launch.</p>
+            <a href="/contact/?topic=web-design" class="svc-item-link">Get a website →</a>
+          </div>
+          <div>
+            <div class="svc-includes-label">What's included</div>
+            <ul class="svc-items">
+              <li>Brand direction &amp; visual identity</li>
+              <li>Copy structure &amp; messaging</li>
+              <li>SEO setup &amp; performance</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 Branding -->
+      <div class="svc-item reveal" onclick="toggleService(this)">
+        <div class="svc-item-header">
+          <div class="svc-item-num">04</div>
+          <div class="svc-item-main">
+            <span class="svc-item-tag-line">Identity &amp; direction</span>
+            <div class="svc-item-name">Branding</div>
+          </div>
+          <div class="svc-item-toggle">
+            <svg viewBox="0 0 14 14"><path d="M7 2v10M2 7h10"/></svg>
+          </div>
+        </div>
+        <div class="svc-item-body">
+          <div class="svc-item-desc">
+            <p>For startups and businesses that need a visual identity that feels intentional — not generic. A brand system that scales from pitch deck to product UI.</p>
+            <a href="/contact/?topic=branding" class="svc-item-link">Start your brand →</a>
+          </div>
+          <div>
+            <div class="svc-includes-label">What's included</div>
+            <ul class="svc-items">
+              <li>Logo &amp; visual identity</li>
+              <li>Brand guidelines &amp; typography</li>
+              <li>Colour system &amp; iconography</li>
+              <li>Brand voice &amp; tone direction</li>
+              <li>Brand kit handoff</li>
+            </ul>
+          </div>
+        </div>
       </div>
 
     </div>
@@ -2789,15 +3534,28 @@ footer {
   </div>
 </section>
 
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-box reveal">
-      <h2>Ready to create meaningful experiences?</h2>
-      <p>Tell me about your product idea or what you're trying to improve. <br>I'll get back to you within 24 hours, no sales pressure.<br></p>
-      <a href="/contact/" class="btn btn-dark">Start a project <svg viewBox="0 0 14 14"><path d="M2 7h10M8 3l4 4-4 4"/></svg></a>
-    </div>
+<div class="cta-scroll-wrap">
+  <div class="cta-sticky">
+    <section class="cta-section" id="cta">
+      <!-- Background orbs -->
+      <div class="cta-bg-orb cta-bg-orb-1"></div>
+      <div class="cta-bg-orb cta-bg-orb-2"></div>
+
+      <div class="container">
+        <div class="cta-inner-dark reveal">
+          <div class="cta-avail-badge">
+            <div class="nav-dot"></div>Available for new projects
+          </div>
+          <h2 class="cta-big-headline">Let's build something<br>that <em>actually works.</em></h2>
+          <p class="cta-big-sub">Tell me about your product or what's not working —<br>I'll get back to you within 24 hours. No pitch, no pressure.</p>
+          <div class="cta-btn-row">
+            <a href="/contact/" class="btn btn-white" style="padding:14px 36px">Start a project</a>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
-</section>
+</div>
 
 <footer>
   <div class="footer-inner">
@@ -3241,6 +3999,114 @@ function initAuditIllustration() {
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 })();
+
+// ─── AUDIENCE SCROLL STACK ───
+(function initAudienceStack() {
+  const wrap = document.querySelector('.audience-wrap');
+  if (!wrap || window.innerWidth <= 900) return;
+  const panel2 = document.getElementById('audiencePanel2');
+  if (!panel2) return;
+
+  function update() {
+    const rect = wrap.getBoundingClientRect();
+    const scrollable = wrap.offsetHeight - window.innerHeight;
+    if (scrollable <= 0) return;
+    const scrolled = Math.max(0, -rect.top);
+    const progress = Math.min(1, scrolled / scrollable);
+    const ease = 1 - Math.pow(1 - progress, 2.5);
+    panel2.style.transform = `translateY(${(1 - ease) * 100}%)`;
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth <= 900) panel2.style.transform = '';
+  }, { passive: true });
+  update();
+})();
+
+// ─── CTA scroll blend — accent peak mid-scroll, finish on --bg (footer) ───
+(function initCtaStack() {
+  const wraps = [...document.querySelectorAll('.cta-scroll-wrap')];
+  if (!wraps.length) return;
+
+  function update() {
+    wraps.forEach((wrap) => {
+      const section = wrap.querySelector('.cta-section, .cs-cta');
+      if (!section) return;
+      const rect = wrap.getBoundingClientRect();
+      const scrollable = wrap.offsetHeight - window.innerHeight;
+      if (scrollable <= 0) {
+        section.style.setProperty('--cta-accent-op', '0');
+        section.style.setProperty('--cta-bg-op', '0');
+        section.style.setProperty('--cta-ease', '1');
+        section.classList.remove('cta-founder-tone', 'cta-footer-tone');
+        return;
+      }
+      const scrolled = Math.max(0, -rect.top);
+      const progress = Math.min(1, scrolled / scrollable);
+      const ease = 1 - Math.pow(1 - progress, 2.5);
+      const accentOp = Math.min(1, Math.max(0, 4 * ease * (1 - ease)));
+      const bgOp = Math.min(1, ease * ease * 1.08);
+      section.style.setProperty('--cta-accent-op', String(accentOp));
+      section.style.setProperty('--cta-bg-op', String(bgOp));
+      section.style.setProperty('--cta-ease', String(ease));
+      section.classList.toggle('cta-founder-tone', accentOp > 0.3 && bgOp < 0.5);
+      section.classList.toggle('cta-footer-tone', bgOp >= 0.5);
+    });
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
+  update();
+})();
+
+// ─── PERSONA SWITCHER ───
+(function initPersonaSwitcher() {
+  const btns = document.querySelectorAll('.persona-btn');
+  const sub  = document.getElementById('heroSub');
+  const cta  = document.getElementById('heroCtaPrimary');
+  if (!sub || !btns.length) return;
+
+  const copy = {
+    company: {
+      sub:     'Senior product design without the overhead. I partner with product teams to solve the UX problems costing you conversions, retention, and engineer time.',
+      ctaText: 'Talk about hiring me',
+      ctaHref: '/contact/?topic=hiring'
+    },
+    founder: {
+      sub:     'From SaaS platforms to mobile apps and AI-powered workflows — I design products that convert, retain and scale. Whether building from scratch or fixing what\'s already live.',
+      ctaText: 'Start a project',
+      ctaHref: '/contact/?topic=start-project'
+    }
+  };
+
+  sub.textContent = copy.founder.sub;
+  if (cta) { cta.textContent = copy.founder.ctaText; cta.href = copy.founder.ctaHref; }
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const persona = btn.dataset.persona;
+      sub.style.opacity = '0';
+      setTimeout(() => {
+        sub.textContent = copy[persona].sub;
+        sub.style.opacity = '1';
+      }, 180);
+      if (cta) {
+        cta.textContent = copy[persona].ctaText;
+        cta.href = copy[persona].ctaHref;
+      }
+    });
+  });
+})();
+
+// ─── SERVICE ACCORDION ───
+function toggleService(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.svc-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
 </script>
 </body>
 </html>
