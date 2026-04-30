@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="/Public/Images/icon.png" type="image/png">
-<title>Contact — Paux Design</title>
+<title>Contacto — Paux Design</title>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Manrope:wght@300;400;500;600;700&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css">
 <style>
@@ -152,16 +152,16 @@
 <nav>
   <div class="nav-inner" id="site-nav">
     <div class="nav-brand">
-      <a href="/"><img class="nav-brand-logo" src="/Public/Images/logo-name.png" alt="Paux Design"></a>
+      <a href="/es/"><img class="nav-brand-logo" src="/Public/Images/logo-name.png" alt="Paux Design"></a>
     </div>
     <ul class="nav-links" aria-label="Primary">
-      <li><a href="/#about">About</a></li>
-      <li><a href="/#services">Services</a></li>
-      <li><a href="/work/">Work</a></li>
-      <li><a href="/contact/">Contact</a></li>
+      <li><a href="/es/#about">Sobre mi</a></li>
+      <li><a href="/es/#services">Servicios</a></li>
+      <li><a href="/es/work/">Proyectos</a></li>
+      <li><a href="/es/contact/">Contacto</a></li>
     </ul>
     <div class="nav-cta">
-      <a href="/contact/" class="btn btn-dark nav-cta-btn" style="padding:12px 18px;">Let's talk</a>
+      <a href="/es/contact/" class="btn btn-dark nav-cta-btn" style="padding:12px 18px;">Hablemos</a>
       <button type="button" class="nav-hamburger" id="navHamburger" onclick="toggleMobileNav()" aria-label="Open menu" aria-expanded="false" aria-controls="navMobileOverlay">
         <span class="nav-hamburger-bars" aria-hidden="true"><span></span><span></span><span></span></span>
       </button>
@@ -170,20 +170,20 @@
 </nav>
 
 <div class="nav-mobile-overlay" id="navMobileOverlay">
-  <a href="/#about" onclick="closeMobileNav()">About</a>
-  <a href="/#services" onclick="closeMobileNav()">Services</a>
-  <a href="/work/" onclick="closeMobileNav()">Work</a>
-  <a href="/contact/" onclick="closeMobileNav()">Contact</a>
+  <a href="/es/#about" onclick="closeMobileNav()">Sobre mi</a>
+  <a href="/es/#services" onclick="closeMobileNav()">Servicios</a>
+  <a href="/es/work/" onclick="closeMobileNav()">Proyectos</a>
+  <a href="/es/contact/" onclick="closeMobileNav()">Contacto</a>
   <div class="nav-mobile-divider"></div>
-  <a href="/contact/" onclick="closeMobileNav()" class="btn btn-dark nav-mobile-cta">Let's talk</a>
+  <a href="/es/contact/" onclick="closeMobileNav()" class="btn btn-dark nav-mobile-cta">Hablemos</a>
 </div>
 
 <main class="contact-page">
   <div class="contact-wrap">
     <div class="contact-card">
-      <div class="contact-kicker">Contact</div>
-      <h1 class="contact-title">Tell me about your project</h1>
-      <p class="contact-sub">Fill in the form and I will receive it directly in my email. I normally reply within 24 hours.</p>
+      <div class="contact-kicker">Contacto</div>
+      <h1 class="contact-title">Cuentame tu proyecto</h1>
+      <p class="contact-sub">Completa el formulario y recibire tu mensaje directamente en mi email. Normalmente respondo en menos de 24 horas.</p>
 
       <form class="contact-form" action="https://formsubmit.co/paulaalonso.design@gmail.com" method="POST" novalidate>
         <input type="hidden" name="_subject" id="formSubject" value="New project enquiry from pauxdesign.uk">
@@ -191,7 +191,7 @@
 
         <div class="contact-grid">
           <div class="contact-field">
-            <label for="name">Name</label>
+            <label for="name">Nombre</label>
             <input id="name" name="Name" type="text" required>
           </div>
           <div class="contact-field">
@@ -202,23 +202,23 @@
 
         <div class="contact-grid">
           <div class="contact-field">
-            <label for="company">Company</label>
+            <label for="company">Empresa</label>
             <input id="company" name="Company" type="text">
           </div>
           <div class="contact-field">
-            <label for="service">Service</label>
+            <label for="service">Servicio</label>
             <select id="service" name="Service">
-              <option value="General enquiry">General enquiry</option>
-              <option value="UX Audit">UX Audit</option>
-              <option value="Product Design">Product Design</option>
-              <option value="Web Design">Web Design</option>
+              <option value="Consulta general">Consulta general</option>
+              <option value="Auditoria UX">Auditoria UX</option>
+              <option value="Diseno de producto">Diseno de producto</option>
+              <option value="Diseno web">Diseno web</option>
             </select>
           </div>
         </div>
 
         <div class="contact-field">
-          <label for="message">Project details</label>
-          <textarea id="message" name="Message" placeholder="What are you building and what do you need help with?" required></textarea>
+          <label for="message">Detalles del proyecto</label>
+          <textarea id="message" name="Message" placeholder="Que estas construyendo y en que necesitas ayuda?" required></textarea>
         </div>
 
         <div class="contact-error" id="contactError" role="alert" aria-live="polite"></div>
@@ -226,7 +226,7 @@
         <p class="contact-recaptcha-note">After you send, FormSubmit may show a quick Google reCAPTCHA check before your message is delivered.</p>
 
         <div class="contact-actions">
-          <button type="submit" class="btn btn-dark" id="contactSubmit">Send enquiry</button>
+          <button type="submit" class="btn btn-dark" id="contactSubmit">Enviar solicitud</button>
         </div>
       </form>
     </div>
@@ -236,23 +236,23 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <a href="/"><img src="/Public/Images/logo.png" alt="Paux Design"></a>
+      <a href="/es/"><img src="/Public/Images/logo.png" alt="Paux Design"></a>
       <p class="footer-brand-name">PAUX Design</p>
-      <p class="footer-brand-tagline">Product Designer for high-growth startups &amp; digital products. London · Remote.</p>
+      <p class="footer-brand-tagline">Disenadora de producto para startups de alto crecimiento y productos digitales. Londres · Remoto.</p>
       <p class="footer-brand-email"><a href="mailto:contact@pauxdesign.uk">contact@pauxdesign.uk</a></p>
     </div>
     <div class="footer-sitemap">
-      <div class="footer-sitemap-label">Site map</div>
+      <div class="footer-sitemap-label">Mapa del sitio</div>
       <div class="footer-sitemap-grid">
-        <a href="/#about">About</a>
-        <a href="/work/">Work</a>
-        <a href="/#services">Services</a>
-        <a href="/#faq">FAQ</a>
-        <a href="/#process">Process</a>
-        <a href="/contact/">Contact</a>
-        <a href="/work/enterprise-saas/">Enterprise SaaS</a>
-        <a href="/work/mila-ai/">Mila AI</a>
-        <a href="/work/joblink/">JobLink</a>
+        <a href="/es/#about">Sobre mi</a>
+        <a href="/es/work/">Proyectos</a>
+        <a href="/es/#services">Servicios</a>
+        <a href="/es/#faq">Preguntas frecuentes</a>
+        <a href="/es/#process">Proceso</a>
+        <a href="/es/contact/">Contacto</a>
+        <a href="/es/work/enterprise-saas/">Enterprise SaaS</a>
+        <a href="/es/work/mila-ai/">Mila AI</a>
+        <a href="/es/work/joblink/">JobLink</a>
       </div>
     </div>
     <div class="footer-right">
@@ -268,8 +268,8 @@
   </div>
   <div class="footer-bottom">
     <div class="footer-copy">© 2026 Paula Alonso · Paux Design</div>
-    <div class="footer-lang"><a href="/">EN</a> / <a href="/es/">ES</a></div>
-    <div class="footer-rights">All rights reserved</div>
+    <div class="footer-lang"><a href="/contact/">EN</a> / <a href="/es/contact/">ES</a></div>
+    <div class="footer-rights">Todos los derechos reservados</div>
   </div>
 </footer>
 
@@ -294,19 +294,19 @@ function closeMobileNav() {
 
 (() => {
   const topicMap = {
-    'ux-audit': 'UX Audit',
-    'product-design': 'Product Design',
-    'web-design': 'Web Design',
-    'project-enquiry': 'General enquiry',
-    'start-project': 'General enquiry'
+    'ux-audit': 'Auditoria UX',
+    'product-design': 'Diseno de producto',
+    'web-design': 'Diseno web',
+    'project-enquiry': 'Consulta general',
+    'start-project': 'Consulta general'
   };
 
   const subjectMap = {
-    'ux-audit': 'UX Audit enquiry',
-    'product-design': 'Product Design enquiry',
-    'web-design': 'Web Design enquiry',
-    'project-enquiry': 'Project enquiry',
-    'start-project': 'Start a project enquiry'
+    'ux-audit': 'Consulta de auditoria UX',
+    'product-design': 'Consulta de diseno de producto',
+    'web-design': 'Consulta de diseno web',
+    'project-enquiry': 'Consulta de proyecto',
+    'start-project': 'Consulta para iniciar proyecto'
   };
 
   const params = new URLSearchParams(window.location.search);
@@ -330,12 +330,12 @@ function closeMobileNav() {
 
   if (topic && topicMap[topic]) {
     service.value = topicMap[topic];
-    subject.value = subjectMap[topic] || 'New project enquiry from pauxdesign.uk';
+    subject.value = subjectMap[topic] || 'Nueva consulta desde pauxdesign.uk';
   }
 
   if (nextField) {
     try {
-      nextField.value = new URL('/thank-you/', window.location.href).href;
+      nextField.value = new URL('/es/thank-you/', window.location.href).href;
     } catch (e) {
       nextField.value = '';
     }
