@@ -253,8 +253,11 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .sb-link .badge {
   margin-left: auto;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   padding: 1px 6px;
   border-radius: var(--pill);
   background: rgba(255,255,255,0.16);
@@ -621,9 +624,9 @@ input, textarea { font-family: inherit; color: inherit; }
   border-radius: var(--pill);
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 10px;
+  font-size: 9.5px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   white-space: nowrap;
 }
 .lv-badge.core {
@@ -772,18 +775,31 @@ input, textarea { font-family: inherit; color: inherit; }
 .featured-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
 .tag {
   font-family: var(--font-display);
+  font-size: 9.5px;
   font-weight: 600;
-  font-size: 10px;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   padding: 4px 10px;
   border-radius: var(--pill);
-  background: var(--bg-accent);
+  background: rgba(245, 246, 255, 0.9);
   color: var(--mid);
+  border: 1px solid var(--border);
 }
-.tag.ac { background: rgba(112, 89, 220, 0.10); color: var(--accent); }
-.tag.bl { background: rgba(38, 30, 72, 0.08); color: var(--dark); }
-.tag.gr { background: rgba(88, 219, 105, 0.14); color: #2c8237; }
+.tag.ac {
+  color: var(--accent);
+  background: rgba(112, 89, 220, 0.08);
+  border-color: rgba(112, 89, 220, 0.18);
+}
+.tag.bl {
+  color: var(--dark);
+  background: rgba(38, 30, 72, 0.08);
+  border: 1px solid rgba(38, 30, 72, 0.14);
+}
+.tag.gr {
+  color: #2c8237;
+  background: rgba(88, 219, 105, 0.14);
+  border: 1px solid rgba(88, 219, 105, 0.28);
+}
 .tag.outline { background: transparent; border: 1px solid var(--border2); }
 
 .featured-title {
@@ -892,7 +908,9 @@ input, textarea { font-family: inherit; color: inherit; }
 .chip {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 11.5px;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   padding: 6px 12px;
   border-radius: var(--pill);
   background: #fff;
@@ -978,8 +996,11 @@ input, textarea { font-family: inherit; color: inherit; }
   position: absolute;
   top: 12px; right: 12px;
   display: inline-flex; align-items: center; gap: 5px;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   padding: 4px 8px;
   border-radius: var(--pill);
   background: rgba(255,255,255,0.85);
@@ -1109,6 +1130,15 @@ input, textarea { font-family: inherit; color: inherit; }
   color: inherit;
   display: block;
 }
+button.proj-gallery-item {
+  -webkit-appearance: none;
+  appearance: none;
+  font: inherit;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
 .proj-gallery-item:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-2);
@@ -1124,6 +1154,98 @@ input, textarea { font-family: inherit; color: inherit; }
   object-fit: cover;
   display: block;
   vertical-align: middle;
+}
+
+/* More UI gallery — click to enlarge (no outbound link) */
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 125;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(20px, calc(env(safe-area-inset-top, 0px) + 12px))
+    max(20px, calc(env(safe-area-inset-right, 0px) + 8px))
+    max(24px, calc(env(safe-area-inset-bottom, 0px) + 12px))
+    max(20px, calc(env(safe-area-inset-left, 0px) + 8px));
+  box-sizing: border-box;
+}
+.gallery-lightbox.is-open {
+  display: flex;
+}
+.gallery-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: rgba(38, 30, 72, 0.52);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  cursor: pointer;
+}
+.gallery-lightbox-panel {
+  position: relative;
+  z-index: 1;
+  max-width: min(960px, 100%);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+.gallery-lightbox-panel .gallery-lightbox-close,
+.gallery-lightbox-panel .gallery-lightbox-img,
+.gallery-lightbox-panel .gallery-lightbox-cap {
+  pointer-events: auto;
+}
+.gallery-lightbox-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 2;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--border2);
+  box-shadow: var(--shadow-2);
+  display: grid;
+  place-items: center;
+  color: var(--dark);
+  cursor: pointer;
+  transition: background 0.16s ease, border-color 0.16s ease, color 0.16s ease;
+}
+.gallery-lightbox-close:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.gallery-lightbox-close svg {
+  width: 15px;
+  height: 15px;
+}
+.gallery-lightbox-img {
+  display: block;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  max-height: min(82vh, calc(100vh - 120px));
+  object-fit: contain;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-3);
+  background: #fff;
+}
+.gallery-lightbox-cap {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #fff;
+  text-align: center;
+  max-width: 42rem;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
 }
 
 /* ── ABOUT VIEW ── */
@@ -2151,17 +2273,23 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .drawer-persona-tag {
   display: inline-block;
-  font-size: 9px;
-  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--accent);
   background: var(--accent-soft);
+  border: 1px solid rgba(112, 89, 220, 0.18);
   border-radius: 999px;
   padding: 3px 10px;
   margin-bottom: 8px;
 }
-.drawer-persona-tag.sec { color: var(--mid); background: rgba(226, 229, 253, 0.5); }
+.drawer-persona-tag.sec {
+  color: var(--mid);
+  background: rgba(226, 229, 253, 0.5);
+  border-color: rgba(38, 30, 72, 0.1);
+}
 .drawer-persona h5 {
   font-size: 14px;
   font-weight: 700;
@@ -2519,10 +2647,10 @@ input, textarea { font-family: inherit; color: inherit; }
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: var(--font-mono);
+  font-family: var(--font-display);
   font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--accent);
   padding: 4px 9px 4px 7px;
@@ -3070,9 +3198,9 @@ input, textarea { font-family: inherit; color: inherit; }
           <div class="featured">
             <div class="featured-body">
               <div class="featured-tags">
-                <span class="tag ac">Featured</span>
-                <span class="tag bl">Enterprise SaaS</span>
-                <span class="tag">2025–2026</span>
+                <span class="tag ac">Enterprise SaaS</span>
+                <span class="tag ac">Lead Product Designer</span>
+                <span class="tag">UX Architecture</span>
               </div>
               <div class="featured-title">Enterprise Compliance &amp; Business Management Platform</div>
               <p class="featured-desc">Compliance-first SaaS that turns dense legal complexity into workflows non-technical users can follow with confidence — GDPR, occupational health, cross-department processes.</p>
@@ -3220,17 +3348,28 @@ input, textarea { font-family: inherit; color: inherit; }
               <div>
                 <div class="proj-gallery-kicker">Gallery · not a case study</div>
                 <h2 class="proj-gallery-title" id="proj-gallery-heading">More UI Designs</h2>
-                <p class="proj-gallery-desc">Standalone interface explorations — apps, marketing sites and dashboards. Browse the full grid on the main work index.</p>
+                <p class="proj-gallery-desc">Standalone interface explorations — apps, marketing sites and dashboards.</p>
               </div>
-              <a href="/work/" class="btn btn-outline shrink-0">Open full gallery</a>
             </div>
             <div class="proj-gallery-scroll">
-              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/food.png" alt="Mobile app UI — recipes" loading="lazy" width="376" height="236"></a>
-              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/website.png" alt="Website — restaurant" loading="lazy" width="376" height="236"></a>
-              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/app.png" alt="Learning mobile app" loading="lazy" width="376" height="236"></a>
-              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/web.png" alt="Citizenship services website" loading="lazy" width="376" height="236"></a>
-              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/tiny.png" alt="Food tracker — Tiny Bite app" loading="lazy" width="376" height="236"></a>
-              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/rover.png" alt="Pet sitting dashboard" loading="lazy" width="376" height="236"></a>
+              <button type="button" class="proj-gallery-item" aria-label="View larger: Mobile app UI — recipes">
+                <img src="/Public/Images/food.png" alt="Mobile app UI — recipes" loading="lazy" width="376" height="236">
+              </button>
+              <button type="button" class="proj-gallery-item" aria-label="View larger: Website — restaurant">
+                <img src="/Public/Images/website.png" alt="Website — restaurant" loading="lazy" width="376" height="236">
+              </button>
+              <button type="button" class="proj-gallery-item" aria-label="View larger: Learning mobile app">
+                <img src="/Public/Images/app.png" alt="Learning mobile app" loading="lazy" width="376" height="236">
+              </button>
+              <button type="button" class="proj-gallery-item" aria-label="View larger: Citizenship services website">
+                <img src="/Public/Images/web.png" alt="Citizenship services website" loading="lazy" width="376" height="236">
+              </button>
+              <button type="button" class="proj-gallery-item" aria-label="View larger: Food tracker — Tiny Bite app">
+                <img src="/Public/Images/tiny.png" alt="Food tracker — Tiny Bite app" loading="lazy" width="376" height="236">
+              </button>
+              <button type="button" class="proj-gallery-item" aria-label="View larger: Pet sitting dashboard">
+                <img src="/Public/Images/rover.png" alt="Pet sitting dashboard" loading="lazy" width="376" height="236">
+              </button>
             </div>
           </div>
         </div>
@@ -3369,7 +3508,7 @@ input, textarea { font-family: inherit; color: inherit; }
           <div class="hero-greet">
             <div class="hero-greet-tag">Tech stack · proficiency</div>
             <h1>What I use, <em>how deep</em>, and why.</h1>
-            <p class="sub">Calibrated against real production projects, not course exercises. Percentages reflect how I'd rate myself against a senior bar — not against my past self.</p>
+            <p class="sub">Calibrated against real production projects.</p>
           </div>
         </div>
 
@@ -3537,12 +3676,12 @@ input, textarea { font-family: inherit; color: inherit; }
               <span class="shrink-0 whitespace-nowrap text-[11px] font-medium text-paux-light">Industries shipped to</span>
             </div>
             <div class="skills-tw-domains mt-1 grid grid-cols-2 gap-2 max-[560px]:grid-cols-1">
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-medium text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-green" aria-hidden="true"></span>Enterprise SaaS</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-medium text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span>AI &amp; LLM UX</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-medium text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span>EdTech</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-medium text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-green" aria-hidden="true"></span>Compliance / Legal</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-medium text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-mid/60" aria-hidden="true"></span>HR / People tools</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-medium text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-mid/60" aria-hidden="true"></span>Mobile · iOS</div>
+              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-green" aria-hidden="true"></span>Enterprise SaaS</div>
+              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span>AI &amp; LLM UX</div>
+              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span>EdTech</div>
+              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-green" aria-hidden="true"></span>Compliance / Legal</div>
+              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-mid/60" aria-hidden="true"></span>HR / People tools</div>
+              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-mid/60" aria-hidden="true"></span>Mobile · iOS</div>
             </div>
           </article>
 
@@ -3679,7 +3818,7 @@ input, textarea { font-family: inherit; color: inherit; }
           <div class="hero-greet">
             <div class="hero-greet-tag">Contact · open to roles</div>
             <h1>Looking for a <em>product designer?</em></h1>
-            <p class="sub">Available May 2026 onwards. Open to full-time, contract or freelance roles in product, UX/UI, AI or SaaS. London-based, happy to consider remote or hybrid teams.</p>
+            <p class="sub"> </p>
           </div>
         </div>
 
@@ -3741,6 +3880,18 @@ input, textarea { font-family: inherit; color: inherit; }
 
     </div>
   </main>
+</div>
+
+<!-- ─── More UI gallery lightbox ─── -->
+<div class="gallery-lightbox" id="gallery-lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image preview">
+  <button type="button" class="gallery-lightbox-backdrop" id="gallery-lightbox-backdrop" aria-label="Close preview"></button>
+  <div class="gallery-lightbox-panel">
+    <button type="button" class="gallery-lightbox-close" id="gallery-lightbox-close" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+    <img class="gallery-lightbox-img" id="gallery-lightbox-img" alt="">
+    <p class="gallery-lightbox-cap" id="gallery-lightbox-cap" hidden></p>
+  </div>
 </div>
 
 <!-- ─── DETAIL DRAWER ─── -->
@@ -3965,7 +4116,7 @@ const PROJECTS = [
     role: "UX Designer (end-to-end)",
     tags: ["research", "mobile"],
     chips: [{label:"UX Research", cls:"ac"}, {label:"Mobile · iOS"}, {label:"A/B Testing"}, {label:"Concept"}],
-    desc: "Redesigning job search for the 43% of people who apply across two or more industries — but have only ever been offered one career identity.",
+    desc: "Full UX research, A/B testing and iOS design for a smarter job app that respects their time.",
     img: "/Public/Images/joblink.png",
     status: "shipped",
     statusLabel: "Shipped",
@@ -4313,6 +4464,59 @@ document.querySelectorAll('#view-toggle button').forEach(b => {
     renderProjects(filter, b.dataset.mode);
   });
 });
+
+(function initGalleryLightbox() {
+  const host = document.getElementById('gallery-lightbox');
+  const backdrop = document.getElementById('gallery-lightbox-backdrop');
+  const closeBtn = document.getElementById('gallery-lightbox-close');
+  const lbImg = document.getElementById('gallery-lightbox-img');
+  const cap = document.getElementById('gallery-lightbox-cap');
+  const scroll = document.querySelector('.proj-gallery-scroll');
+  if (!host || !lbImg || !scroll) return;
+
+  function openPreview(src, alt) {
+    lbImg.src = src;
+    lbImg.alt = alt || '';
+    if (alt) {
+      cap.textContent = alt;
+      cap.hidden = false;
+    } else {
+      cap.hidden = true;
+      cap.textContent = '';
+    }
+    host.classList.add('is-open');
+    host.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    closeBtn?.focus({ preventScroll: true });
+  }
+
+  function closePreview() {
+    if (!host.classList.contains('is-open')) return;
+    host.classList.remove('is-open');
+    host.setAttribute('aria-hidden', 'true');
+    lbImg.removeAttribute('src');
+    lbImg.alt = '';
+    cap.textContent = '';
+    cap.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  scroll.addEventListener('click', e => {
+    const btn = e.target.closest('.proj-gallery-item');
+    if (!btn) return;
+    const im = btn.querySelector('img');
+    if (!im) return;
+    openPreview(im.currentSrc || im.src, im.alt);
+  });
+
+  backdrop?.addEventListener('click', closePreview);
+  closeBtn?.addEventListener('click', closePreview);
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (!host.classList.contains('is-open')) return;
+    closePreview();
+  });
+})();
 
 /* Drawer */
 const drawer = document.getElementById('drawer');
