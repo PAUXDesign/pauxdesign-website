@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="icon" href="/Public/Images/icon.png" type="image/png">
 <title>Paula Alonso — Product Designer · Studio OS</title>
 <meta name="description" content="Interactive portfolio — projects, metrics and process. Product designer for AI, SaaS and mobile. London · remote.">
@@ -333,9 +333,15 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .tb-mobile-toggle svg { width: 16px; height: 16px; }
 
-.tb-breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--mid); }
-.tb-breadcrumb .sep { color: var(--light); }
-.tb-breadcrumb .current { color: var(--dark); font-weight: 600; font-family: var(--font-display); }
+.tb-breadcrumb {
+  display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--mid);
+  min-width: 0;
+}
+.tb-breadcrumb .sep { color: var(--light); flex-shrink: 0; }
+.tb-breadcrumb .current {
+  color: var(--dark); font-weight: 600; font-family: var(--font-display);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0;
+}
 
 .tb-spacer { flex: 1; }
 
@@ -384,6 +390,7 @@ input, textarea { font-family: inherit; color: inherit; }
 .main {
   position: relative;
   min-height: 100vh;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -391,6 +398,7 @@ input, textarea { font-family: inherit; color: inherit; }
   padding: 28px;
   max-width: 1320px;
   width: 100%;
+  min-width: 0;
 }
 
 .view { display: none; }
@@ -410,7 +418,9 @@ input, textarea { font-family: inherit; color: inherit; }
   margin-bottom: 22px;
   padding-bottom: 18px;
   border-bottom: 1px solid var(--border);
+  min-width: 0;
 }
+.hero-greet { min-width: 0; }
 .hero-greet-tag {
   display: inline-flex; align-items: center; gap: 7px;
   font-family: var(--font-display);
@@ -872,8 +882,13 @@ input, textarea { font-family: inherit; color: inherit; }
   gap: 14px;
   margin-bottom: 14px;
   flex-wrap: wrap;
+  min-width: 0;
 }
-.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chips {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  min-width: 0;
+  flex: 1 1 auto;
+}
 .chip {
   font-family: var(--font-display);
   font-weight: 600;
@@ -897,6 +912,7 @@ input, textarea { font-family: inherit; color: inherit; }
   display: flex; align-items: center; gap: 8px;
   font-size: 12px;
   color: var(--mid);
+  flex-shrink: 0;
 }
 .toolbar-right .seg {
   display: inline-flex;
@@ -916,17 +932,19 @@ input, textarea { font-family: inherit; color: inherit; }
 
 .proj-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  min-width: 0;
 }
-.proj-grid.list { grid-template-columns: 1fr; }
-.proj-grid.list .pcard { grid-template-columns: 220px 1fr; }
+.proj-grid.list { grid-template-columns: minmax(0, 1fr); }
+.proj-grid.list .pcard { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); }
 .proj-grid.list .pcard-thumb { min-height: 100%; padding: 18px; }
 .proj-grid.list .pcard-thumb img { max-width: 180px; }
 
 .pcard {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
@@ -971,7 +989,7 @@ input, textarea { font-family: inherit; color: inherit; }
 .pcard-status .d { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
 .pcard-status.shipped .d { background: var(--green); }
 .pcard-status.live .d { background: var(--accent); }
-.pcard-body { padding: 16px 18px 18px; }
+.pcard-body { padding: 16px 18px 18px; min-width: 0; }
 .pcard-title {
   font-family: var(--font-display);
   font-weight: 600;
@@ -980,6 +998,7 @@ input, textarea { font-family: inherit; color: inherit; }
   color: var(--dark);
   letter-spacing: -0.2px;
   margin-top: 8px;
+  overflow-wrap: break-word;
 }
 .pcard-desc {
   font-size: 12.5px;
@@ -992,7 +1011,7 @@ input, textarea { font-family: inherit; color: inherit; }
   overflow: hidden;
 }
 .pcard-metrics {
-  display: flex; gap: 14px;
+  display: flex; flex-wrap: wrap; gap: 10px 14px;
   margin-top: 12px;
   padding-top: 12px;
   border-top: 1px dashed var(--border2);
@@ -1009,6 +1028,102 @@ input, textarea { font-family: inherit; color: inherit; }
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-top: 1px;
+}
+
+/* ── Projects: More UI gallery band (below grid, not a project card) ── */
+.proj-gallery-band {
+  margin-top: 24px;
+  width: 100%;
+  min-width: 0;
+}
+.proj-gallery-band-inner {
+  background: linear-gradient(165deg, #fff 0%, rgba(245, 246, 255, 0.85) 55%, var(--bg-soft) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 20px;
+  box-shadow: var(--shadow-1);
+  min-width: 0;
+  overflow-x: hidden;
+}
+.proj-gallery-band-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+.proj-gallery-kicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+.proj-gallery-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  color: var(--dark);
+  line-height: 1.2;
+}
+.proj-gallery-desc {
+  margin-top: 8px;
+  max-width: 520px;
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--mid);
+}
+.proj-gallery-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+  margin: 0 -2px;
+  max-width: 100%;
+  min-width: 0;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.proj-gallery-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+.proj-gallery-scroll::-webkit-scrollbar-thumb {
+  background: var(--border2);
+  border-radius: var(--pill);
+}
+.proj-gallery-item {
+  flex: 0 0 auto;
+  width: min(188px, 42vw);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border2);
+  background: #fff;
+  scroll-snap-align: start;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+.proj-gallery-item:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-2);
+  border-color: rgba(112, 89, 220, 0.22);
+}
+.proj-gallery-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.proj-gallery-item img {
+  width: 100%;
+  height: 118px;
+  object-fit: cover;
+  display: block;
+  vertical-align: middle;
 }
 
 /* ── ABOUT VIEW ── */
@@ -1103,6 +1218,51 @@ input, textarea { font-family: inherit; color: inherit; }
 .pm-row .pm-val { color: var(--dark); font-weight: 500; flex: 1; min-width: 0; word-break: break-word; }
 .pm-row .pm-link { color: var(--dark); font-weight: 500; transition: color 160ms ease; }
 .pm-row .pm-link:hover { color: var(--accent); }
+
+/* About profile — copyable email pill (reference UI) */
+.about-copy-email {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 14px;
+  border-radius: var(--pill);
+  border: 1px dashed rgba(101, 95, 140, 0.38);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(237, 238, 250, 0.65) 100%);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--mid);
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+.about-copy-email svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  color: inherit;
+  opacity: 0.92;
+}
+.about-copy-email .em {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.about-copy-email:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.about-copy-email:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .profile-actions { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
 
 .about-blocks {
@@ -1321,7 +1481,7 @@ input, textarea { font-family: inherit; color: inherit; }
   transition: width 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* ── Skills & stack — radar charts only (layout via Tailwind utilities) ── */
+/* ── Skills & stack — radar charts (shadcn-style chart polish) ── */
 .skills-divider {
   border: none;
   height: 1px;
@@ -1334,10 +1494,19 @@ input, textarea { font-family: inherit; color: inherit; }
   display: grid;
   place-items: center;
   margin: 0.35rem 0 0.75rem;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  padding: 10px 8px 12px;
+  border-radius: var(--radius);
+  background: linear-gradient(165deg, rgba(255, 255, 255, 0.92) 0%, rgba(245, 246, 255, 0.42) 100%);
+  border: 1px solid rgba(38, 30, 72, 0.055);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
 .group:hover .prof-radar {
   transform: scale(1.02);
+  border-color: rgba(112, 89, 220, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 1px 2px rgba(38, 30, 72, 0.04);
 }
 .prof-radar svg {
   width: 100%;
@@ -1351,52 +1520,113 @@ input, textarea { font-family: inherit; color: inherit; }
 .prof-radar .radar-grid-layer {
   opacity: 1;
 }
+/* Concentric rings — hairline, neutral (grid) */
 .prof-radar .radar-grid {
-  stroke: rgba(101, 95, 140, 0.28);
+  stroke: rgba(38, 30, 72, 0.07);
   opacity: 1;
-  stroke-width: 0.38;
+  stroke-width: 0.55;
   fill: none;
   vector-effect: non-scaling-stroke;
 }
+/* Spokes — lighter than rings */
 .prof-radar .radar-axis {
-  stroke: rgba(101, 95, 140, 0.26);
+  stroke: rgba(38, 30, 72, 0.055);
   opacity: 1;
-  stroke-width: 0.42;
+  stroke-width: 0.5;
   vector-effect: non-scaling-stroke;
 }
-/* Outer axis endpoints — subtle connection anchors */
+/* Outer scale ticks — pill like axis markers */
 .prof-radar .radar-anchor {
   fill: #fff;
-  stroke: rgba(101, 95, 140, 0.32);
-  stroke-width: 0.42;
+  stroke: rgba(38, 30, 72, 0.14);
+  stroke-width: 0.5;
   vector-effect: non-scaling-stroke;
 }
 .prof-radar .radar-shape-wrap {
   transform-origin: 60px 60px;
   opacity: 1;
   transform: scale(1);
+  filter: drop-shadow(0 1px 3px rgba(38, 30, 72, 0.04));
 }
 .prof-radar .radar-shape {
-  stroke-width: 0.72;
+  stroke-width: 0.85;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
-  transition: fill-opacity 0.35s ease, stroke-opacity 0.35s ease;
-  fill-opacity: 0.2;
-  stroke-opacity: 0.42;
+  transition: stroke-opacity 0.35s ease, opacity 0.35s ease, filter 0.35s ease;
+  fill-opacity: 1;
+  stroke-opacity: 0.38;
 }
-/* Data vertices — connection points */
+/* Series vertices — solid fill, crisp 0.5 grey ring + micro shadow */
 .prof-radar .radar-node {
-  fill: #fff;
-  stroke-width: 0.7;
+  stroke: rgba(38, 30, 72, 0.16);
+  stroke-width: 0.5;
   vector-effect: non-scaling-stroke;
-  transition: stroke-opacity 0.25s ease, fill-opacity 0.25s ease;
+  transition: transform 0.2s ease, filter 0.2s ease, stroke 0.2s ease;
+  cursor: default;
+  filter: drop-shadow(0 1px 2px rgba(38, 30, 72, 0.07));
+}
+.prof-radar .radar-node.radar-node--accent {
+  fill: var(--accent);
+}
+.prof-radar .radar-node.radar-node--green {
+  fill: var(--green);
+}
+.prof-radar .radar-node.radar-node--mid {
+  fill: #655F8C;
 }
 .group:hover .prof-radar .radar-shape {
-  fill-opacity: 0.32;
-  stroke-opacity: 0.62;
+  stroke-opacity: 0.52;
+  filter: brightness(1.05);
 }
 .group:hover .prof-radar .radar-node {
-  fill-opacity: 1;
+  filter: drop-shadow(0 2px 4px rgba(38, 30, 72, 0.1));
+  stroke: rgba(38, 30, 72, 0.22);
+}
+
+/* Tooltip — light surface, hairline border, layered shadow (chart tooltip pattern) */
+.radar-chart-tooltip {
+  position: fixed;
+  z-index: 200;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fff;
+  color: var(--dark);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  max-width: min(236px, calc(100vw - 24px));
+  border: 0.5px solid rgba(38, 30, 72, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(38, 30, 72, 0.03),
+    0 4px 6px -1px rgba(38, 30, 72, 0.06),
+    0 10px 20px -4px rgba(38, 30, 72, 0.08);
+  opacity: 0;
+  transform: translate(12px, 12px) scale(0.97);
+  transition: opacity 0.12s ease, transform 0.12s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.radar-chart-tooltip .radar-chart-tooltip-label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin-bottom: 3px;
+}
+.radar-chart-tooltip .radar-chart-tooltip-detail {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--mid);
+  line-height: 1.45;
+}
+.radar-chart-tooltip.is-visible {
+  opacity: 1;
+  transform: translate(12px, 12px) scale(1);
 }
 .prof-radar.radar-play .radar-grid-layer {
   animation: radarGridIn 0.62s ease forwards;
@@ -2142,6 +2372,7 @@ input, textarea { font-family: inherit; color: inherit; }
   .drawer-meta { grid-template-columns: 1fr; }
   .drawer-two, .drawer-personas, .drawer-stat-row { grid-template-columns: 1fr; }
   .drawer-content { padding: 28px 22px 48px; }
+  .drawer-cover { padding: 24px 18px 28px; min-height: 220px; }
 }
 
 /* ──────────────────── COMMAND PALETTE ──────────────────── */
@@ -2152,11 +2383,16 @@ input, textarea { font-family: inherit; color: inherit; }
   z-index: 200;
   display: none;
   align-items: flex-start; justify-content: center;
-  padding-top: 14vh;
+  box-sizing: border-box;
+  padding: max(10vh, calc(env(safe-area-inset-top, 0px) + 12px))
+           max(12px, env(safe-area-inset-right, 0px))
+           max(12px, env(safe-area-inset-bottom, 0px))
+           max(12px, env(safe-area-inset-left, 0px));
 }
 .cmdk-backdrop.open { display: flex; animation: cmdkIn 220ms ease; }
 @keyframes cmdkIn { from { opacity:0; } to { opacity:1; } }
 .cmdk {
+  position: relative;
   width: min(560px, 92vw);
   background: #fff;
   border: 1px solid var(--border2);
@@ -2164,7 +2400,44 @@ input, textarea { font-family: inherit; color: inherit; }
   box-shadow: 0 24px 64px rgba(38,30,72,0.22);
   overflow: hidden;
 }
+.cmdk-confetti-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 15;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.cmdk-confetti-piece {
+  position: absolute;
+  top: -12px;
+  left: var(--x0, 50%);
+  width: 7px;
+  height: 9px;
+  border-radius: 2px;
+  background: #7059DC;
+  opacity: 0.95;
+  box-shadow: 0 1px 2px rgba(112, 89, 220, 0.35);
+  animation: cmdkConfettiFall var(--dur, 1.9s) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+@keyframes cmdkConfettiFall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(var(--dx-end, 0px), min(420px, 85vh), 0) rotate(var(--rot, 360deg));
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdk-confetti-piece { animation: none; opacity: 0; }
+}
 .cmdk-input {
+  position: relative;
+  z-index: 2;
   width: 100%;
   padding: 18px 22px;
   font-size: 16px;
@@ -2173,7 +2446,216 @@ input, textarea { font-family: inherit; color: inherit; }
   background: #fff;
   outline: none;
 }
-.cmdk-list { max-height: 400px; overflow-y: auto; padding: 6px; }
+.cmdk-egg {
+  display: none;
+  position: relative;
+  z-index: 2;
+  margin: 0 14px 12px;
+  padding: 2px;
+  border-radius: calc(var(--radius) + 2px);
+  background: linear-gradient(125deg, #7059DC 0%, #9b8aed 35%, #58DB69 65%, #7059DC 100%);
+  background-size: 240% 240%;
+  box-shadow:
+    0 0 0 1px rgba(112, 89, 220, 0.12),
+    0 12px 36px rgba(112, 89, 220, 0.18),
+    0 4px 12px rgba(38, 30, 72, 0.06);
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+.cmdk-egg.is-on {
+  display: block;
+  animation:
+    cmdkEggIn 0.52s cubic-bezier(0.22, 1, 0.36, 1) both,
+    cmdkEggBorderFlow 5s linear infinite 0.15s;
+}
+.cmdk-egg.is-on:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 0 0 1px rgba(112, 89, 220, 0.2),
+    0 16px 44px rgba(112, 89, 220, 0.25),
+    0 8px 20px rgba(38, 30, 72, 0.08);
+}
+.cmdk-egg-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 0.4s ease;
+}
+.cmdk-egg.is-on .cmdk-egg-shine {
+  opacity: 1;
+}
+.cmdk-egg-shine::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -30%;
+  width: 56%;
+  height: 220%;
+  background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.55) 45%, transparent 70%);
+  animation: cmdkEggShineSweep 2.6s ease-in-out infinite;
+}
+.cmdk-egg-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--radius);
+  padding: 14px 16px 16px;
+  background: linear-gradient(180deg, #fff 0%, rgba(250, 250, 252, 0.98) 100%);
+  transition: transform 0.15s ease-out;
+  transform-style: preserve-3d;
+}
+.cmdk-egg-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.cmdk-egg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding: 4px 9px 4px 7px;
+  border-radius: var(--pill);
+  background: var(--accent-soft);
+  border: 1px solid rgba(112, 89, 220, 0.14);
+  animation: cmdkEggBadgePop 0.55s cubic-bezier(0.34, 1.5, 0.64, 1) 0.2s both;
+}
+.cmdk-egg-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 0 3px rgba(88, 219, 105, 0.25);
+  animation: cmdkEggPulse 1.6s ease-in-out infinite;
+}
+.cmdk-egg-emoji {
+  font-size: 1.35rem;
+  line-height: 1;
+  display: inline-block;
+  animation: cmdkEggSparkle 2.2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 4px rgba(112, 89, 220, 0.25));
+  user-select: none;
+}
+.cmdk-egg-text {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.025em;
+  color: var(--dark);
+  line-height: 1.35;
+  margin: 0 0 6px;
+}
+.cmdk-egg-text em {
+  font-style: italic;
+  color: var(--accent);
+  font-weight: 700;
+}
+.cmdk-egg-sub {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--mid);
+  margin: 0 0 14px;
+  max-width: 36ch;
+}
+.cmdk-egg-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+  background: linear-gradient(135deg, #7059DC 0%, #5a46c4 50%, #5540b8 100%);
+  background-size: 200% 200%;
+  box-shadow: 0 2px 8px rgba(112, 89, 220, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.18s ease, background-position 0.4s ease;
+}
+.cmdk-egg-cta svg {
+  transition: transform 0.25s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+.cmdk-egg-cta:hover {
+  transform: translateY(-2px) scale(1.03);
+  background-position: 100% 50%;
+  box-shadow: 0 6px 22px rgba(112, 89, 220, 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+.cmdk-egg-cta:hover svg {
+  transform: translateX(3px) scale(1.05);
+}
+.cmdk-egg-cta:active {
+  transform: translateY(0) scale(1);
+}
+.cmdk-egg-cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+@keyframes cmdkEggIn {
+  from {
+    opacity: 0;
+    transform: translateY(-14px) scale(0.92) rotateX(8deg);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotateX(0);
+  }
+}
+@keyframes cmdkEggBorderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+@keyframes cmdkEggShineSweep {
+  0% { transform: translateX(-20%) rotate(12deg); }
+  100% { transform: translateX(220%) rotate(12deg); }
+}
+@keyframes cmdkEggBadgePop {
+  from { opacity: 0; transform: scale(0.86); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes cmdkEggPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.9; }
+}
+@keyframes cmdkEggSparkle {
+  0%, 100% { transform: rotate(-6deg) scale(1); }
+  25% { transform: rotate(8deg) scale(1.08); }
+  50% { transform: rotate(-4deg) scale(1.02); }
+  75% { transform: rotate(6deg) scale(1.1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cmdk-egg.is-on {
+    animation: cmdkEggIn 0.35s ease both;
+    background: linear-gradient(125deg, #7059DC 0%, #8b7ae8 100%);
+    background-size: 100% 100%;
+  }
+  .cmdk-egg.is-on:hover {
+    transform: none;
+  }
+  .cmdk-egg-shine::after,
+  .cmdk-egg-badge,
+  .cmdk-egg-badge-dot,
+  .cmdk-egg-emoji {
+    animation: none !important;
+  }
+  .cmdk-egg-cta:hover {
+    transform: none;
+  }
+}
+.cmdk-list { position: relative; z-index: 1; max-height: 400px; overflow-y: auto; padding: 6px; }
 .cmdk-section {
   font-family: var(--font-display);
   font-weight: 700;
@@ -2206,11 +2688,25 @@ input, textarea { font-family: inherit; color: inherit; }
   opacity: 0.85;
 }
 .cmdk-foot {
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px;
   padding: 8px 14px;
   border-top: 1px solid var(--border);
   font-size: 11px;
   color: var(--mid);
+}
+.cmdk-foot-hint {
+  margin-left: auto;
+  font-size: 10.5px;
+  color: var(--light);
+}
+.cmdk-foot-hint kbd {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  padding: 1px 5px;
+  border: 1px solid var(--border2);
+  border-radius: 4px;
+  background: var(--bg-soft);
+  color: var(--accent);
 }
 .cmdk-foot kbd {
   font-family: var(--font-mono);
@@ -2225,7 +2721,10 @@ input, textarea { font-family: inherit; color: inherit; }
 
 /* ──────────────────── TOAST ──────────────────── */
 .toast {
-  position: fixed; bottom: 24px; right: 24px;
+  position: fixed;
+  right: max(24px, env(safe-area-inset-right, 0px) + 8px);
+  bottom: max(24px, env(safe-area-inset-bottom, 0px) + 8px);
+  max-width: min(420px, calc(100vw - 32px - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)));
   background: var(--dark);
   color: #fff;
   padding: 12px 16px;
@@ -2261,13 +2760,19 @@ input, textarea { font-family: inherit; color: inherit; }
   .row-3 { grid-template-columns: 1fr; }
   .featured { grid-template-columns: 1fr; }
   .featured-thumb { min-height: 220px; }
-  .proj-grid { grid-template-columns: 1fr; }
   .about-grid { grid-template-columns: 1fr; }
   .about-grid > .profile-card { max-width: none; justify-self: stretch; }
   .contact-grid { grid-template-columns: 1fr; }
   .kanban { grid-template-columns: 1fr; }
   .view-wrap { padding: 20px 16px; }
-  .topbar { padding: 0 16px; gap: 8px; }
+  .topbar {
+    padding: max(0px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px))
+             0 max(16px, env(safe-area-inset-left, 0px));
+    min-height: calc(var(--tb-height) + env(safe-area-inset-top, 0px));
+    height: auto;
+    align-items: center;
+    gap: 8px;
+  }
   .tb-pill, .tb-clock { display: none; }
   .hero-strip { flex-direction: column; }
   .drawer {
@@ -2280,17 +2785,39 @@ input, textarea { font-family: inherit; color: inherit; }
     border-radius: 12px;
   }
 }
+
+/* Project cards: 2×2 from small tablets up; single column only on narrow phones */
+@media (max-width: 639px) {
+  .proj-grid:not(.list) { grid-template-columns: minmax(0, 1fr); }
+  .proj-grid.list .pcard { grid-template-columns: minmax(0, 1fr); }
+  .proj-grid.list .pcard-thumb { min-height: 160px; }
+  .proj-grid.list .pcard-thumb img { max-width: 100%; }
+  .contact-side { padding: 22px 18px; }
+  .contact-side .meta { flex-wrap: wrap; gap: 12px 20px; }
+  .proj-gallery-band-inner { padding: 18px 16px 16px; }
+}
 @media (max-width: 560px) {
   .kpi-grid { grid-template-columns: 1fr 1fr; }
   .featured-metrics { grid-template-columns: repeat(3, 1fr); }
   .drawer-metrics { grid-template-columns: 1fr 1fr 1fr; }
+  .cmdk-foot-hint { margin-left: 0; flex-basis: 100%; }
+}
+@media (max-width: 480px) {
+  .toast {
+    left: max(12px, env(safe-area-inset-left, 0px) + 4px);
+    right: max(12px, env(safe-area-inset-right, 0px) + 4px);
+    max-width: none;
+  }
+  .back-top {
+    bottom: calc(max(28px, env(safe-area-inset-bottom, 0px) + 12px) + 52px);
+  }
 }
 
 /* ── BACK TO TOP ── */
 .back-top {
   position: fixed;
-  bottom: 28px;
-  right: 28px;
+  bottom: max(28px, env(safe-area-inset-bottom, 0px) + 12px);
+  right: max(28px, env(safe-area-inset-right, 0px) + 12px);
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -2686,6 +3213,27 @@ input, textarea { font-family: inherit; color: inherit; }
         </div>
 
         <div class="proj-grid" id="proj-grid"><!-- populated by JS --></div>
+
+        <div class="proj-gallery-band" aria-labelledby="proj-gallery-heading">
+          <div class="proj-gallery-band-inner">
+            <div class="proj-gallery-band-head">
+              <div>
+                <div class="proj-gallery-kicker">Gallery · not a case study</div>
+                <h2 class="proj-gallery-title" id="proj-gallery-heading">More UI Designs</h2>
+                <p class="proj-gallery-desc">Standalone interface explorations — apps, marketing sites and dashboards. Browse the full grid on the main work index.</p>
+              </div>
+              <a href="/work/" class="btn btn-outline shrink-0">Open full gallery</a>
+            </div>
+            <div class="proj-gallery-scroll">
+              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/food.png" alt="Mobile app UI — recipes" loading="lazy" width="376" height="236"></a>
+              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/website.png" alt="Website — restaurant" loading="lazy" width="376" height="236"></a>
+              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/app.png" alt="Learning mobile app" loading="lazy" width="376" height="236"></a>
+              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/web.png" alt="Citizenship services website" loading="lazy" width="376" height="236"></a>
+              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/tiny.png" alt="Food tracker — Tiny Bite app" loading="lazy" width="376" height="236"></a>
+              <a href="/work/" class="proj-gallery-item"><img src="/Public/Images/rover.png" alt="Pet sitting dashboard" loading="lazy" width="376" height="236"></a>
+            </div>
+          </div>
+        </div>
       </section>
 
       <!-- ────── ABOUT ────── -->
@@ -2706,9 +3254,12 @@ input, textarea { font-family: inherit; color: inherit; }
             </div>
             <div class="profile-name">Paula Alonso</div>
             <div class="profile-role">Product Designer · AI &amp; SaaS · UX/UI · Mobile</div>
+            <button type="button" class="about-copy-email" data-copy-email="paulaalonso.design@gmail.com" aria-label="Copy email address to clipboard" title="Click to copy">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span class="em">paulaalonso.design@gmail.com</span>
+            </button>
             <div class="profile-meta">
               <div class="pm-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="pm-label">Based</span><span class="pm-val">London, UK</span></div>
-              <div class="pm-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><span class="pm-label">Email</span><a class="pm-val pm-link" href="mailto:paulaalonso.design@gmail.com">paulaalonso.design@gmail.com</a></div>
               <div class="pm-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="pm-label">Status</span><span class="pm-val" style="color: #2c8237; display:inline-flex; align-items:center; gap:6px"><span class="sb-av-dot" style="position:relative; top:0"></span> Available May 2026</span></div>
             </div>
             <div class="profile-actions">
@@ -2835,6 +3386,13 @@ input, textarea { font-family: inherit; color: inherit; }
             </div>
             <div class="prof-radar" aria-hidden="true">
               <svg viewBox="0 0 120 120" width="210" height="210">
+                <defs>
+                  <radialGradient id="radar-grad-skill-design" cx="60" cy="60" r="50" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+                    <stop offset="45%" stop-color="#b8acf5" stop-opacity="0.32"/>
+                    <stop offset="100%" stop-color="#7059DC" stop-opacity="0.18"/>
+                  </radialGradient>
+                </defs>
                 <g class="radar-grid-layer">
                   <g class="radar-grid">
                     <polygon points="60,22 98,60 60,98 22,60"/>
@@ -2849,12 +3407,12 @@ input, textarea { font-family: inherit; color: inherit; }
                   </g>
                 </g>
                 <g class="radar-shape-wrap">
-                  <polygon class="radar-shape" points="60,22.76 94.96,60 60,93.44 24.28,60" fill="#7059DC" stroke="#7059DC"/>
+                  <polygon class="radar-shape" points="60,22.76 94.96,60 60,93.44 24.28,60" fill="url(#radar-grad-skill-design)" stroke="#7059DC"/>
                   <g class="radar-vertices">
-                    <circle class="radar-node" cx="60" cy="22.76" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
-                    <circle class="radar-node" cx="94.96" cy="60" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
-                    <circle class="radar-node" cx="60" cy="93.44" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
-                    <circle class="radar-node" cx="24.28" cy="60" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
+                    <circle class="radar-node radar-node--accent" cx="60" cy="22.76" r="2" data-tip="Figma · visual craft &amp; systems (98%)"/>
+                    <circle class="radar-node radar-node--accent" cx="94.96" cy="60" r="2" data-tip="Design systems · tokens, components, handoff (92%)"/>
+                    <circle class="radar-node radar-node--green" cx="60" cy="93.44" r="2" data-tip="IA · navigation &amp; mental models (94%)"/>
+                    <circle class="radar-node radar-node--green" cx="24.28" cy="60" r="2" data-tip="Prototyping · flows &amp; interaction design (88%)"/>
                   </g>
                 </g>
               </svg>
@@ -2878,6 +3436,13 @@ input, textarea { font-family: inherit; color: inherit; }
             </div>
             <div class="prof-radar" aria-hidden="true">
               <svg viewBox="0 0 120 120" width="210" height="210">
+                <defs>
+                  <radialGradient id="radar-grad-skill-research" cx="60" cy="60" r="50" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.48"/>
+                    <stop offset="45%" stop-color="#9cefa8" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#58DB69" stop-opacity="0.18"/>
+                  </radialGradient>
+                </defs>
                 <g class="radar-grid-layer">
                   <g class="radar-grid">
                     <polygon points="60,22 98,60 60,98 22,60"/>
@@ -2892,12 +3457,12 @@ input, textarea { font-family: inherit; color: inherit; }
                   </g>
                 </g>
                 <g class="radar-shape-wrap">
-                  <polygon class="radar-shape" points="60,23.52 94.32,60 60,90.8 27.36,60" fill="#58DB69" stroke="#48c759"/>
+                  <polygon class="radar-shape" points="60,23.52 94.32,60 60,90.8 27.36,60" fill="url(#radar-grad-skill-research)" stroke="#48c759"/>
                   <g class="radar-vertices">
-                    <circle class="radar-node" cx="60" cy="23.52" r="2.15" fill="#fff" stroke="#48c759" stroke-opacity="0.58"/>
-                    <circle class="radar-node" cx="94.32" cy="60" r="2.15" fill="#fff" stroke="#48c759" stroke-opacity="0.58"/>
-                    <circle class="radar-node" cx="60" cy="90.8" r="2.15" fill="#fff" stroke="#48c759" stroke-opacity="0.58"/>
-                    <circle class="radar-node" cx="27.36" cy="60" r="2.15" fill="#fff" stroke="#48c759" stroke-opacity="0.58"/>
+                    <circle class="radar-node radar-node--green" cx="60" cy="23.52" r="2" data-tip="UX audits · heuristic &amp; journey review (96%)"/>
+                    <circle class="radar-node radar-node--green" cx="94.32" cy="60" r="2" data-tip="User interviews · discovery &amp; synthesis (90%)"/>
+                    <circle class="radar-node radar-node--accent" cx="60" cy="90.8" r="2" data-tip="A/B testing · experiment design &amp; analysis (80%)"/>
+                    <circle class="radar-node radar-node--accent" cx="27.36" cy="60" r="2" data-tip="Usability tests · moderated sessions (86%)"/>
                   </g>
                 </g>
               </svg>
@@ -2921,6 +3486,13 @@ input, textarea { font-family: inherit; color: inherit; }
             </div>
             <div class="prof-radar" aria-hidden="true">
               <svg viewBox="0 0 120 120" width="210" height="210">
+                <defs>
+                  <radialGradient id="radar-grad-skill-code" cx="60" cy="60" r="50" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45"/>
+                    <stop offset="45%" stop-color="#a39ec9" stop-opacity="0.28"/>
+                    <stop offset="100%" stop-color="#655F8C" stop-opacity="0.17"/>
+                  </radialGradient>
+                </defs>
                 <g class="radar-grid-layer">
                   <g class="radar-grid">
                     <polygon points="60,22 98,60 60,98 22,60"/>
@@ -2935,12 +3507,12 @@ input, textarea { font-family: inherit; color: inherit; }
                   </g>
                 </g>
                 <g class="radar-shape-wrap">
-                  <polygon class="radar-shape" points="60,30.36 91.16,60 60,91.92 33.4,60" fill="#655F8C" stroke="#261E48"/>
+                  <polygon class="radar-shape" points="60,30.36 80.9,60 60,80.9 33.4,60" fill="url(#radar-grad-skill-code)" stroke="#261E48"/>
                   <g class="radar-vertices">
-                    <circle class="radar-node" cx="60" cy="30.36" r="2.15" fill="#fff" stroke="#261E48" stroke-opacity="0.42"/>
-                    <circle class="radar-node" cx="91.16" cy="60" r="2.15" fill="#fff" stroke="#261E48" stroke-opacity="0.42"/>
-                    <circle class="radar-node" cx="60" cy="91.92" r="2.15" fill="#fff" stroke="#261E48" stroke-opacity="0.42"/>
-                    <circle class="radar-node" cx="33.4" cy="60" r="2.15" fill="#fff" stroke="#261E48" stroke-opacity="0.42"/>
+                    <circle class="radar-node radar-node--mid" cx="60" cy="30.36" r="2" data-tip="HTML / CSS · layout, semantics, polish (78%)"/>
+                    <circle class="radar-node radar-node--accent" cx="80.9" cy="60" r="2" data-tip="Claude AI · prompting for design &amp; build (55%)"/>
+                    <circle class="radar-node radar-node--accent" cx="60" cy="80.9" r="2" data-tip="Cursor · AI-assisted prototyping (55%)"/>
+                    <circle class="radar-node radar-node--green" cx="33.4" cy="60" r="2" data-tip="Framer · marketing &amp; light product sites (70%)"/>
                   </g>
                 </g>
               </svg>
@@ -2948,8 +3520,8 @@ input, textarea { font-family: inherit; color: inherit; }
             <div class="my-3 border-t border-dashed border-paux-dark/[0.09]"></div>
             <div class="skills-tw-metrics grid grid-cols-2 gap-x-3 gap-y-2.5 max-[560px]:grid-cols-1">
               <div class="flex min-w-0 items-center gap-2 text-[13px] font-medium"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-mid/70" aria-hidden="true"></span><span class="min-w-0 flex-1 text-paux-light">HTML / CSS</span><strong class="ml-auto shrink-0 font-mono text-xs font-semibold tabular-nums text-paux-mid">78%</strong></div>
-              <div class="flex min-w-0 items-center gap-2 text-[13px] font-medium"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span><span class="min-w-0 flex-1 text-paux-light">Claude AI</span><strong class="ml-auto shrink-0 font-mono text-xs font-semibold tabular-nums text-paux-mid">82%</strong></div>
-              <div class="flex min-w-0 items-center gap-2 text-[13px] font-medium"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span><span class="min-w-0 flex-1 text-paux-light">Cursor</span><strong class="ml-auto shrink-0 font-mono text-xs font-semibold tabular-nums text-paux-mid">84%</strong></div>
+              <div class="flex min-w-0 items-center gap-2 text-[13px] font-medium"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span><span class="min-w-0 flex-1 text-paux-light">Claude AI</span><strong class="ml-auto shrink-0 font-mono text-xs font-semibold tabular-nums text-paux-mid">55%</strong></div>
+              <div class="flex min-w-0 items-center gap-2 text-[13px] font-medium"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span><span class="min-w-0 flex-1 text-paux-light">Cursor</span><strong class="ml-auto shrink-0 font-mono text-xs font-semibold tabular-nums text-paux-mid">55%</strong></div>
               <div class="flex min-w-0 items-center gap-2 text-[13px] font-medium"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-green" aria-hidden="true"></span><span class="min-w-0 flex-1 text-paux-light">Framer</span><strong class="ml-auto shrink-0 font-mono text-xs font-semibold tabular-nums text-paux-mid">70%</strong></div>
             </div>
           </article>
@@ -2983,6 +3555,13 @@ input, textarea { font-family: inherit; color: inherit; }
             </div>
             <div class="prof-radar prof-radar-penta mx-auto my-2" aria-hidden="true">
               <svg viewBox="0 0 120 120" width="240" height="240">
+                <defs>
+                  <radialGradient id="radar-grad-skill-soft" cx="60" cy="58" r="54" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.52"/>
+                    <stop offset="40%" stop-color="#c4bbf9" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#7059DC" stop-opacity="0.17"/>
+                  </radialGradient>
+                </defs>
                 <g class="radar-grid-layer">
                   <g class="radar-grid">
                     <polygon points="60,22 93.5,46 82.5,87 37.5,87 26.5,46"/>
@@ -2997,13 +3576,13 @@ input, textarea { font-family: inherit; color: inherit; }
                   </g>
                 </g>
                 <g class="radar-shape-wrap">
-                  <polygon class="radar-shape" points="60,24.28 93.15,49.2 80.1,87.67 39.98,87.05 25.68,48.15" fill="#7059DC" stroke="#7059DC"/>
+                  <polygon class="radar-shape" points="60,24.28 93.15,49.2 80.1,87.67 39.98,87.05 25.68,48.15" fill="url(#radar-grad-skill-soft)" stroke="#7059DC"/>
                   <g class="radar-vertices">
-                    <circle class="radar-node" cx="60" cy="24.28" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
-                    <circle class="radar-node" cx="93.15" cy="49.2" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
-                    <circle class="radar-node" cx="80.1" cy="87.67" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
-                    <circle class="radar-node" cx="39.98" cy="87.05" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
-                    <circle class="radar-node" cx="25.68" cy="48.15" r="2.15" fill="#fff" stroke="#7059DC" stroke-opacity="0.52"/>
+                    <circle class="radar-node radar-node--accent" cx="60" cy="24.28" r="2" data-tip="Collaboration · PM, eng &amp; stakeholders (94%)"/>
+                    <circle class="radar-node radar-node--accent" cx="93.15" cy="49.2" r="2" data-tip="Compliance-aware design · regulation &amp; risk (92%)"/>
+                    <circle class="radar-node radar-node--accent" cx="80.1" cy="87.67" r="2" data-tip="Activation · first-run &amp; onboarding impact (90%)"/>
+                    <circle class="radar-node radar-node--accent" cx="39.98" cy="87.05" r="2" data-tip="Retention · habits &amp; ongoing value (88%)"/>
+                    <circle class="radar-node radar-node--accent" cx="25.68" cy="48.15" r="2" data-tip="Engagement · clarity &amp; motivation in-product (84%)"/>
                   </g>
                 </g>
               </svg>
@@ -3136,7 +3715,7 @@ input, textarea { font-family: inherit; color: inherit; }
 
           <aside class="contact-side">
             <h3>Reply within<br><em>24 hours.</em></h3>
-            <p>Direct line to me. Tell me about the role, team and product — I'll reply with availability, expectations and next steps.</p>
+            <p>Reach me directly by email. Tell me about the role, team and product — I'll reply with availability, expectations and next steps.</p>
 
             <a class="item" href="mailto:paulaalonso.design@gmail.com">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
@@ -3182,12 +3761,29 @@ input, textarea { font-family: inherit; color: inherit; }
 <!-- ─── COMMAND PALETTE ─── -->
 <div class="cmdk-backdrop" id="cmdk">
   <div class="cmdk" role="dialog" aria-label="Command palette">
-    <input class="cmdk-input" id="cmdk-input" placeholder="Type a command, project, or page…" autocomplete="off">
+    <div class="cmdk-confetti-layer" id="cmdk-confetti-layer" aria-hidden="true"></div>
+    <input class="cmdk-input" id="cmdk-input" placeholder="Search… or try design / paula for a surprise" autocomplete="off">
+    <div class="cmdk-egg" id="cmdk-egg" aria-live="polite">
+      <div class="cmdk-egg-shine" aria-hidden="true"></div>
+      <div class="cmdk-egg-inner">
+        <div class="cmdk-egg-top">
+          <span class="cmdk-egg-badge"><span class="cmdk-egg-badge-dot" aria-hidden="true"></span> Secret unlocked</span>
+          <span class="cmdk-egg-emoji" aria-hidden="true">✨</span>
+        </div>
+        <p class="cmdk-egg-text">You found me. <em>Let's talk.</em></p>
+        <p class="cmdk-egg-sub">Product design, AI UX &amp; systems — open the door below or keep exploring.</p>
+        <button type="button" class="cmdk-egg-cta" id="cmdk-egg-contact">
+          <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+          Open Contact
+        </button>
+      </div>
+    </div>
     <div class="cmdk-list" id="cmdk-list"></div>
     <div class="cmdk-foot">
       <span><kbd>↑</kbd><kbd>↓</kbd> navigate</span>
       <span><kbd>↵</kbd> open</span>
       <span><kbd>esc</kbd> close</span>
+      <span class="cmdk-foot-hint">Tip: type <kbd>design</kbd> or <kbd>paula</kbd></span>
     </div>
   </div>
 </div>
@@ -3298,7 +3894,7 @@ const PROJECTS = [
     year: "2024",
     role: "Product Designer / UX Architect",
     tags: ["ai", "mobile"],
-    chips: [{label:"AI Product", cls:"bl"}, {label:"Mobile · iOS", cls:"bl"}, {label:"UX Architecture"}],
+    chips: [{label:"AI Product", cls:"ac"}, {label:"Mobile · iOS", cls:"ac"}, {label:"UX Architecture"}],
     desc: "Redesigning a web-based platform into an AI-driven mobile app — reducing friction and making personalisation visible to the user.",
     img: "/Public/Images/mila.png",
     status: "live",
@@ -4023,6 +4619,46 @@ const COMMANDS = [
 ];
 
 let cmdkActiveIdx = 0;
+
+function cmdkQueryMatchesEasterEgg(q) {
+  const s = q.trim().toLowerCase();
+  return s.includes('design') || s.includes('paula');
+}
+
+function spawnCmdkConfetti(layer) {
+  if (!layer || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  layer.innerHTML = '';
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('span');
+    p.className = 'cmdk-confetti-piece';
+    p.style.setProperty('--x0', `${6 + Math.random() * 88}%`);
+    p.style.setProperty('--dx-end', `${(Math.random() - 0.5) * 72}px`);
+    p.style.setProperty('--rot', `${(Math.random() - 0.5) * 1080}deg`);
+    p.style.setProperty('--delay', `${i * 28}ms`);
+    p.style.setProperty('--dur', `${1.45 + Math.random() * 0.75}s`);
+    layer.appendChild(p);
+  }
+  window.setTimeout(() => { layer.innerHTML = ''; }, 3200);
+}
+
+function updateCmdkEasterEgg(query) {
+  const egg = document.getElementById('cmdk-egg');
+  const layer = document.getElementById('cmdk-confetti-layer');
+  if (!egg || !layer) return;
+  const on = cmdkQueryMatchesEasterEgg(query);
+  if (on) {
+    egg.classList.add('is-on');
+    if (!window.__cmdkEggConfettiThisSession) {
+      window.__cmdkEggConfettiThisSession = true;
+      spawnCmdkConfetti(layer);
+    }
+  } else {
+    egg.classList.remove('is-on');
+    window.__cmdkEggConfettiThisSession = false;
+    layer.innerHTML = '';
+  }
+}
+
 function renderCmdk(query = '') {
   const q = query.trim().toLowerCase();
   const filtered = q ? COMMANDS.filter(c => c.keys.includes(q) || c.label.toLowerCase().includes(q)) : COMMANDS;
@@ -4049,6 +4685,7 @@ function renderCmdk(query = '') {
   }
   if (!filtered.length) html = `<div style="padding:20px; text-align:center; color: var(--mid); font-size: 13px">No results</div>`;
   cmdkList.innerHTML = html;
+  updateCmdkEasterEgg(query);
   cmdkList.querySelectorAll('.cmdk-item').forEach(it => {
     it.addEventListener('mouseenter', () => {
       cmdkActiveIdx = parseInt(it.dataset.idx, 10);
@@ -4069,10 +4706,43 @@ function openCmdk() {
   cmdkBackdrop.classList.add('open');
   cmdkInput.value = '';
   cmdkActiveIdx = 0;
+  window.__cmdkEggConfettiThisSession = false;
+  const layer = document.getElementById('cmdk-confetti-layer');
+  if (layer) layer.innerHTML = '';
+  const egg = document.getElementById('cmdk-egg');
+  if (egg) {
+    egg.classList.remove('is-on');
+    const inner = egg.querySelector('.cmdk-egg-inner');
+    if (inner) inner.style.transform = '';
+  }
   renderCmdk();
   setTimeout(() => cmdkInput.focus(), 50);
 }
 function closeCmdk() { cmdkBackdrop.classList.remove('open'); }
+
+document.getElementById('cmdk-egg-contact')?.addEventListener('click', () => {
+  closeCmdk();
+  setView('contact');
+});
+
+(function initCmdkEggTilt() {
+  const egg = document.getElementById('cmdk-egg');
+  const inner = egg?.querySelector('.cmdk-egg-inner');
+  if (!egg || !inner) return;
+  function reduced() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+  egg.addEventListener('mousemove', e => {
+    if (!egg.classList.contains('is-on') || reduced()) return;
+    const r = egg.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    inner.style.transform = `perspective(520px) rotateX(${y * -5.5}deg) rotateY(${x * 7.5}deg) translateZ(0)`;
+  });
+  egg.addEventListener('mouseleave', () => {
+    inner.style.transform = '';
+  });
+})();
 
 document.getElementById('cmdk-trigger').addEventListener('click', openCmdk);
 const cmdkTrigger2 = document.getElementById('cmdk-trigger-2');
@@ -4110,15 +4780,91 @@ function showToast(text, ms = 2400) {
 }
 window.showToast = showToast;
 
+document.querySelectorAll('[data-copy-email]').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const v = btn.getAttribute('data-copy-email');
+    if (!v) return;
+    try {
+      await navigator.clipboard.writeText(v);
+      showToast('Email copied to clipboard');
+    } catch {
+      showToast('Could not copy — try again or copy manually');
+    }
+  });
+});
+
 /* ════════════════════════════════════════════════
    MOBILE NAV
    ════════════════════════════════════════════════ */
 document.getElementById('mobile-toggle').addEventListener('click', () => sidebar.classList.toggle('open'));
 
 /* ════════════════════════════════════════════════
+   SKILLS RADAR TOOLTIPS
+   ════════════════════════════════════════════════ */
+(function initSkillsRadarTooltips() {
+  const skillsRoot = document.querySelector('section[data-view="skills"]');
+  if (!skillsRoot) return;
+  let tip = document.getElementById('radar-chart-tooltip');
+  if (!tip) {
+    tip = document.createElement('div');
+    tip.id = 'radar-chart-tooltip';
+    tip.className = 'radar-chart-tooltip';
+    tip.setAttribute('role', 'tooltip');
+    document.body.appendChild(tip);
+  }
+  function escapeHtml(s) {
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function setTipContent(raw) {
+    if (!raw) {
+      tip.innerHTML = '';
+      return;
+    }
+    const sep = ' · ';
+    const i = raw.indexOf(sep);
+    if (i === -1) {
+      tip.innerHTML = `<div class="radar-chart-tooltip-detail">${escapeHtml(raw)}</div>`;
+      return;
+    }
+    tip.innerHTML =
+      `<div class="radar-chart-tooltip-label">${escapeHtml(raw.slice(0, i))}</div>` +
+      `<div class="radar-chart-tooltip-detail">${escapeHtml(raw.slice(i + sep.length))}</div>`;
+  }
+  const pad = 14;
+  function position(e) {
+    tip.style.left = (e.clientX + pad) + 'px';
+    tip.style.top = (e.clientY + pad) + 'px';
+  }
+  skillsRoot.querySelectorAll('.radar-node[data-tip]').forEach(node => {
+    node.addEventListener('mouseenter', e => {
+      setTipContent(node.getAttribute('data-tip') || '');
+      tip.classList.add('is-visible');
+      position(e);
+    });
+    node.addEventListener('mousemove', position);
+    node.addEventListener('mouseleave', () => {
+      tip.classList.remove('is-visible');
+      tip.innerHTML = '';
+    });
+  });
+})();
+
+/* ════════════════════════════════════════════════
    WELCOME TOAST
    ════════════════════════════════════════════════ */
 setTimeout(() => showToast('Tip · press ⌘K to search and navigate', 3200), 1100);
+
+/* Recurring hint: easter egg search (every 2 min, skip if tab hidden or palette open) */
+setInterval(() => {
+  if (document.visibilityState === 'hidden') return;
+  const cmdkEl = document.getElementById('cmdk');
+  if (cmdkEl && cmdkEl.classList.contains('open')) return;
+  showToast('Tip · open search (⌘K) and try typing design or paula', 3800);
+}, 120000);
 </script>
 </body>
 </html>
