@@ -6,7 +6,8 @@
       "mcp__Claude_in_Chrome__computer",
       "mcp__Claude_in_Chrome__javascript_tool",
       "WebFetch(domain:paulaalonso.framer.website)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "mcp__Claude_in_Chrome__browser_batch"
     ]
   }
 }

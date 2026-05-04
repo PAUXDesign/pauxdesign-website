@@ -13,7 +13,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -443,17 +442,13 @@ input, textarea { font-family: inherit; color: inherit; }
   letter-spacing: -0.02em;
   color: var(--dark);
 }
-.view[data-view="skills"] .hero-greet .sub {
-  color: var(--light);
-}
 .hero-greet h1 em {
   font-style: italic;
-  color: var(--mid);
+  color: var(--accent);
   font-weight: 400;
 }
-.hero-greet .sub {
+.hero-greet .hero-sub {
   margin-top: 8px;
-  color: var(--mid);
   font-size: 14px;
   max-width: 540px;
   line-height: 1.7;
@@ -715,9 +710,24 @@ input, textarea { font-family: inherit; color: inherit; }
 /* ── ROW LAYOUTS ── */
 .row {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 14px;
   margin-bottom: 22px;
+  align-items: start;
+}
+.row-overview {
+  grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+  align-items: stretch;
+}
+.row-overview > .featured-stack {
+  align-self: start;
+  min-width: 0;
+}
+.row-overview > .card-activity {
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .row-3 {
   display: grid;
@@ -762,17 +772,47 @@ input, textarea { font-family: inherit; color: inherit; }
 /* ── FEATURED PROJECT ── */
 .featured {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(168px, 200px);
+  grid-template-rows: auto;
+  align-items: stretch;
   gap: 0;
+  width: 100%;
+  max-width: 100%;
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-1);
   overflow: hidden;
   position: relative;
+  cursor: default;
+  transition: box-shadow 220ms ease, border-color 220ms ease, transform 220ms ease;
 }
-.featured-body { padding: 22px; display: flex; flex-direction: column; }
-.featured-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.featured:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-3);
+  border-color: var(--accent);
+}
+.featured[data-project-id] {
+  cursor: pointer;
+}
+.featured[data-project-id]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.featured-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  width: 100%;
+}
+.featured-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.featured-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
 .tag {
   font-family: var(--font-display);
   font-size: 9.5px;
@@ -805,25 +845,32 @@ input, textarea { font-family: inherit; color: inherit; }
 .featured-title {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 22px;
-  line-height: 1.25;
+  font-size: 17px;
+  line-height: 1.28;
   letter-spacing: -0.02em;
   color: var(--dark);
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 .featured-desc {
-  font-size: 13.5px;
+  font-size: 12.5px;
   color: var(--mid);
-  line-height: 1.7;
-  margin-bottom: 14px;
+  line-height: 1.55;
+  margin-bottom: 12px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .featured-metrics {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 8px;
   margin-top: auto;
-  padding-top: 14px;
+  padding-top: 12px;
   border-top: 1px dashed var(--border2);
+}
+.featured .fm-num {
+  font-size: 17px;
 }
 .fm-num {
   font-family: var(--font-display);
@@ -840,21 +887,53 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .featured-thumb {
   position: relative;
-  background: linear-gradient(135deg, #edeefa 0%, #e3e3e7 100%);
-  display: flex; align-items: center; justify-content: center;
-  padding: 24px;
-  min-height: 280px;
+  background: linear-gradient(135deg, #eff0fb 0%, #cbcefa 100%);
+  background-size: 100% 100%;
+  display: grid;
+  place-items: center;
+  place-content: center;
+  padding: 18px 14px;
+  min-height: 220px;
+  min-width: 0;
+  box-sizing: border-box;
+  perspective: 960px;
+  perspective-origin: 50% 50%;
+  transition: background-size 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.featured-thumb img {
-  width: 100%;
-  max-width: 380px;
+.featured:hover .featured-thumb {
+  background-size: 115% 115%;
+}
+.featured-thumb .pcard-mock {
+  width: fit-content;
+  max-width: min(168px, 100%);
+  margin: 0;
+  justify-self: center;
+}
+.featured-thumb .pcard-mock img {
+  display: block;
+  width: auto;
+  max-width: min(168px, 100%);
   height: auto;
-  border-radius: var(--radius);
-  box-shadow: 0 14px 36px rgba(38, 30, 72, 0.18);
-  transform: rotate(-2deg);
-  transition: transform 400ms cubic-bezier(0.34, 1.3, 0.64, 1);
+  margin: 0 auto;
+  border-radius: 10px;
+  box-shadow:
+    0 10px 26px rgba(38, 30, 72, .14),
+    0 2px 4px rgba(38, 30, 72, .06);
+  transition: box-shadow 0.55s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.featured:hover .featured-thumb img { transform: rotate(0) translateY(-4px); }
+.featured:hover .pcard-mock {
+  transform: perspective(960px) rotateX(-5deg) rotateY(5deg) translateY(-8px) scale(1.045);
+  filter: drop-shadow(0 16px 28px rgba(112, 89, 220, .18));
+}
+.featured:hover .pcard-mock::after {
+  opacity: 1;
+  transform: translateX(18%) rotate(0.001deg);
+}
+.featured:hover .featured-thumb .pcard-mock img {
+  box-shadow:
+    0 22px 48px rgba(38, 30, 72, .2),
+    0 8px 16px rgba(112, 89, 220, .12);
+}
 
 /* ── ACTIVITY FEED ── */
 .activity { padding: 8px 18px 14px; }
@@ -890,6 +969,53 @@ input, textarea { font-family: inherit; color: inherit; }
   font-size: 10.5px;
   color: var(--mid);
   white-space: nowrap;
+}
+
+/* Overview · compact activity / Recent highlights */
+.row-overview > .card-activity .card-head {
+  padding: 11px 14px;
+}
+.row-overview > .card-activity .card-title {
+  font-size: 12.5px;
+  gap: 6px;
+}
+.row-overview > .card-activity .card-title svg {
+  width: 12px;
+  height: 12px;
+}
+.row-overview > .card-activity .card-action {
+  font-size: 10px;
+}
+.row-overview > .card-activity .activity {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 5px 14px 10px;
+}
+.row-overview > .card-activity .act-item {
+  flex: 1 1 0;
+  min-height: 0;
+  grid-template-columns: 24px 1fr auto;
+  gap: 9px;
+  padding: 8px 0;
+  align-items: center;
+}
+.row-overview > .card-activity .act-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+}
+.row-overview > .card-activity .act-icon svg {
+  width: 11px;
+  height: 11px;
+}
+.row-overview > .card-activity .act-text {
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+.row-overview > .card-activity .act-time {
+  font-size: 9.5px;
 }
 
 /* ── PROJECT GRID ── */
@@ -957,7 +1083,8 @@ input, textarea { font-family: inherit; color: inherit; }
 .proj-grid.list { grid-template-columns: minmax(0, 1fr); }
 .proj-grid.list .pcard { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); }
 .proj-grid.list .pcard-thumb { min-height: 100%; padding: 18px; }
-.proj-grid.list .pcard-thumb img { max-width: 180px; }
+.proj-grid.list .pcard-mock { max-width: 180px; }
+.proj-grid.list .pcard-mock img { max-width: 100%; }
 
 .pcard {
   display: grid;
@@ -979,19 +1106,103 @@ input, textarea { font-family: inherit; color: inherit; }
 .pcard-thumb {
   position: relative;
   background: linear-gradient(135deg, #eff0fb 0%, #cbcefa 100%);
+  background-size: 100% 100%;
   padding: 24px;
   display: flex; align-items: center; justify-content: center;
   min-height: 200px;
+  perspective: 960px;
+  perspective-origin: 50% 42%;
+  transition: background-size 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.pcard:hover .pcard-thumb {
+  background-size: 115% 115%;
+}
+.pcard-mock {
+  position: relative;
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+  transform-style: preserve-3d;
+  border-radius: 12px;
+  transition:
+    transform 0.55s cubic-bezier(0.23, 1, 0.32, 1),
+    filter 0.45s ease;
+  will-change: transform;
+}
+.pcard-mock::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(255, 255, 255, 0.55) 49%,
+    rgba(255, 255, 255, 0.12) 53%,
+    transparent 65%
+  );
+  opacity: 0;
+  transform: translateX(-18%) rotate(0.001deg);
+  transition:
+    opacity 0.45s ease,
+    transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+}
+.pcard:hover .pcard-mock::after {
+  opacity: 1;
+  transform: translateX(18%) rotate(0.001deg);
 }
 .pcard-thumb img {
+  display: block;
   max-width: 280px;
   width: 100%;
   height: auto;
   border-radius: 10px;
-  box-shadow: 0 10px 26px rgba(38, 30, 72, 0.15);
-  transition: transform 300ms ease;
+  box-shadow:
+    0 10px 26px rgba(38, 30, 72, .14),
+    0 2px 4px rgba(38, 30, 72, .06);
+  transition: box-shadow 0.55s cubic-bezier(0.23, 1, 0.32, 1);
 }
-.pcard:hover .pcard-thumb img { transform: scale(1.03); }
+.pcard:hover .pcard-mock {
+  transform: perspective(960px) rotateX(-5deg) rotateY(5deg) translateY(-8px) scale(1.045);
+  filter: drop-shadow(0 16px 28px rgba(112, 89, 220, .18));
+}
+.pcard:hover .pcard-thumb img {
+  box-shadow:
+    0 22px 48px rgba(38, 30, 72, .2),
+    0 8px 16px rgba(112, 89, 220, .12);
+}
+@media (prefers-reduced-motion: reduce) {
+  .featured,
+  .pcard-thumb,
+  .featured-thumb,
+  .pcard-mock,
+  .pcard-mock::after,
+  .pcard-thumb img,
+  .featured-thumb .pcard-mock img {
+    transition: none !important;
+  }
+  .featured:hover {
+    transform: none;
+  }
+  .pcard:hover .pcard-thumb,
+  .featured:hover .featured-thumb {
+    background-size: 100% 100%;
+  }
+  .pcard:hover .pcard-mock,
+  .featured:hover .pcard-mock {
+    transform: none;
+    filter: none;
+  }
+  .pcard:hover .pcard-mock::after,
+  .featured:hover .pcard-mock::after {
+    opacity: 0;
+    transform: none;
+  }
+}
 .pcard-status {
   position: absolute;
   top: 12px; right: 12px;
@@ -1256,10 +1467,20 @@ button.proj-gallery-item {
   margin-bottom: 28px;
   align-items: start;
 }
-.about-grid > .profile-card {
+.about-grid > .about-profile-col {
   justify-self: start;
   width: 100%;
   max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+}
+.about-profile-col .profile-card {
+  max-width: none;
+}
+.block-tools-sidebar .tools-grid {
+  grid-template-columns: 1fr;
 }
 .profile-card {
   position: relative;
@@ -1279,29 +1500,45 @@ button.proj-gallery-item {
 }
 .profile-photo {
   position: relative;
+  display: block;
   width: 100%;
-  aspect-ratio: 3/4;
-  border-radius: var(--radius);
-  overflow: hidden;
-  background: linear-gradient(160deg, #edeefa 0%, #dcddf5 100%);
+  margin-inline: 0;
   margin-bottom: 16px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  background: #f0f1fa;
   cursor: pointer;
   transform-style: preserve-3d;
   perspective: 800px;
+  line-height: 0;
 }
-.profile-photo img {
-  position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  object-position: center top;
+.profile-photo img.profile-img-real {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center bottom;
   transition: opacity 400ms ease, transform 400ms ease;
 }
-.profile-photo .alt { object-position: center; }
 .profile-photo .alt {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  background: transparent;
   opacity: 0;
-  transform: scale(1.05);
+  transform: scale(1.02);
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 400ms ease, transform 400ms ease;
 }
-.profile-photo:hover .main { opacity: 0; }
+.profile-photo:hover .profile-img-real { opacity: 0; }
 .profile-photo:hover .alt { opacity: 1; transform: scale(1); }
 
 .profile-name {
@@ -1349,7 +1586,7 @@ button.proj-gallery-item {
   width: 100%;
   margin-top: 14px;
   padding: 10px 14px;
-  border-radius: var(--pill);
+  border-radius: 12px;
   border: 1px dashed rgba(101, 95, 140, 0.38);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(237, 238, 250, 0.65) 100%);
   font-family: var(--font-sans);
@@ -1393,14 +1630,6 @@ button.proj-gallery-item {
   gap: 18px;
   align-items: start;
   min-width: 0;
-}
-@media (min-width: 1024px) {
-  .about-blocks {
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
-  }
-  .about-blocks > .block:first-child { grid-column: 1 / -1; }
-  .about-blocks > .block:last-child { grid-column: 1 / -1; }
 }
 .block {
   background: #fff;
@@ -1497,7 +1726,7 @@ button.proj-gallery-item {
 .tool .dot.l2 { background: var(--accent); }
 .tool .dot.l3 { background: var(--mid); opacity: 0.6; }
 
-/* Working from — real map (Leaflet) + pill markers */
+/* Working from — 3D globe (Three.js canvas) */
 .geo-card-body {
   display: flex;
   flex-direction: column;
@@ -1506,72 +1735,120 @@ button.proj-gallery-item {
 }
 .geo-map {
   position: relative;
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  height: 220px;
-  min-height: 200px;
-  border: 1px solid rgba(112, 89, 220, 0.1);
-  margin-bottom: 12px;
-  background: var(--bg-soft);
+  height: 212px;
+  margin-bottom: 14px;
+  cursor: grab;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background:
+    radial-gradient(78% 70% at 50% 34%, rgba(255, 255, 255, 0.65) 0%, rgba(236, 240, 252, 0.5) 50%, transparent 76%),
+    radial-gradient(110% 85% at 70% 18%, rgba(160, 158, 232, 0.11) 0%, transparent 54%),
+    linear-gradient(165deg, #eef0f8 0%, #e4e8f4 46%, #d8ddf0 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    0 8px 32px rgba(112, 89, 220, 0.07),
+    0 2px 8px rgba(38, 30, 72, 0.035);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
 }
-.geo-map .leaflet-container {
+.geo-map:hover {
+  border-color: rgba(150, 148, 232, 0.42);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 10px 36px rgba(112, 89, 220, 0.11),
+    0 4px 14px rgba(130, 140, 200, 0.08);
+}
+.geo-map:active {
+  cursor: grabbing;
+}
+.geo-globe-host {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  min-height: 160px;
+  min-width: 0;
+  transform-origin: 50% 48%;
+  transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.geo-map:hover .geo-globe-host {
+  transform: scale(1.042);
+}
+@media (prefers-reduced-motion: reduce) {
+  .geo-map { transition: none; }
+  .geo-globe-host { transition: none; }
+  .geo-map:hover .geo-globe-host { transform: none; }
+}
+.geo-globe-host canvas {
+  display: block;
   width: 100%;
   height: 100%;
-  font-family: var(--font-sans);
-  border-radius: var(--radius);
+  touch-action: none;
+  filter: drop-shadow(0 8px 20px rgba(130, 160, 220, 0.22)) drop-shadow(0 3px 10px rgba(140, 138, 210, 0.14));
 }
-.geo-map .leaflet-control-zoom a {
-  border-radius: 6px !important;
-}
-.geo-map .leaflet-control-attribution {
-  font-size: 9px;
-  background: rgba(255, 255, 255, 0.82) !important;
-  padding: 2px 6px !important;
-}
-.geo-leaflet-fallback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  padding: 16px;
-  font-size: 12px;
-  color: var(--mid);
-  text-align: center;
-  line-height: 1.5;
-}
-.geo-div-icon {
-  border: none !important;
-  background: transparent !important;
-  transform: translate(-50%, calc(-100% - 4px));
-}
-.geo-pin-label {
+.geo-pill {
+  position: absolute;
+  z-index: 2;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.96);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--dark);
-  box-shadow: 0 4px 16px rgba(38, 30, 72, 0.12);
-  white-space: nowrap;
+  gap: 6px;
+  padding: 4px 9px 4px 5px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.88);
+  border-radius: 10px;
+  box-shadow:
+    0 6px 20px rgba(38, 30, 72, 0.1),
+    0 1px 4px rgba(38, 30, 72, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.98);
+  pointer-events: none;
+  max-width: min(168px, 52vw);
 }
-.geo-pin-label .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
+.geo-pill-ic {
+  width: 20px;
+  height: 20px;
+  border-radius: 7px;
   flex-shrink: 0;
+  position: relative;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
-.geo-pin-label .dot.l1 { background: var(--green); }
-.geo-pin-label .dot.l2 { background: var(--accent); }
-.geo-pin-label .dot.l3 { background: var(--mid); opacity: 0.65; }
+.geo-pill-ic::after {
+  content: "";
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.geo-pill-ic-green  { background: rgba(88, 219, 105, 0.22); }
+.geo-pill-ic-green::after  { background: var(--green); }
+.geo-pill-ic-accent { background: rgba(112, 89, 220, 0.2); }
+.geo-pill-ic-accent::after { background: var(--accent); }
+.geo-pill-copy {
+  font-family: var(--font-display);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--dark);
+}
+.geo-pill-london { bottom: 8px; left: 8px; }
+.geo-pill-remote { top: 8px; right: 8px; }
 .geo-foot {
   font-size: 12px;
   color: var(--mid);
   line-height: 1.65;
   margin: 0;
+}
+@media (max-width: 560px) {
+  .geo-map { height: 186px; border-radius: var(--radius); }
+  .geo-pill { padding: 3px 7px 3px 4px; gap: 5px; max-width: min(152px, 58vw); }
+  .geo-pill-copy { font-size: 10px; }
+  .geo-pill-ic { width: 18px; height: 18px; border-radius: 6px; }
+  .geo-pill-london { bottom: 6px; left: 6px; }
+  .geo-pill-remote { top: 6px; right: 6px; }
 }
 
 /* Skills bars */
@@ -1775,6 +2052,205 @@ button.proj-gallery-item {
     transform: scale(1);
   }
 }
+
+/* Skills · Domains — label-only cells */
+.skills-tw-domains {
+  min-width: 0;
+}
+/* Skills bottom row — Domains + Soft skills same height (pad+) */
+@media (min-width: 980px) {
+  .skills-tw-bottom {
+    align-items: stretch;
+  }
+  .skills-tw-bottom > article {
+    min-height: 0;
+  }
+}
+
+.skills-tw-bottom .skills-tw-domains {
+  gap: 8px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
+  align-content: stretch;
+}
+@media (max-width: 560px) {
+  .skills-tw-bottom .skills-tw-domains {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+  }
+}
+.skills-tw-bottom .skills-domain-tile {
+  padding: 8px 10px;
+  min-height: 2.5rem;
+  height: 100%;
+  align-self: stretch;
+  box-sizing: border-box;
+}
+.skills-domain-tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-width: 0;
+  padding: 9px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(38, 30, 72, 0.08);
+  background: #fff;
+  transition:
+    transform 0.25s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+.skills-tw-domains.skills-domains-anim .skills-domain-tile {
+  animation: skillsDomainIn 0.58s cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: calc(0.08s + var(--sd-i, 0) * 0.055s);
+}
+@keyframes skillsDomainIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.skills-domain-tile:hover {
+  transform: translateY(-1px);
+  border-color: rgba(38, 30, 72, 0.14);
+  background: rgba(38, 30, 72, 0.02);
+}
+.skills-domain-tile:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.skills-domain-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--mid);
+  line-height: 1.3;
+}
+
+.skills-tw-bottom .skills-soft-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 4px;
+  padding-top: 0;
+}
+.skills-tw-bottom .skills-soft-row {
+  flex: 1 1 0;
+  min-height: 1.5rem;
+}
+
+/* Skills · Soft impact — compact horizontal bar chart */
+.skills-soft-chart {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 2px 0 0;
+}
+.skills-soft-chart:not(.skills-soft-anim) .skills-soft-fill {
+  width: var(--p);
+  opacity: 1;
+}
+.skills-soft-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(52px, 1fr) 34px;
+  gap: 8px 10px;
+  align-items: center;
+  padding: 3px 4px;
+  margin: 0 -4px;
+  border-radius: 9px;
+  transition: background 0.2s ease;
+}
+.skills-soft-row:hover {
+  background: rgba(112, 89, 220, 0.05);
+}
+.skills-soft-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--mid);
+  line-height: 1.25;
+  min-width: 0;
+}
+.skills-soft-track {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(38, 30, 72, 0.065);
+  overflow: hidden;
+}
+.skills-soft-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  max-width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #5542b8, #7f6ae8);
+  box-shadow: 0 1px 2px rgba(112, 89, 220, 0.18);
+  box-sizing: border-box;
+}
+.skills-soft-row:nth-child(2) .skills-soft-fill {
+  background: linear-gradient(90deg, #4a38a6, #7059dc);
+}
+.skills-soft-row:nth-child(3) .skills-soft-fill {
+  background: linear-gradient(90deg, #5346a1, #8270df);
+}
+.skills-soft-row:nth-child(4) .skills-soft-fill {
+  background: linear-gradient(90deg, #5d5298, #9183d4);
+}
+.skills-soft-row:nth-child(5) .skills-soft-fill {
+  background: linear-gradient(90deg, #665f8a, #9f94c8);
+}
+.skills-soft-chart.skills-soft-anim .skills-soft-fill {
+  animation: skillsSoftBarFill 1.05s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: calc(0.05s + var(--si, 0) * 0.065s);
+}
+@keyframes skillsSoftBarFill {
+  from {
+    width: 0%;
+    opacity: 0.85;
+  }
+  to {
+    width: var(--p);
+    opacity: 1;
+  }
+}
+.skills-soft-chart.skills-soft-anim .skills-soft-pct {
+  opacity: 0;
+  animation: skillsSoftPctReveal 0.45s ease forwards;
+  animation-delay: calc(0.42s + var(--si, 0) * 0.065s);
+}
+@keyframes skillsSoftPctReveal {
+  from {
+    opacity: 0;
+    transform: translateX(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.skills-soft-pct {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--dark);
+  text-align: right;
+  transition: color 0.2s ease;
+}
+.impact-card:hover .skills-soft-pct {
+  color: var(--accent);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .group:hover .prof-radar { transform: none; }
   .prof-radar.radar-play .radar-grid-layer,
@@ -1783,12 +2259,23 @@ button.proj-gallery-item {
     opacity: 1 !important;
     transform: none !important;
   }
+  .skills-tw-domains.skills-domains-anim .skills-domain-tile {
+    animation: none !important;
+  }
+  .skills-domain-tile:hover {
+    transform: none;
+  }
+  .skills-soft-chart.skills-soft-anim .skills-soft-fill {
+    animation: none !important;
+    width: var(--p);
+    opacity: 1;
+  }
+  .skills-soft-chart.skills-soft-anim .skills-soft-pct {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
 }
-.impact-card:hover .impact-metric-val {
-  color: var(--accent);
-}
-
-/* Process / Kanban */
 .kanban {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -1851,6 +2338,7 @@ button.proj-gallery-item {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 14px;
+  align-items: start;
 }
 .form-card {
   background: #fff;
@@ -1886,13 +2374,87 @@ button.proj-gallery-item {
   background: #fff;
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
+/* Contact reply card — egg-style hover; border uses purple tones only (avoids green band when column stretches) */
+.contact-side-shell {
+  position: relative;
+  z-index: 0;
+  min-width: 0;
+  padding: 2px;
+  border-radius: calc(var(--radius-lg) + 2px);
+  background: linear-gradient(125deg, #7059DC 0%, #9b8aed 35%, #8f83eb 55%, #6450c8 100%);
+  background-size: 240% 240%;
+  box-shadow:
+    0 0 0 1px rgba(112, 89, 220, 0.12),
+    0 12px 36px rgba(112, 89, 220, 0.18),
+    0 4px 12px rgba(38, 30, 72, 0.06);
+  overflow: hidden;
+  cursor: default;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+  animation: cmdkEggBorderFlow 5s linear infinite;
+  perspective: 1000px;
+  perspective-origin: 50% 42%;
+  transform-style: preserve-3d;
+}
+.contact-side-shell:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow:
+    0 0 0 1px rgba(112, 89, 220, 0.2),
+    0 16px 44px rgba(112, 89, 220, 0.25),
+    0 8px 20px rgba(38, 30, 72, 0.08);
+}
+.contact-side-shine {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 1;
+  z-index: 0;
+}
+.contact-side-shine::after {
+  content: "";
+  position: absolute;
+  top: -60%;
+  left: -30%;
+  width: 56%;
+  height: 220%;
+  background: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, 0.55) 45%, transparent 70%);
+  animation: cmdkEggShineSweep 2.6s ease-in-out infinite;
+}
 .contact-side {
   background: linear-gradient(160deg, var(--dark), var(--accent));
   color: #fff;
   border-radius: var(--radius-lg);
-  padding: 28px;
+  padding: 0;
   position: relative;
   overflow: hidden;
+  z-index: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  transform-style: preserve-3d;
+  box-shadow:
+    inset 0 5px 36px rgba(0, 0, 0, 0.32),
+    inset 0 2px 12px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+.contact-side-inner {
+  position: relative;
+  z-index: 1;
+  padding: 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.12s ease-out;
+  transform-style: preserve-3d;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  border-radius: calc(var(--radius-lg) - 3px);
+  margin: 3px;
+  background: linear-gradient(168deg, rgba(255, 255, 255, 0.07) 0%, transparent 45%, rgba(0, 0, 0, 0.12) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 10px 28px rgba(0, 0, 0, 0.2);
 }
 .contact-side::before {
   content:"";
@@ -1907,7 +2469,10 @@ button.proj-gallery-item {
   line-height: 1.15;
   letter-spacing: -0.02em;
 }
-.contact-side h3 em { color: rgba(255,255,255,0.65); }
+.contact-side h3 em {
+  color: var(--accent);
+  text-shadow: 0 1px 2px rgba(38, 30, 72, 0.25);
+}
 .contact-side p {
   margin-top: 12px;
   font-size: 13.5px;
@@ -2782,6 +3347,17 @@ button.proj-gallery-item {
   .cmdk-egg-cta:hover {
     transform: none;
   }
+  .contact-side-shell {
+    animation: none;
+    background: linear-gradient(125deg, #7059DC 0%, #8b7ae8 100%);
+    background-size: 100% 100%;
+  }
+  .contact-side-shell:hover {
+    transform: none;
+  }
+  .contact-side-shine::after {
+    animation: none !important;
+  }
 }
 .cmdk-list { position: relative; z-index: 1; max-height: 400px; overflow-y: auto; padding: 6px; }
 .cmdk-section {
@@ -2885,11 +3461,26 @@ button.proj-gallery-item {
   .tb-mobile-toggle { display: inline-flex; }
   .kpi-grid { grid-template-columns: repeat(2, 1fr); }
   .row { grid-template-columns: 1fr; }
+  .row-overview > .card-activity {
+    height: auto;
+  }
+  .row-overview > .card-activity .activity {
+    flex: none;
+    display: block;
+  }
+  .row-overview > .card-activity .act-item {
+    flex: none;
+    align-items: flex-start;
+  }
   .row-3 { grid-template-columns: 1fr; }
   .featured { grid-template-columns: 1fr; }
   .featured-thumb { min-height: 220px; }
+  .featured-thumb .pcard-mock,
+  .featured-thumb .pcard-mock img {
+    max-width: min(200px, 100%);
+  }
   .about-grid { grid-template-columns: 1fr; }
-  .about-grid > .profile-card { max-width: none; justify-self: stretch; }
+  .about-grid > .about-profile-col { max-width: none; justify-self: stretch; align-self: stretch; }
   .contact-grid { grid-template-columns: 1fr; }
   .kanban { grid-template-columns: 1fr; }
   .view-wrap { padding: 20px 16px; }
@@ -2919,8 +3510,9 @@ button.proj-gallery-item {
   .proj-grid:not(.list) { grid-template-columns: minmax(0, 1fr); }
   .proj-grid.list .pcard { grid-template-columns: minmax(0, 1fr); }
   .proj-grid.list .pcard-thumb { min-height: 160px; }
-  .proj-grid.list .pcard-thumb img { max-width: 100%; }
-  .contact-side { padding: 22px 18px; }
+  .proj-grid.list .pcard-mock { max-width: 100%; }
+  .proj-grid.list .pcard-mock img { max-width: 100%; }
+  .contact-side-inner { padding: 22px 18px; }
   .contact-side .meta { flex-wrap: wrap; gap: 12px 20px; }
   .proj-gallery-band-inner { padding: 18px 16px 16px; }
 }
@@ -3106,7 +3698,7 @@ button.proj-gallery-item {
           <div class="hero-greet">
             <div class="hero-greet-tag" id="time-greet">Good afternoon · London</div>
             <h1>Product designer for<br><em>AI, SaaS and mobile.</em></h1>
-            <p class="sub">Works closely with PM, engineering and stakeholders to translate complex business requirements into intuitive, user-centered solutions.</p>
+            <p class="hero-sub text-paux-mid">Works closely with PM, engineering and stakeholders to translate complex business requirements into intuitive, user-centered solutions.</p>
           </div>
           <div class="hero-quick">
             <a class="btn btn-dark" href="#contact" data-action="goto-contact">
@@ -3194,28 +3786,54 @@ button.proj-gallery-item {
         </div>
 
         <!-- Featured + Activity -->
-        <div class="row">
-          <div class="featured">
-            <div class="featured-body">
-              <div class="featured-tags">
-                <span class="tag ac">Enterprise SaaS</span>
-                <span class="tag ac">Lead Product Designer</span>
-                <span class="tag">UX Architecture</span>
+        <div class="row row-overview">
+          <div class="featured-stack">
+            <article class="featured" data-project-id="enterprise-saas" role="button" tabindex="0" aria-label="Open case study: Enterprise compliance platform">
+              <div class="featured-body">
+                <div class="featured-tags">
+                  <span class="tag ac">Enterprise SaaS</span>
+                  <span class="tag ac">Lead Product Designer</span>
+                  <span class="tag">UX Architecture</span>
+                </div>
+                <div class="featured-title">Enterprise compliance platform</div>
+                <p class="featured-desc">Dense legal and ops requirements turned into guided workflows — so teams stay compliant without living in spreadsheets.</p>
+                <div class="featured-metrics">
+                  <div><div class="fm-num">10</div><div class="fm-lbl">Modules</div></div>
+                  <div><div class="fm-num">0</div><div class="fm-lbl">Unsafe paths</div></div>
+                  <div><div class="fm-num">850+</div><div class="fm-lbl">Rows cut</div></div>
+                </div>
               </div>
-              <div class="featured-title">Enterprise Compliance &amp; Business Management Platform</div>
-              <p class="featured-desc">Compliance-first SaaS that turns dense legal complexity into workflows non-technical users can follow with confidence — GDPR, occupational health, cross-department processes.</p>
-              <div class="featured-metrics">
-                <div><div class="fm-num">10</div><div class="fm-lbl">Regulatory modules</div></div>
-                <div><div class="fm-num">0</div><div class="fm-lbl">Non-compliant paths</div></div>
-                <div><div class="fm-num">850+</div><div class="fm-lbl">Excel rows replaced</div></div>
+              <div class="featured-thumb">
+                <div class="pcard-mock">
+                  <img src="/Public/Images/dashboard-saas.png" alt="Enterprise SaaS dashboard">
+                </div>
               </div>
-            </div>
-            <div class="featured-thumb">
-              <img src="/Public/Images/dashboard-saas.png" alt="Enterprise SaaS dashboard">
-            </div>
+            </article>
+
+            <article class="featured" data-project-id="mila-ai" role="button" tabindex="0" aria-label="Open case study: Mila AI">
+              <div class="featured-body">
+                <div class="featured-tags">
+                  <span class="tag ac">AI Product</span>
+                  <span class="tag ac">Mobile · iOS</span>
+                  <span class="tag">UX Architecture</span>
+                </div>
+                <div class="featured-title">Mila AI — your language coach</div>
+                <p class="featured-desc">From web platform to an AI-first iOS app — clearer progression, one-tap resume, personalisation users actually notice.</p>
+                <div class="featured-metrics">
+                  <div><div class="fm-num">85%</div><div class="fm-lbl">Tests · uplift</div></div>
+                  <div><div class="fm-num">1 tap</div><div class="fm-lbl">Resume</div></div>
+                  <div><div class="fm-num">AI</div><div class="fm-lbl">Surfaced</div></div>
+                </div>
+              </div>
+              <div class="featured-thumb">
+                <div class="pcard-mock">
+                  <img src="/Public/Images/mila.png" alt="Mila AI language learning app">
+                </div>
+              </div>
+            </article>
           </div>
 
-          <div class="card">
+          <div class="card card-activity">
             <div class="card-head">
               <div class="card-title">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 8-6-16-3 8H2"/></svg>
@@ -3297,8 +3915,19 @@ button.proj-gallery-item {
               </div>
             </div>
             <div class="card-body geo-card-body">
-              <div class="geo-map" aria-label="Map: London base, remote GMT, hybrid in-office">
-                <div id="geo-leaflet-map" style="width:100%;height:100%"></div>
+              <div class="geo-map" aria-label="Map: London base, remote work">
+                <div class="geo-globe-host" id="geo-globe-host">
+                  <canvas id="geo-globe-canvas" aria-hidden="true"></canvas>
+                </div>
+
+                <div class="geo-pill geo-pill-remote">
+                  <span class="geo-pill-ic geo-pill-ic-accent" aria-hidden="true"></span>
+                  <span class="geo-pill-copy">Remote</span>
+                </div>
+                <div class="geo-pill geo-pill-london">
+                  <span class="geo-pill-ic geo-pill-ic-green" aria-hidden="true"></span>
+                  <span class="geo-pill-copy">London · base</span>
+                </div>
               </div>
               <p class="geo-foot">
                 Based in London, available for full-time roles or freelance engagements across the UK and EU.
@@ -3314,7 +3943,7 @@ button.proj-gallery-item {
           <div class="hero-greet">
             <div class="hero-greet-tag">Selected work · 2023–2026</div>
             <h1>Work that <em>moved metrics.</em></h1>
-            <p class="sub">Each project focused on a real problem, real users, and a measurable outcome. Click any card to open the full write-up in the panel.</p>
+            <p class="hero-sub text-paux-mid">Each project focused on a real problem, real users, and a measurable outcome. Click any card to open the full write-up in the panel.</p>
           </div>
         </div>
 
@@ -3381,31 +4010,51 @@ button.proj-gallery-item {
           <div class="hero-greet">
             <div class="hero-greet-tag">About me · /paula-alonso</div>
             <h1>Designing products <em>with intention.</em></h1>
-            <p class="sub">Product designer with 5+ years across graphic design, UX/UI and people operations. I bring a rare mix of visual craft, systems thinking and organisational understanding to AI, SaaS and mobile products.</p>
+            <p class="hero-sub text-paux-mid">Product designer with 5+ years across graphic design, UX/UI and people operations. I bring a rare mix of visual craft, systems thinking and organisational understanding to AI, SaaS and mobile products.</p>
           </div>
         </div>
 
         <div class="about-grid">
-          <div class="profile-card">
-            <div class="profile-photo" aria-label="Photo of Paula Alonso (hover to see illustrated avatar)">
-              <img class="main" src="/Public/Images/paula.jpg" alt="Paula Alonso" loading="eager" fill>
-              <img class="alt" src="/Public/Images/avatar.png" alt="" aria-hidden="true">
+          <div class="about-profile-col">
+            <div class="profile-card">
+              <div class="profile-photo" aria-label="Photo of Paula Alonso (hover to see illustrated avatar)">
+                <img class="profile-img-real" src="../Public/Images/paula.jpg" alt="Paula Alonso" loading="eager">
+                <img class="alt" src="../Public/Images/avatar.png" alt="" aria-hidden="true">
+              </div>
+              <div class="profile-name">Paula Alonso</div>
+              <div class="profile-role">Product Designer · AI &amp; SaaS · UX/UI · Mobile</div>
+              <button type="button" class="about-copy-email" data-copy-email="paulaalonso.design@gmail.com" aria-label="Copy email address to clipboard" title="Click to copy">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                <span class="em">paulaalonso.design@gmail.com</span>
+              </button>
+              <div class="profile-meta">
+                <div class="pm-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="pm-label">Based</span><span class="pm-val">London, UK</span></div>
+                <div class="pm-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="pm-label">Status</span><span class="pm-val" style="color: #2c8237; display:inline-flex; align-items:center; gap:6px"><span class="sb-av-dot" style="position:relative; top:0"></span> Available May 2026</span></div>
+              </div>
+              <div class="profile-actions">
+                <a href="/dashboard/paula_alonso_cv.html" target="_blank" rel="noopener" class="btn btn-outline" style="width:100%; justify-content:center">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
+                  View CV
+                </a>
+              </div>
             </div>
-            <div class="profile-name">Paula Alonso</div>
-            <div class="profile-role">Product Designer · AI &amp; SaaS · UX/UI · Mobile</div>
-            <button type="button" class="about-copy-email" data-copy-email="paulaalonso.design@gmail.com" aria-label="Copy email address to clipboard" title="Click to copy">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-              <span class="em">paulaalonso.design@gmail.com</span>
-            </button>
-            <div class="profile-meta">
-              <div class="pm-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span class="pm-label">Based</span><span class="pm-val">London, UK</span></div>
-              <div class="pm-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span class="pm-label">Status</span><span class="pm-val" style="color: #2c8237; display:inline-flex; align-items:center; gap:6px"><span class="sb-av-dot" style="position:relative; top:0"></span> Available May 2026</span></div>
-            </div>
-            <div class="profile-actions">
-              <a href="/dashboard/paula_alonso_cv.html" target="_blank" rel="noopener" class="btn btn-outline" style="width:100%; justify-content:center">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg>
-                View CV
-              </a>
+
+            <div class="block block-tools-sidebar" aria-label="Tools I use daily">
+              <div class="block-head">
+                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
+                <h3>Tools I use daily</h3>
+              </div>
+              <div class="tools-grid">
+                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Figma</div>
+                <div class="tool"><span class="dot l1" aria-hidden="true"></span> FigJam</div>
+                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Framer</div>
+                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Adobe CC</div>
+                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Maze</div>
+                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Notion</div>
+                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Claude AI</div>
+                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Cursor</div>
+                <div class="tool"><span class="dot l3" aria-hidden="true"></span> HTML / CSS</div>
+              </div>
             </div>
           </div>
 
@@ -3479,25 +4128,6 @@ button.proj-gallery-item {
                 </div>
               </div>
             </div>
-
-            <div class="block">
-              <div class="block-head">
-                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
-                <h3>Tools I use daily</h3>
-              </div>
-              <div class="tools-grid">
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Figma</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> FigJam</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Framer</div>
-                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Adobe CC</div>
-                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Maze</div>
-                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Notion</div>
-                <div class="tool"><span class="dot l3" aria-hidden="true"></span> Jira</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Claude AI</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Cursor</div>
-                <div class="tool"><span class="dot l3" aria-hidden="true"></span> HTML / CSS</div>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -3508,7 +4138,7 @@ button.proj-gallery-item {
           <div class="hero-greet">
             <div class="hero-greet-tag">Tech stack · proficiency</div>
             <h1>What I use, <em>how deep</em>, and why.</h1>
-            <p class="sub">Calibrated against real production projects.</p>
+            <p class="hero-sub text-paux-light">Calibrated against real production projects.</p>
           </div>
         </div>
 
@@ -3666,73 +4296,59 @@ button.proj-gallery-item {
           </article>
         </div>
 
-        <div class="skills-tw-bottom grid grid-cols-1 gap-4 pad:grid-cols-2">
-          <article class="group flex min-w-0 flex-col rounded-2xl border border-paux-dark/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(38,30,72,0.035)] transition-[box-shadow,border-color] duration-200 hover:border-paux-accent/18 hover:shadow-[0_12px_40px_-18px_rgba(112,89,220,0.14)]">
-            <div class="mb-2 flex w-full items-center justify-between gap-3">
+        <div class="skills-tw-bottom grid grid-cols-1 gap-3 pad:grid-cols-2">
+          <article class="group flex h-full min-h-0 min-w-0 flex-col rounded-2xl border border-paux-dark/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(38,30,72,0.035)] transition-[box-shadow,border-color] duration-200 hover:border-paux-accent/18 hover:shadow-[0_12px_40px_-18px_rgba(112,89,220,0.14)]">
+            <div class="mb-1.5 flex w-full shrink-0 items-center justify-between gap-3">
               <div class="flex items-center gap-2 font-jakarta text-sm font-semibold tracking-tight text-paux-dark">
                 <svg class="h-[17px] w-[17px] shrink-0 text-paux-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
                 Domains
               </div>
               <span class="shrink-0 whitespace-nowrap text-[11px] font-medium text-paux-light">Industries shipped to</span>
             </div>
-            <div class="skills-tw-domains mt-1 grid grid-cols-2 gap-2 max-[560px]:grid-cols-1">
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-green" aria-hidden="true"></span>Enterprise SaaS</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span>AI &amp; LLM UX</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-accent" aria-hidden="true"></span>EdTech</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-green" aria-hidden="true"></span>Compliance / Legal</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-mid/60" aria-hidden="true"></span>HR / People tools</div>
-              <div class="flex items-center gap-2 rounded-full border border-paux-dark/[0.07] bg-paux-soft px-3 py-2 text-xs font-semibold uppercase tracking-[0.1em] text-paux-light"><span class="h-2 w-2 shrink-0 rounded-full bg-paux-mid/60" aria-hidden="true"></span>Mobile · iOS</div>
+            <div class="skills-tw-domains mt-1 grid min-h-0 flex-1 grid-cols-2 gap-2 max-[560px]:grid-cols-1">
+              <div class="skills-domain-tile" style="--sd-i:0"><span class="skills-domain-label">Enterprise SaaS</span></div>
+              <div class="skills-domain-tile" style="--sd-i:1"><span class="skills-domain-label">AI &amp; LLM UX</span></div>
+              <div class="skills-domain-tile" style="--sd-i:2"><span class="skills-domain-label">EdTech</span></div>
+              <div class="skills-domain-tile" style="--sd-i:3"><span class="skills-domain-label">Compliance / Legal</span></div>
+              <div class="skills-domain-tile" style="--sd-i:4"><span class="skills-domain-label">HR / People tools</span></div>
+              <div class="skills-domain-tile" style="--sd-i:5"><span class="skills-domain-label">Mobile · iOS</span></div>
             </div>
           </article>
 
-          <article class="impact-card group flex min-w-0 flex-col rounded-2xl border border-paux-dark/[0.06] bg-white p-5 shadow-[0_1px_2px_rgba(38,30,72,0.035)] transition-[box-shadow,border-color] duration-200 hover:border-paux-accent/18 hover:shadow-[0_12px_40px_-18px_rgba(112,89,220,0.14)]">
-            <div class="mb-1 flex items-center justify-between gap-2">
+          <article class="impact-card group flex h-full min-h-0 min-w-0 flex-col rounded-2xl border border-paux-dark/[0.06] bg-white p-4 shadow-[0_1px_2px_rgba(38,30,72,0.035)] transition-[box-shadow,border-color] duration-200 hover:border-paux-accent/18 hover:shadow-[0_12px_40px_-18px_rgba(112,89,220,0.14)]">
+            <div class="mb-1.5 flex w-full shrink-0 items-center justify-between gap-3">
               <div class="flex items-center gap-2 font-jakarta text-sm font-semibold tracking-tight text-paux-dark">
                 <svg class="h-[17px] w-[17px] shrink-0 text-paux-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"/></svg>
                 Soft skills &amp; impact
               </div>
+              <span class="shrink-0 whitespace-nowrap text-[11px] font-medium text-paux-light">Team outcomes</span>
             </div>
-            <div class="prof-radar prof-radar-penta mx-auto my-2" aria-hidden="true">
-              <svg viewBox="0 0 120 120" width="240" height="240">
-                <defs>
-                  <radialGradient id="radar-grad-skill-soft" cx="60" cy="58" r="54" gradientUnits="userSpaceOnUse">
-                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.52"/>
-                    <stop offset="40%" stop-color="#c4bbf9" stop-opacity="0.3"/>
-                    <stop offset="100%" stop-color="#7059DC" stop-opacity="0.17"/>
-                  </radialGradient>
-                </defs>
-                <g class="radar-grid-layer">
-                  <g class="radar-grid">
-                    <polygon points="60,22 93.5,46 82.5,87 37.5,87 26.5,46"/>
-                    <polygon points="60,30 89,49 79.5,81 40.5,81 31,49"/>
-                    <polygon points="60,38 84.5,52 76.5,75 43.5,75 35.5,52"/>
-                  </g>
-                  <g class="radar-axis">
-                    <line x1="60" y1="60" x2="60" y2="22"/><line x1="60" y1="60" x2="93.5" y2="46"/><line x1="60" y1="60" x2="82.5" y2="87"/><line x1="60" y1="60" x2="37.5" y2="87"/><line x1="60" y1="60" x2="26.5" y2="46"/>
-                  </g>
-                  <g class="radar-anchors">
-                    <circle class="radar-anchor" cx="60" cy="22" r="1.85"/><circle class="radar-anchor" cx="93.5" cy="46" r="1.85"/><circle class="radar-anchor" cx="82.5" cy="87" r="1.85"/><circle class="radar-anchor" cx="37.5" cy="87" r="1.85"/><circle class="radar-anchor" cx="26.5" cy="46" r="1.85"/>
-                  </g>
-                </g>
-                <g class="radar-shape-wrap">
-                  <polygon class="radar-shape" points="60,24.28 93.15,49.2 80.1,87.67 39.98,87.05 25.68,48.15" fill="url(#radar-grad-skill-soft)" stroke="#7059DC"/>
-                  <g class="radar-vertices">
-                    <circle class="radar-node radar-node--accent" cx="60" cy="24.28" r="2" data-tip="Collaboration · PM, eng &amp; stakeholders (94%)"/>
-                    <circle class="radar-node radar-node--accent" cx="93.15" cy="49.2" r="2" data-tip="Compliance-aware design · regulation &amp; risk (92%)"/>
-                    <circle class="radar-node radar-node--accent" cx="80.1" cy="87.67" r="2" data-tip="Activation · first-run &amp; onboarding impact (90%)"/>
-                    <circle class="radar-node radar-node--accent" cx="39.98" cy="87.05" r="2" data-tip="Retention · habits &amp; ongoing value (88%)"/>
-                    <circle class="radar-node radar-node--accent" cx="25.68" cy="48.15" r="2" data-tip="Engagement · clarity &amp; motivation in-product (84%)"/>
-                  </g>
-                </g>
-              </svg>
-            </div>
-            <div class="my-3 border-t border-dashed border-paux-dark/[0.09]"></div>
-            <div class="skills-tw-impact-metrics grid grid-cols-5 gap-2 text-center max-[560px]:grid-cols-2">
-              <div><div class="impact-metric-val font-jakarta text-lg font-bold tracking-tight text-paux-dark transition-colors duration-200 sm:text-xl">94%</div><div class="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-paux-light">Collaboration</div></div>
-              <div><div class="impact-metric-val font-jakarta text-lg font-bold tracking-tight text-paux-dark transition-colors duration-200 sm:text-xl">92%</div><div class="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-paux-light">Compliance</div></div>
-              <div><div class="impact-metric-val font-jakarta text-lg font-bold tracking-tight text-paux-dark transition-colors duration-200 sm:text-xl">90%</div><div class="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-paux-light">Activation</div></div>
-              <div><div class="impact-metric-val font-jakarta text-lg font-bold tracking-tight text-paux-dark transition-colors duration-200 sm:text-xl">88%</div><div class="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-paux-light">Retention</div></div>
-              <div><div class="impact-metric-val font-jakarta text-lg font-bold tracking-tight text-paux-dark transition-colors duration-200 sm:text-xl">84%</div><div class="mt-1 text-[9px] font-semibold uppercase leading-tight tracking-wide text-paux-light">Engagement</div></div>
+            <div class="skills-soft-chart min-h-0 flex-1">
+              <div class="skills-soft-row" style="--si:0" data-tip="Collaboration · PM, eng &amp; stakeholders (94%)">
+                <span class="skills-soft-label">Collaboration</span>
+                <div class="skills-soft-track"><span class="skills-soft-fill" style="--p:94%"></span></div>
+                <span class="skills-soft-pct">94%</span>
+              </div>
+              <div class="skills-soft-row" style="--si:1" data-tip="Compliance-aware design · regulation &amp; risk (92%)">
+                <span class="skills-soft-label">Compliance</span>
+                <div class="skills-soft-track"><span class="skills-soft-fill" style="--p:92%"></span></div>
+                <span class="skills-soft-pct">92%</span>
+              </div>
+              <div class="skills-soft-row" style="--si:2" data-tip="Activation · first-run &amp; onboarding impact (90%)">
+                <span class="skills-soft-label">Activation</span>
+                <div class="skills-soft-track"><span class="skills-soft-fill" style="--p:90%"></span></div>
+                <span class="skills-soft-pct">90%</span>
+              </div>
+              <div class="skills-soft-row" style="--si:3" data-tip="Retention · habits &amp; ongoing value (88%)">
+                <span class="skills-soft-label">Retention</span>
+                <div class="skills-soft-track"><span class="skills-soft-fill" style="--p:88%"></span></div>
+                <span class="skills-soft-pct">88%</span>
+              </div>
+              <div class="skills-soft-row" style="--si:4" data-tip="Engagement · clarity &amp; motivation in-product (84%)">
+                <span class="skills-soft-label">Engagement</span>
+                <div class="skills-soft-track"><span class="skills-soft-fill" style="--p:84%"></span></div>
+                <span class="skills-soft-pct">84%</span>
+              </div>
             </div>
           </article>
         </div>
@@ -3744,7 +4360,7 @@ button.proj-gallery-item {
           <div class="hero-greet">
             <div class="hero-greet-tag">How I work · methodology</div>
             <h1>From research to <em>shipped product.</em></h1>
-            <p class="sub">A look at how I approach a project end-to-end. The same 4 phases I bring to every team — adapted to your sprint cadence, design system and stack.</p>
+            <p class="hero-sub text-paux-mid">A look at how I approach a project end-to-end. The same 4 phases I bring to every team — adapted to your sprint cadence, design system and stack.</p>
           </div>
         </div>
 
@@ -3818,7 +4434,7 @@ button.proj-gallery-item {
           <div class="hero-greet">
             <div class="hero-greet-tag">Contact · open to roles</div>
             <h1>Looking for a <em>product designer?</em></h1>
-            <p class="sub"> </p>
+            <p class="hero-sub text-paux-mid"> </p>
           </div>
         </div>
 
@@ -3852,29 +4468,34 @@ button.proj-gallery-item {
             </button>
           </form>
 
-          <aside class="contact-side">
-            <h3>Reply within<br><em>24 hours.</em></h3>
-            <p>Reach me directly by email. Tell me about the role, team and product — I'll reply with availability, expectations and next steps.</p>
+          <div class="contact-side-shell">
+            <div class="contact-side-shine" aria-hidden="true"></div>
+            <aside class="contact-side">
+              <div class="contact-side-inner">
+                <h3>Reply within<br><em>24 hours.</em></h3>
+                <p>Reach me directly by email. Tell me about the role, team and product — I'll reply with availability, expectations and next steps.</p>
 
-            <a class="item" href="mailto:paulaalonso.design@gmail.com">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-              <span>paulaalonso.design@gmail.com</span>
-            </a>
-            <a class="item" href="https://www.linkedin.com/in/paula-alonso-design/" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-              <span>linkedin.com/in/paula-alonso-design</span>
-            </a>
-            <a class="item" href="/dashboard/paula_alonso_cv.html" target="_blank" rel="noopener">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
-              <span>Download / view CV</span>
-            </a>
+                <a class="item" href="mailto:paulaalonso.design@gmail.com">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                  <span>paulaalonso.design@gmail.com</span>
+                </a>
+                <a class="item" href="https://www.linkedin.com/in/paula-alonso-design/" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  <span>linkedin.com/in/paula-alonso-design</span>
+                </a>
+                <a class="item" href="/dashboard/paula_alonso_cv.html" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+                  <span>Download / view CV</span>
+                </a>
 
-            <div class="meta">
-              <span>London · GMT</span>
-              <span>Available May 2026</span>
-              <span>Spanish · English</span>
-            </div>
-          </aside>
+                <div class="meta">
+                  <span>London · GMT</span>
+                  <span>Available May 2026</span>
+                  <span>Spanish · English</span>
+                </div>
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
 
@@ -3950,7 +4571,7 @@ button.proj-gallery-item {
   <span id="toast-text">Done.</span>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="assets/three.min.js"></script>
 <script>
 /* ════════════════════════════════════════════════
    DATA
@@ -4296,19 +4917,333 @@ const bcCurrent = document.getElementById('bc-current');
 
 function animateSkillsRadars() {
   document.querySelectorAll('.prof-radar').forEach(el => el.classList.remove('radar-play'));
+  document.querySelectorAll('.skills-tw-domains').forEach(el => el.classList.remove('skills-domains-anim'));
+  document.querySelectorAll('.skills-soft-chart').forEach(el => el.classList.remove('skills-soft-anim'));
   const skillsView = document.querySelector('[data-view="skills"].active');
   if (!skillsView) return;
   const radars = skillsView.querySelectorAll('.prof-radar');
+  const domains = skillsView.querySelectorAll('.skills-tw-domains');
+  const softCharts = skillsView.querySelectorAll('.skills-soft-chart');
   radars.forEach((el, i) => el.style.setProperty('--radar-i', String(i)));
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       radars.forEach(el => el.classList.add('radar-play'));
+      domains.forEach(el => el.classList.add('skills-domains-anim'));
+      softCharts.forEach(el => el.classList.add('skills-soft-anim'));
     });
   });
 }
 
+/* Working from — WebGL globe (lazy init when Overview is visible) */
+const __geoGlobe = {
+  raf: 0,
+  ro: null,
+  renderer: null,
+  scene: null,
+  camera: null,
+  group: null,
+  earthMesh: null,
+  inited: false,
+  paused: true,
+  spinSpeed: 0,
+  spinIdle: 0,
+  spinHover: 0,
+  hoverBound: false,
+};
+
+function geoGlobeLatLonToVector3(lat, lon, radius) {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+  const x = -(radius * Math.sin(phi) * Math.cos(theta));
+  const z = radius * Math.sin(phi) * Math.sin(theta);
+  const y = radius * Math.cos(phi);
+  return new THREE.Vector3(x, y, z);
+}
+
+function geoGlobeIsOverviewActive() {
+  const el = document.querySelector('.view[data-view="overview"]');
+  return !!(el && el.classList.contains('active'));
+}
+
+function geoGlobeStopLoop() {
+  if (__geoGlobe.raf) cancelAnimationFrame(__geoGlobe.raf);
+  __geoGlobe.raf = 0;
+}
+
+function geoGlobeTick() {
+  __geoGlobe.raf = requestAnimationFrame(geoGlobeTick);
+  if (__geoGlobe.paused || !geoGlobeIsOverviewActive()) return;
+  const { renderer, scene, camera, group } = __geoGlobe;
+  if (!renderer || !scene || !camera) return;
+  if (__geoGlobe.spinSpeed && group) group.rotation.y += __geoGlobe.spinSpeed;
+  renderer.render(scene, camera);
+}
+
+function bindGeoGlobeHover() {
+  if (__geoGlobe.hoverBound) return;
+  const map = document.querySelector('.geo-card-body .geo-map') || document.querySelector('.geo-map');
+  if (!map) return;
+  __geoGlobe.hoverBound = true;
+  const onEnter = () => {
+    if (__geoGlobe.paused || !__geoGlobe.spinHover) return;
+    __geoGlobe.spinSpeed = __geoGlobe.spinHover;
+  };
+  const onLeave = () => {
+    __geoGlobe.spinSpeed = __geoGlobe.spinIdle;
+  };
+  map.addEventListener('mouseenter', onEnter);
+  map.addEventListener('mouseleave', onLeave);
+}
+
+function geoGlobeMeasureHost() {
+  const host = document.getElementById('geo-globe-host');
+  if (!host) return null;
+  const map = host.closest('.geo-map');
+  const w = map?.clientWidth || host.clientWidth || 0;
+  const h = map?.clientHeight || host.clientHeight || 0;
+  if (w < 2 || h < 2) return null;
+  return { w, h, map, host };
+}
+
+function geoGlobeResize() {
+  const size = geoGlobeMeasureHost();
+  const { renderer, camera } = __geoGlobe;
+  if (!size || !renderer || !camera) return;
+  const { w, h } = size;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h, false);
+}
+
+function initGeoGlobe() {
+  if (typeof THREE === 'undefined' || __geoGlobe.inited) return;
+  if (!geoGlobeIsOverviewActive()) return;
+
+  const size = geoGlobeMeasureHost();
+  if (!size) {
+    requestAnimationFrame(() => {
+      if (geoGlobeIsOverviewActive() && !__geoGlobe.inited) initGeoGlobe();
+    });
+    return;
+  }
+
+  const { w: W, h: H, map: mapEl, host } = size;
+  const canvas = document.getElementById('geo-globe-canvas');
+  if (!host || !canvas) return;
+
+  try {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    __geoGlobe.spinIdle = reduced ? 0 : 0.00168;
+    __geoGlobe.spinHover = reduced ? 0 : 0.00275;
+    __geoGlobe.spinSpeed = __geoGlobe.spinIdle;
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(36, W / H, 0.08, 100);
+    camera.position.set(0, 0.05, 2.98);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance',
+    });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(W, H, false);
+    renderer.setClearColor(0x000000, 0);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.NoToneMapping;
+
+    const group = new THREE.Group();
+    group.scale.setScalar(0.76);
+    group.rotation.order = 'YXZ';
+    group.rotation.y = 2.08;
+    group.rotation.x = 0.11;
+
+    const segs = W < 420 ? 44 : 56;
+
+    const rimGeom = new THREE.SphereGeometry(1, segs, segs);
+    const rimMat = new THREE.MeshBasicMaterial({
+      color: 0xb8c4ee,
+      transparent: true,
+      opacity: 0.26,
+      side: THREE.BackSide,
+      depthWrite: false,
+    });
+    const rim = new THREE.Mesh(rimGeom, rimMat);
+    rim.scale.setScalar(1.08);
+    group.add(rim);
+
+    const haloGeom = new THREE.SphereGeometry(1, Math.min(segs, 48), Math.min(segs, 48));
+    const haloMat = new THREE.MeshBasicMaterial({
+      color: 0xffffff,
+      transparent: true,
+      opacity: 0.065,
+      side: THREE.BackSide,
+      depthWrite: false,
+    });
+    const halo = new THREE.Mesh(haloGeom, haloMat);
+    halo.scale.setScalar(1.18);
+    group.add(halo);
+
+    const geom = new THREE.SphereGeometry(1, segs, segs);
+    const landPlace = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1, THREE.RGBAFormat);
+    landPlace.needsUpdate = true;
+
+    const globeMat = new THREE.ShaderMaterial({
+      uniforms: {
+        landMap: { value: landPlace },
+        uHasLand: { value: 0.0 },
+        uColA: { value: new THREE.Color(0x8ab8ea) },
+        uColB: { value: new THREE.Color(0x9694e4) },
+        uRim: { value: 0.3 },
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        varying vec3 vNorm;
+        varying vec3 vMvPos;
+        void main() {
+          vUv = uv;
+          vNorm = normalize(normalMatrix * normal);
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          vMvPos = mv.xyz;
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        varying vec3 vNorm;
+        varying vec3 vMvPos;
+        uniform sampler2D landMap;
+        uniform float uHasLand;
+        uniform vec3 uColA;
+        uniform vec3 uColB;
+        uniform float uRim;
+
+        float landMask(vec2 uv) {
+          vec4 t = texture2D(landMap, uv);
+          float lum = dot(t.rgb, vec3(0.2126, 0.7152, 0.0722));
+          float mx = max(max(t.r, t.g), t.b);
+          float mn = min(min(t.r, t.g), t.b);
+          float sat = (mx - mn) / (mx + 0.001);
+          float veg = lum * 0.72 + t.g * 0.58 + t.r * 0.22;
+          float arid = lum * 0.85 + t.r * 0.35;
+          float notOcean = 1.0 - smoothstep(0.02, 0.28, t.b - max(t.r, t.g));
+          float mVeg = smoothstep(0.03, 0.44, veg);
+          float mDry = smoothstep(0.06, 0.40, arid) * notOcean;
+          float mSat = smoothstep(0.05, 0.38, lum + sat * 0.32);
+          float m = max(mVeg, max(mDry * 0.92, mSat * 0.88));
+          m = clamp(m, 0.0, 1.0);
+          return m * step(0.5, uHasLand);
+        }
+
+        float hexEdge(vec2 uv) {
+          vec2 p = uv * vec2(44.0, 25.5);
+          p.x *= 1.15470053838;
+          vec2 f = fract(p);
+          float s = step(f.y, f.x);
+          float c = max(
+            s * f.x + (1.0 - s) * (1.0 - f.x),
+            s * (1.0 - f.y) + (1.0 - s) * f.y
+          );
+          return smoothstep(0.44, 0.50, c) * smoothstep(0.58, 0.51, c);
+        }
+
+        void main() {
+          float gy = vUv.y * 0.56 + 0.17 * sin(6.28318 * (vUv.x * 1.1 + vUv.y * 0.4));
+          vec3 base = mix(uColA, uColB, gy);
+
+          float land = landMask(vUv);
+          float hx = hexEdge(vUv);
+
+          vec3 col = base;
+          vec3 cellGlow = vec3(0.96, 0.96, 0.995);
+          col = mix(col, mix(base, cellGlow, 0.62), land * 0.66);
+          col += vec3(0.5, 0.52, 0.62) * land * hx * 0.38;
+          col += (1.0 - hx) * land * vec3(0.09, 0.10, 0.3) * 0.2;
+          col += land * vec3(0.035, 0.010, 0.048);
+
+          vec3 view = normalize(-vMvPos);
+          float fres = pow(1.0 - max(dot(normalize(vNorm), view), 0.0), 2.6);
+          col += fres * vec3(0.92, 0.94, 0.98) * uRim;
+          col += (uColA + uColB) * 0.022;
+
+          gl_FragColor = vec4(col, 1.0);
+        }
+      `,
+    });
+
+    const earthMesh = new THREE.Mesh(geom, globeMat);
+    group.add(earthMesh);
+
+    const pinGeom = new THREE.SphereGeometry(0.042, 16, 16);
+    const pinMat = new THREE.MeshBasicMaterial({ color: 0x58db69 });
+    const pin = new THREE.Mesh(pinGeom, pinMat);
+    pin.position.copy(geoGlobeLatLonToVector3(51.5074, -0.1278, 1.055));
+    group.add(pin);
+
+    scene.add(group);
+
+    scene.add(new THREE.AmbientLight(0xf5f7ff, 0.55));
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xd0d8f0, 0.42));
+
+    __geoGlobe.scene = scene;
+    __geoGlobe.camera = camera;
+    __geoGlobe.renderer = renderer;
+    __geoGlobe.group = group;
+    __geoGlobe.earthMesh = earthMesh;
+    __geoGlobe.inited = true;
+
+    const applyLandTex = (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      const gm = earthMesh.material;
+      if (gm.uniforms) {
+        gm.uniforms.landMap.value = tex;
+        gm.uniforms.uHasLand.value = 1.0;
+      }
+      if (__geoGlobe.renderer && __geoGlobe.scene && __geoGlobe.camera) {
+        __geoGlobe.renderer.render(__geoGlobe.scene, __geoGlobe.camera);
+      }
+    };
+
+    const loader = new THREE.TextureLoader();
+    const texLocal = 'assets/earth_atmos_2048.jpg';
+    const texCdn = 'https://cdn.jsdelivr.net/gh/mrdoob/three.js@r161/examples/textures/planets/earth_atmos_2048.jpg';
+    loader.load(texLocal, applyLandTex, undefined, () => {
+      loader.setCrossOrigin('anonymous');
+      loader.load(texCdn, applyLandTex, undefined, () => {});
+    });
+
+    __geoGlobe.ro = new ResizeObserver(() => geoGlobeResize());
+    __geoGlobe.ro.observe(host);
+    if (mapEl) __geoGlobe.ro.observe(mapEl);
+
+    bindGeoGlobeHover();
+    renderer.render(scene, camera);
+  } catch (e) {
+    console.warn('Geo globe init failed', e);
+  }
+}
+
+function setGeoGlobeActive(active) {
+  __geoGlobe.paused = !active;
+  if (active) {
+    initGeoGlobe();
+    if (__geoGlobe.inited) {
+      __geoGlobe.spinSpeed = __geoGlobe.spinIdle;
+      geoGlobeResize();
+      if (!__geoGlobe.raf) geoGlobeTick();
+    }
+  } else {
+    geoGlobeStopLoop();
+  }
+}
+
 function setView(id, push = true) {
   document.querySelectorAll('.prof-radar').forEach(el => el.classList.remove('radar-play'));
+  document.querySelectorAll('.skills-tw-domains').forEach(el => el.classList.remove('skills-domains-anim'));
+  document.querySelectorAll('.skills-soft-chart').forEach(el => el.classList.remove('skills-soft-anim'));
   const target = id || 'overview';
   document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.dataset.view === target));
   document.querySelectorAll('.sb-link[data-view]').forEach(l => l.classList.toggle('active', l.dataset.view === target));
@@ -4319,72 +5254,14 @@ function setView(id, push = true) {
   }
   // close sidebar on mobile
   sidebar.classList.remove('open');
+  setGeoGlobeActive(target === 'overview');
   // re-trigger animations
   animateKpis();
   animateBars();
   if (target === 'skills') animateSkillsRadars();
-  if (target === 'overview') ensureWorkLocationMap();
   window.scrollTo({ top: 0, behavior: 'instant' });
 }
 
-let __workLocationMap = null;
-
-function invalidateWorkLocationMap() {
-  if (!__workLocationMap) return;
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      __workLocationMap.invalidateSize(true);
-    });
-  });
-}
-
-function ensureWorkLocationMap() {
-  const overviewActive = document.querySelector('.view[data-view="overview"]')?.classList.contains('active');
-  if (!overviewActive) return;
-  const host = document.getElementById('geo-leaflet-map');
-  if (!host) return;
-  if (__workLocationMap) {
-    invalidateWorkLocationMap();
-    return;
-  }
-  if (typeof L === 'undefined') {
-    host.innerHTML = '<div class="geo-leaflet-fallback" role="note">Map could not load. Based in London · UK, EU · GMT — remote-friendly and hybrid.</div>';
-    return;
-  }
-  const map = L.map(host, {
-    zoomControl: true,
-    scrollWheelZoom: false,
-    dragging: true,
-    attributionControl: true
-  });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-    subdomains: 'abcd',
-    maxZoom: 19
-  }).addTo(map);
-
-  const bounds = L.latLngBounds([[59.5, -10.5], [45.5, 18]]);
-  map.fitBounds(bounds, { padding: [12, 12], animate: false });
-
-  function pillLabel(html) {
-    return L.divIcon({
-      className: 'geo-div-icon',
-      html,
-      iconSize: [0, 0],
-      iconAnchor: [0, 0]
-    });
-  }
-  function addPill(latlng, html) {
-    L.marker(latlng, { icon: pillLabel(html) }).addTo(map);
-  }
-
-  addPill([51.5074, -0.1278], '<div class="geo-pin-label"><span class="dot l1"></span>London <span style="opacity:.72">(base)</span></div>');
-  addPill([52.48, -1.89], '<div class="geo-pin-label"><span class="dot l3"></span>Hybrid · in-office</div>');
-  addPill([55.9533, -3.1883], '<div class="geo-pin-label"><span class="dot l2"></span>Remote · GMT</div>');
-
-  __workLocationMap = map;
-  invalidateWorkLocationMap();
-}
 
 document.querySelectorAll('.sb-link[data-view]').forEach(l => {
   l.addEventListener('click', e => {
@@ -4413,11 +5290,53 @@ window.addEventListener('hashchange', () => {
 });
 const initialHash = location.hash.replace('#','');
 if (initialHash && VIEWS.find(v => v.id === initialHash)) setView(initialHash, false);
-else ensureWorkLocationMap();
+else setGeoGlobeActive(geoGlobeIsOverviewActive());
+
+window.addEventListener('load', () => {
+  if (geoGlobeIsOverviewActive() && !__geoGlobe.inited) setGeoGlobeActive(true);
+  else if (geoGlobeIsOverviewActive() && __geoGlobe.inited) geoGlobeResize();
+});
 
 /* ════════════════════════════════════════════════
    PROJECTS GRID + DRAWER
    ════════════════════════════════════════════════ */
+function bindMockTilt(host, thumbSelector, mockSelector) {
+  const mock = host.querySelector(mockSelector);
+  const tiltOk =
+    mock &&
+    window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!tiltOk) return;
+  let raf = 0;
+  let pending = null;
+  host.addEventListener('mousemove', e => {
+    const thumb = host.querySelector(thumbSelector);
+    if (!thumb) return;
+    pending = { e, thumb };
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      if (!pending) return;
+      const { e: ev, thumb: th } = pending;
+      pending = null;
+      const b = th.getBoundingClientRect();
+      const px = (ev.clientX - b.left) / b.width - 0.5;
+      const py = (ev.clientY - b.top) / b.height - 0.5;
+      const max = 11;
+      const rx = -py * max * 2;
+      const ry = px * max * 2;
+      mock.style.transform =
+        `perspective(960px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px) scale(1.045)`;
+    });
+  });
+  host.addEventListener('mouseleave', () => {
+    pending = null;
+    if (raf) cancelAnimationFrame(raf);
+    raf = 0;
+    mock.style.transform = '';
+  });
+}
+
 const projGrid = document.getElementById('proj-grid');
 
 function renderProjects(filter = 'all', mode = 'grid') {
@@ -4427,7 +5346,9 @@ function renderProjects(filter = 'all', mode = 'grid') {
     <article class="pcard" data-id="${p.id}">
       <div class="pcard-thumb">
         <span class="pcard-status ${p.status}"><span class="d"></span>${p.statusLabel}</span>
-        <img src="${p.img}" alt="${p.title}">
+        <div class="pcard-mock">
+          <img src="${p.img}" alt="${p.title}">
+        </div>
       </div>
       <div class="pcard-body">
         <div class="featured-tags">
@@ -4443,6 +5364,7 @@ function renderProjects(filter = 'all', mode = 'grid') {
   `).join('');
   projGrid.querySelectorAll('.pcard').forEach(card => {
     card.addEventListener('click', () => openDrawer(card.dataset.id));
+    bindMockTilt(card, '.pcard-thumb', '.pcard-mock');
   });
 }
 renderProjects();
@@ -4948,6 +5870,27 @@ document.getElementById('cmdk-egg-contact')?.addEventListener('click', () => {
   });
 })();
 
+(function initContactSideTilt() {
+  const shell = document.querySelector('.contact-side-shell');
+  const inner = shell?.querySelector('.contact-side-inner');
+  if (!shell || !inner) return;
+  function reduced() {
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  }
+  shell.addEventListener('mousemove', e => {
+    if (reduced()) return;
+    const r = shell.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width - 0.5;
+    const y = (e.clientY - r.top) / r.height - 0.5;
+    const rx = y * -7.2;
+    const ry = x * 9.2;
+    inner.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg) translateZ(-18px) scale3d(0.985, 0.985, 1)`;
+  });
+  shell.addEventListener('mouseleave', () => {
+    inner.style.transform = 'translateZ(0) scale3d(1, 1, 1)';
+  });
+})();
+
 document.getElementById('cmdk-trigger').addEventListener('click', openCmdk);
 const cmdkTrigger2 = document.getElementById('cmdk-trigger-2');
 if (cmdkTrigger2) cmdkTrigger2.addEventListener('click', openCmdk);
@@ -5043,7 +5986,7 @@ document.getElementById('mobile-toggle').addEventListener('click', () => sidebar
     tip.style.left = (e.clientX + pad) + 'px';
     tip.style.top = (e.clientY + pad) + 'px';
   }
-  skillsRoot.querySelectorAll('.radar-node[data-tip]').forEach(node => {
+  skillsRoot.querySelectorAll('.radar-node[data-tip], .skills-soft-row[data-tip]').forEach(node => {
     node.addEventListener('mouseenter', e => {
       setTipContent(node.getAttribute('data-tip') || '');
       tip.classList.add('is-visible');
@@ -5055,6 +5998,18 @@ document.getElementById('mobile-toggle').addEventListener('click', () => sidebar
       tip.innerHTML = '';
     });
   });
+})();
+
+(function initOverviewFeaturedCards() {
+  document.querySelectorAll('.featured[data-project-id]').forEach(el => {
+    el.addEventListener('click', () => openDrawer(el.dataset.projectId));
+    el.addEventListener('keydown', e => {
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      e.preventDefault();
+      openDrawer(el.dataset.projectId);
+    });
+  });
+  document.querySelectorAll('.featured').forEach(el => bindMockTilt(el, '.featured-thumb', '.pcard-mock'));
 })();
 
 /* ════════════════════════════════════════════════

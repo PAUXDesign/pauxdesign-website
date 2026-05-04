@@ -293,6 +293,199 @@
     stroke-linejoin: round;
   }
 </style>
+
+<style>
+
+/* ─────────────────────────────────────────
+   VIEW TOGGLE — Quick read / Full case study
+   ───────────────────────────────────────── */
+
+/* Toggle bar — sits between hero and cs-body */
+.cs-view-toggle {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.cs-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  background: #FAFAFC;
+  border: 1px solid rgba(38,30,72,0.12);
+  border-radius: 999px;
+  padding: 5px;
+  gap: 2px;
+  box-shadow: 0 2px 12px rgba(38,30,72,0.06);
+}
+
+.cs-toggle-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  font-family: 'Manrope', sans-serif;
+  text-align: left;
+  min-width: 180px;
+}
+
+.cs-toggle-btn:hover:not(.active) {
+  background: rgba(38,30,72,0.04);
+}
+
+.cs-toggle-btn.active {
+  background: #261E48;
+}
+
+.cs-toggle-btn-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: #9B98B8;
+  line-height: 1;
+  margin-bottom: 3px;
+  transition: color 0.2s;
+}
+
+.cs-toggle-btn.active .cs-toggle-btn-label {
+  color: rgba(255,255,255,0.55);
+}
+
+.cs-toggle-btn-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #261E48;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.cs-toggle-btn.active .cs-toggle-btn-name {
+  color: #fff;
+}
+
+/* Divider between buttons */
+.cs-toggle-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(38,30,72,0.12);
+  flex-shrink: 0;
+}
+
+/* Elements that only show in full view */
+.full-only {
+  display: block;
+}
+
+/* When quick-read mode is active, hide full-only elements */
+body.view-quick .full-only {
+  display: none !important;
+}
+
+/* Smooth transition for content sections */
+.cs-section,
+.cs-mockup-full,
+.cs-img-ref,
+.cs-body {
+  transition: opacity 0.25s ease;
+}
+
+body.view-switching .cs-section,
+body.view-switching .cs-mockup-full,
+body.view-switching .cs-body {
+  opacity: 0.4;
+}
+
+
+/* ─────────────────────────────────────────
+   STICKY LEFT INDEX — Full case study only
+   ───────────────────────────────────────── */
+
+.cs-layout {
+  position: relative;
+  display: block;
+}
+
+/* The index panel */
+.cs-index {
+  display: none; /* hidden by default and in quick-read */
+  position: fixed;
+  top: 50%;
+  left: 24px;
+  transform: translateY(-50%);
+  z-index: 100;
+  width: 160px;
+}
+
+/* Show index only in full view and on wide enough screens */
+@media (min-width: 1280px) {
+  body:not(.view-quick) .cs-index {
+    display: block;
+  }
+}
+
+.cs-index-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.cs-index-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 5px 8px;
+  border-radius: 8px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.cs-index-item:hover .cs-index-dot {
+  background: #7059DC;
+  transform: scale(1.3);
+}
+
+.cs-index-item:hover .cs-index-label {
+  color: #261E48;
+}
+
+.cs-index-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(38,30,72,0.18);
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.cs-index-item.active .cs-index-dot {
+  background: #7059DC;
+  transform: scale(1.25);
+}
+
+.cs-index-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #9B98B8;
+  line-height: 1.2;
+  transition: color 0.2s;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cs-index-item.active .cs-index-label {
+  color: #261E48;
+}
+
+
+</style>
 </head>
 <body>
 <nav>
@@ -346,6 +539,19 @@
         <div><div class="cs-meta-label">Platform</div><div class="cs-meta-value">iOS mobile app</div></div>
         <div><div class="cs-meta-label">Year</div><div class="cs-meta-value">2023</div></div>
       </div>
+      <div class="cs-view-toggle">
+        <div class="cs-toggle-wrap">
+          <button class="cs-toggle-btn active" data-view="full" aria-label="Full case study">
+            <span class="cs-toggle-btn-label">Full case study</span>
+            <span class="cs-toggle-btn-name">Full deep-dive</span>
+          </button>
+          <div class="cs-toggle-divider"></div>
+          <button class="cs-toggle-btn" data-view="quick" aria-label="Quick read view">
+            <span class="cs-toggle-btn-label">Quick read</span>
+            <span class="cs-toggle-btn-name">30-second skim</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -354,10 +560,58 @@
     <img src="/Public/Images/joblink.png" alt="JobLink — multi-profile job search app">
   </div>
 
+
+<!-- STICKY LEFT INDEX (full view only) -->
+<div class="cs-index" aria-label="Case study navigation">
+  <div class="cs-index-inner">
+    <a class="cs-index-item" data-section="cs-metrics" href="#cs-metrics">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">At a glance</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-overview" href="#cs-overview">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Overview</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-problem" href="#cs-problem">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">The problem</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-research" href="#cs-research">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Research</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-solution" href="#cs-solution">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Solution</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-process" href="#cs-process">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Design process</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-wireframes" href="#cs-wireframes">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Wireframes</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-ab" href="#cs-ab">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">A/B testing</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-impact" href="#cs-impact">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Impact</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-learnings" href="#cs-learnings">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Key learnings</span>
+    </a>
+  </div>
+</div>
+
+  <div class="cs-layout">
   <div class="cs-body">
 
     <!-- ── Metrics ── -->
-    <div class="cs-metrics">
+    <div class="cs-metrics" id="cs-metrics">
       <div class="cs-metric">
         <div class="cs-metric-num">60%</div>
         <div class="cs-metric-label">Higher task success rate vs competing platforms</div>
@@ -373,7 +627,7 @@
     </div>
 
     <!-- ── Overview ── -->
-    <div class="cs-section">
+    <div class="cs-section" id="cs-overview">
       <div class="cs-section-title">Overview</div>
       <p class="cs-text">JobLink is a mobile concept that rethinks how people manage multiple career identities when searching for jobs. Most platforms assume users have one professional identity — but many professionals today work across different industries or roles.</p>
       <p class="cs-text">Designers who also freelance as marketers, engineers transitioning into product roles, career changers — they all struggle to represent themselves with a single profile. <strong>43% of job seekers apply across 2+ industries, yet every major platform treats them as a single-track professional.</strong></p>
@@ -381,7 +635,7 @@
     </div>
 
     <!-- ── The problem ── -->
-    <div class="cs-section">
+    <div class="cs-section" id="cs-problem">
       <div class="cs-section-title">The problem</div>
       <p class="cs-text">Most job platforms are built around the idea that users have one professional identity. These users face a specific set of compounding problems — not just one.</p>
       <div class="cs-quote">"Users were spending 15+ hours a week just customising applications. Many gave up on roles they were qualified for — it was simply too much work."</div>
@@ -415,7 +669,7 @@
     </div>
 
     <!-- ── Research & Insights ── -->
-    <div class="cs-section">
+    <div class="cs-section full-only" id="cs-research">
       <div class="cs-section-title">Research &amp; insights</div>
       <p class="cs-text">To understand the challenges job seekers face when applying across different roles, I conducted user surveys and analysed existing job platforms. The goal was to identify key behaviours, pain points and opportunities that could inform the product strategy.</p>
 
@@ -530,7 +784,7 @@
   </div><!-- /cs-body -->
 
   <!-- ── Mockup showcase ── -->
-  <div class="cs-mockup-full">
+  <div class="cs-mockup-full full-only">
     <img src="/Public/Images/joblink2.png" alt="JobLink — iOS app screens">
     <div class="cs-mockup-caption">
       <span class="cs-mockup-label">iOS App</span>
@@ -541,7 +795,7 @@
   <div class="cs-body">
 
     <!-- ── Solution ── -->
-    <div class="cs-section">
+    <div class="cs-section" id="cs-solution">
       <div class="cs-section-title">Solution</div>
       <p class="cs-text">JobLink introduces a job search experience designed for professionals with multiple career paths. Users create different professional profiles tailored to specific roles or industries — and switch between them instantly when searching or applying.</p>
       <p class="cs-text">This means job seekers can apply faster and always present the most relevant version of their professional identity for each opportunity — without duplication, without frustration.</p>
@@ -572,7 +826,7 @@
     </div>
 
     <!-- ── Design process ── -->
-    <div class="cs-section">
+    <div class="cs-section full-only" id="cs-process">
       <div class="cs-section-title">Design process</div>
       <p class="cs-text">Based on the research insights, the process focused on simplifying the experience and reducing the time cost of applying. Each phase fed directly into the next — no skipped steps, no assumptions left untested.</p>
 
@@ -611,7 +865,7 @@
     </div>
 
     <!-- ── Wireframes ── -->
-    <div class="cs-section">
+    <div class="cs-section full-only" id="cs-wireframes">
       <div class="cs-section-title">Wireframe evolution</div>
       <p class="cs-text">Early sketches explored different structural approaches before committing to visual design. The goal was to test navigation logic and screen hierarchy — not aesthetics.</p>
       <div class="cs-wireframe-grid">
@@ -625,7 +879,7 @@
     </div>
 
     <!-- ── A/B Testing ── -->
-    <div class="cs-section">
+    <div class="cs-section full-only" id="cs-ab">
       <div class="cs-section-title">A/B testing</div>
       <p class="cs-text">After usability testing surfaced the information overload issue, I ran an A/B test to compare two different approaches to the quick apply screen. The goal: understand which layout better matched user expectations before submitting an application.</p>
 
@@ -655,7 +909,7 @@
     </div>
 
     <!-- ── Design system ── -->
-    <div class="cs-section">
+    <div class="cs-section full-only">
       <div class="cs-section-title">Design system</div>
       <p class="cs-text">Before building the high-fidelity UI, a structured design system was established — ensuring consistency across all screens and making future iteration faster and more predictable.</p>
       <div class="cs-design-system-img">
@@ -664,7 +918,7 @@
     </div>
 
     <!-- ── Impact ── -->
-    <div class="cs-section">
+    <div class="cs-section" id="cs-impact">
       <div class="cs-section-title">Impact on behaviour</div>
       <p class="cs-text">The redesigned experience significantly changed how users searched and applied for jobs. The improvements weren't marginal — the before/after difference was structural.</p>
 
@@ -694,7 +948,7 @@
     </div>
 
     <!-- ── Key learnings ── -->
-    <div class="cs-section">
+    <div class="cs-section full-only" id="cs-learnings">
       <div class="cs-section-title">Key learnings</div>
       <div class="cs-insight">
         <div class="cs-insight-i">🔍</div>
@@ -712,6 +966,7 @@
 
   </div><!-- /cs-body -->
 
+  </div><!-- /cs-layout -->
 </div><!-- /cs-page -->
 
 <!-- CTA — full bleed (sibling of .cs-page so width is always viewport) -->
@@ -842,6 +1097,86 @@ window.addEventListener('load', () => {
   window.addEventListener('resize', update, { passive: true });
   update();
 })();
+</script>
+
+<script>
+// ── VIEW TOGGLE ──────────────────────────────────────────────────────────────
+(function initViewToggle() {
+  const STORAGE_KEY = 'paux-cs-view';
+  const body = document.body;
+
+  // Default to 'full' — don't penalise the design lead on first visit
+  const saved = sessionStorage.getItem(STORAGE_KEY) || 'full';
+  setView(saved, false);
+
+  function setView(view, animate) {
+    if (animate) {
+      body.classList.add('view-switching');
+      setTimeout(() => body.classList.remove('view-switching'), 280);
+    }
+
+    if (view === 'quick') {
+      body.classList.add('view-quick');
+      body.classList.remove('view-full');
+    } else {
+      body.classList.remove('view-quick');
+      body.classList.add('view-full');
+    }
+
+    sessionStorage.setItem(STORAGE_KEY, view);
+
+    // Update button states
+    document.querySelectorAll('.cs-toggle-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+
+    // Show/hide index
+    const idx = document.querySelector('.cs-index');
+    if (idx) {
+      idx.style.display = (view === 'full') ? '' : 'none';
+    }
+  }
+
+  // Bind toggle buttons
+  document.querySelectorAll('.cs-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => setView(btn.dataset.view, true));
+  });
+})();
+
+// ── STICKY INDEX — active section tracking ───────────────────────────────────
+(function initStickyIndex() {
+  const items = document.querySelectorAll('.cs-index-item[data-section]');
+  if (!items.length) return;
+
+  const sections = [...items].map(item => {
+    return document.getElementById(item.dataset.section);
+  }).filter(Boolean);
+
+  function update() {
+    if (document.body.classList.contains('view-quick')) return;
+    let active = sections[0];
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if (rect.top <= 160) active = sec;
+    });
+    items.forEach(item => {
+      item.classList.toggle('active', item.dataset.section === active?.id);
+    });
+  }
+
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+
+  // Smooth scroll on click
+  items.forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.getElementById(item.dataset.section);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+})();
+
 </script>
 </body>
 </html>
