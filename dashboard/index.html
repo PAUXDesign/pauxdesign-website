@@ -863,27 +863,37 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .featured-metrics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px 12px;
   margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border2);
+  padding-top: 14px;
+  border-top: 1px solid rgba(38, 30, 72, 0.07);
 }
-.featured .fm-num {
-  font-size: 17px;
+.featured-metrics > div {
+  min-width: 0;
 }
 .fm-num {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 22px;
-  color: var(--dark);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--mid);
   letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
+  line-height: 1.2;
 }
 .fm-lbl {
-  font-size: 11px;
-  color: var(--mid);
-  margin-top: 2px;
+  font-family: var(--font-sans);
+  font-size: 8.5px;
+  font-weight: 500;
+  color: var(--light);
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 .featured-thumb {
   position: relative;
@@ -1083,7 +1093,7 @@ input, textarea { font-family: inherit; color: inherit; }
 .proj-grid.list { grid-template-columns: minmax(0, 1fr); }
 .proj-grid.list .pcard { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); }
 .proj-grid.list .pcard-thumb { min-height: 100%; padding: 18px; }
-.proj-grid.list .pcard-mock { max-width: 180px; }
+.proj-grid.list .pcard-mock { max-width: 220px; }
 .proj-grid.list .pcard-mock img { max-width: 100%; }
 
 .pcard {
@@ -1109,10 +1119,33 @@ input, textarea { font-family: inherit; color: inherit; }
   background-size: 100% 100%;
   padding: 24px;
   display: flex; align-items: center; justify-content: center;
-  min-height: 200px;
   perspective: 960px;
   perspective-origin: 50% 42%;
   transition: background-size 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+}
+/* Grid view: fixed visual slot so chips/titles/descriptions align across cards */
+.proj-grid:not(.list) .pcard-thumb {
+  aspect-ratio: 4 / 3;
+  min-height: clamp(240px, 42vw, 320px);
+  padding: 14px 14px 16px;
+  box-sizing: border-box;
+}
+.proj-grid:not(.list) .pcard-mock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  width: 100%;
+  max-width: min(400px, 98%);
+  margin: 0 auto;
+  min-height: 0;
+}
+.proj-grid:not(.list) .pcard-thumb img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }
 .pcard:hover .pcard-thumb {
   background-size: 115% 115%;
@@ -1221,7 +1254,7 @@ input, textarea { font-family: inherit; color: inherit; }
 .pcard-status .d { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
 .pcard-status.shipped .d { background: var(--green); }
 .pcard-status.live .d { background: var(--accent); }
-.pcard-body { padding: 16px 18px 18px; min-width: 0; }
+.pcard-body { padding: 16px 18px 20px; min-width: 0; }
 .pcard-title {
   font-family: var(--font-display);
   font-weight: 600;
@@ -1235,31 +1268,55 @@ input, textarea { font-family: inherit; color: inherit; }
 .pcard-desc {
   font-size: 12.5px;
   color: var(--mid);
-  line-height: 1.6;
+  line-height: 1.55;
   margin-top: 6px;
+  margin-bottom: 2px;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 .pcard-metrics {
-  display: flex; flex-wrap: wrap; gap: 10px 14px;
-  margin-top: 12px;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border2);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 12px;
+  row-gap: 0;
+  align-items: start;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(38, 30, 72, 0.07);
+}
+.pcard-metrics > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 .pcard-metrics div .n {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 16px;
-  color: var(--dark);
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--mid);
+  letter-spacing: -0.02em;
   font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .pcard-metrics div .l {
-  font-size: 10px; color: var(--mid);
+  font-family: var(--font-sans);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-top: 1px;
+  color: var(--light);
+  margin-top: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ── Projects: More UI gallery band (below grid, not a project card) ── */
@@ -2595,36 +2652,38 @@ button.proj-gallery-item {
   border-radius: var(--radius);
   box-shadow: 0 20px 50px rgba(38, 30, 72, 0.2);
 }
-.drawer-content { padding: 36px 48px 56px; max-width: 1040px; margin: 0 auto; }
+.drawer-content { padding: 32px 44px 56px; max-width: 1040px; margin: 0 auto; }
 .drawer-content h2 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 29px;
+  font-size: 24px;
   line-height: 1.2;
   letter-spacing: -0.02em;
   color: var(--dark);
   margin-top: 10px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .drawer-content .lead {
-  font-size: 15px; color: var(--mid); line-height: 1.72;
-  margin-bottom: 22px;
+  font-size: 14px; color: var(--mid); line-height: 1.72;
+  margin-bottom: 20px;
 }
 .drawer-prose {
-  font-size: 15px;
+  font-size: 13.5px;
   color: var(--mid);
-  line-height: 1.78;
-  margin-bottom: 18px;
+  line-height: 1.75;
+  margin-bottom: 16px;
 }
 .drawer-prose:last-of-type { margin-bottom: 10px; }
 .drawer-content h4 {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 11.5px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--mid);
-  margin: 34px 0 16px;
+  letter-spacing: 0.1em;
+  color: var(--light);
+  margin: 32px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
 }
 .drawer-metrics {
   display: grid;
@@ -2655,8 +2714,8 @@ button.proj-gallery-item {
 .drawer-list li {
   padding: 10px 0;
   border-bottom: 1px dashed var(--border);
-  font-size: 13.5px;
-  color: var(--dark);
+  font-size: 13px;
+  color: var(--mid);
   line-height: 1.6;
   position: relative;
   padding-left: 18px;
@@ -2676,10 +2735,10 @@ button.proj-gallery-item {
   border-top: 1px solid var(--border);
 }
 .drawer-subtitle {
-  font-size: 15px;
+  font-size: 13.5px;
   color: var(--mid);
-  line-height: 1.68;
-  margin: 0 0 18px;
+  line-height: 1.7;
+  margin: 0 0 16px;
 }
 .drawer-meta {
   display: grid;
@@ -2717,13 +2776,13 @@ button.proj-gallery-item {
 }
 .drawer-quote {
   font-family: var(--font-display);
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   font-style: italic;
-  line-height: 1.58;
+  line-height: 1.65;
   color: var(--dark);
-  margin: 26px 0 22px;
-  padding: 22px 24px;
+  margin: 22px 0 18px;
+  padding: 20px 24px;
   border-radius: var(--radius);
   background: linear-gradient(135deg, rgba(112, 89, 220, 0.08), rgba(88, 219, 105, 0.06));
   border: 1px solid var(--border);
@@ -2896,16 +2955,18 @@ button.proj-gallery-item {
   margin: 0;
 }
 .drawer-steps {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
   margin: 18px 0 28px;
 }
 .drawer-step {
-  padding: 20px 22px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: #fff;
+  padding: 22px 24px;
+  border: 1px solid rgba(38,30,72,0.09);
+  border-radius: 16px;
+  background: #FAFAFC;
+  display: flex;
+  flex-direction: column;
 }
 .drawer-step-num {
   font-size: 10px;
@@ -2913,43 +2974,44 @@ button.proj-gallery-item {
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 .drawer-step-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--dark);
   margin-bottom: 6px;
 }
 .drawer-step-desc {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--mid);
   line-height: 1.65;
   margin: 0;
 }
 .drawer-insights {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   margin: 20px 0 24px;
 }
 .drawer-insight {
   display: flex;
-  gap: 14px;
+  gap: 12px;
   align-items: flex-start;
-  padding: 16px 18px;
+  padding: 18px 20px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--bg-soft);
 }
 .drawer-insight-i {
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1;
   flex-shrink: 0;
+  margin-top: 1px;
 }
 .drawer-insight-t {
-  font-size: 14px;
-  color: var(--dark);
+  font-size: 13px;
+  color: var(--mid);
   line-height: 1.65;
 }
 /* Key decision cards — horizontal row per card (text | image), stacked vertically */
@@ -3002,15 +3064,15 @@ button.proj-gallery-item {
 }
 .drawer-kd-card-body strong {
   display: block;
-  font-size: 15px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--dark);
   margin-bottom: 8px;
-  line-height: 1.35;
+  line-height: 1.4;
 }
 .drawer-kd-card-body p {
   margin: 0;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--mid);
   line-height: 1.65;
 }
@@ -3034,6 +3096,230 @@ button.proj-gallery-item {
   color: var(--dark);
   font-weight: 600;
 }
+
+
+/* ── Rich drawer content components ── */
+.drawer-method-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  column-gap: 12px;
+  row-gap: 12px;
+  margin: 24px 0 24px;
+}
+.drawer-method-tag { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: #F0EEFF; border: 1px solid rgba(112,89,220,0.2); border-radius: 999px; font-family: var(--font-sans); font-size: 0.74rem; font-weight: 600; color: #7059DC; }
+.drawer-method-dot { width: 4px; height: 4px; border-radius: 50%; background: #7059DC; flex-shrink: 0; }
+.drawer-bench-table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 0.8rem; font-family: var(--font-sans); }
+.drawer-bench-table th { padding: 9px 12px; text-align: left; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mid); border-bottom: 2px solid rgba(38,30,72,0.1); }
+.drawer-bench-table td { padding: 14px 14px; border-bottom: 1px solid rgba(38,30,72,0.07); color: var(--mid); line-height: 1.5; vertical-align: top; }
+.drawer-bench-table tr:last-child td { border-bottom: none; }
+.drawer-bench-table td:first-child { font-weight: 600; color: var(--dark); width: 100px; }
+.drawer-heuristic-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 10px;
+  row-gap: 10px;
+  margin: 20px 0 28px;
+  align-items: stretch;
+}
+.drawer-heuristic-item { display: flex; align-items: center; gap: 10px; padding: 14px 16px; background: #FAFAFC; border: 1px solid rgba(38,30,72,0.08); border-radius: 12px; font-size: 13px; color: var(--mid); font-family: var(--font-sans); min-width: 0; }
+.drawer-heuristic-status { width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.65rem; font-weight: 700; }
+.drawer-heuristic-status.pass { background: #E6FAF0; color: #1a8a30; }
+.drawer-heuristic-status.fail { background: #FFF0F0; color: #C0392B; }
+.drawer-writing-example {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 16px;
+  margin: 20px 0 28px;
+}
+.drawer-writing-col { border-radius: 12px; padding: 18px 20px; min-width: 0; }
+.drawer-writing-col.bad { background: #FFF8F8; border: 1px solid rgba(192,57,43,0.15); }
+.drawer-writing-col.good { background: #F0FFF5; border: 1px solid rgba(26,138,48,0.15); }
+.drawer-writing-col-label { font-size: 0.67rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; font-family: var(--font-sans); }
+.drawer-writing-col.bad .drawer-writing-col-label { color: #C0392B; }
+.drawer-writing-col.good .drawer-writing-col-label { color: #1a8a30; }
+.drawer-writing-col ul { margin: 0; padding: 0 0 0 14px; }
+.drawer-writing-col li { font-size: 13px; color: var(--mid); line-height: 1.55; margin-bottom: 5px; font-family: var(--font-sans); }
+.drawer-tree-result {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 16px;
+  margin: 16px 0 28px;
+}
+.drawer-tree-task { background: #FAFAFC; border: 1px solid rgba(38,30,72,0.09); border-radius: 16px; padding: 24px 20px; min-width: 0; }
+.drawer-tree-task-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #9B98B8; margin-bottom: 8px; font-family: var(--font-sans); }
+.drawer-tree-task-desc { font-size: 13px; color: var(--mid); line-height: 1.5; margin-bottom: 20px; font-family: var(--font-sans); }
+.drawer-tree-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.drawer-tree-bar-label { font-size: 0.68rem; font-weight: 600; font-family: var(--font-sans); color: var(--mid); width: 48px; flex-shrink: 0; }
+.drawer-tree-bar-track { flex: 1; height: 7px; background: rgba(38,30,72,0.08); border-radius: 4px; overflow: hidden; }
+.drawer-tree-bar-fill { height: 100%; border-radius: 4px; }
+.drawer-tree-bar-fill.before { background: #E05B5B; }
+.drawer-tree-bar-fill.after { background: #22C55E; }
+.drawer-tree-bar-val { font-size: 0.75rem; font-weight: 700; font-family: var(--font-sans); color: #261E48; width: 32px; text-align: right; flex-shrink: 0; }
+.drawer-subsection-title { font-family: var(--font-display); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--light); margin: 32px 0 14px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+.drawer-subsection-title.drawer-full-only:first-child { margin-top: 0; }
+
+/* ── Drawer before/after (rich) — keep 2 columns in drawer until very narrow viewport ── */
+.drawer-ba {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 16px;
+  margin: 24px 0 32px;
+  align-items: stretch;
+}
+.drawer-ba-col { background: #FAFAFC; border: 1px solid rgba(38,30,72,0.09); border-radius: 14px; padding: 22px 24px; min-width: 0; }
+.drawer-ba-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--mid); font-family: var(--font-display); margin-bottom: 12px; }
+.drawer-ba-col ul { margin: 0; padding: 0 0 0 14px; }
+.drawer-ba-col li { font-size: 13px; color: var(--mid); line-height: 1.6; margin-bottom: 8px; font-family: var(--font-sans); }
+
+@media (max-width: 720px) {
+  .drawer-ba { grid-template-columns: 1fr; row-gap: 12px; }
+  .drawer-steps { grid-template-columns: 1fr; }
+  .drawer-insights { grid-template-columns: 1fr; }
+  .drawer-heuristic-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .drawer-heuristic-grid { grid-template-columns: 1fr; row-gap: 10px; }
+  .drawer-writing-example { grid-template-columns: 1fr; row-gap: 14px; }
+  .drawer-tree-result { grid-template-columns: 1fr; row-gap: 14px; }
+}
+
+
+/* ── Drawer sticky index ── */
+.drawer-with-index {
+  display: grid;
+  grid-template-columns: 148px 1fr;
+  gap: 0;
+  align-items: start;
+  min-height: 100%;
+}
+.drawer-index-panel {
+  position: sticky;
+  top: 80px;
+  padding: 0 0 0 8px;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.drawer-index-panel::-webkit-scrollbar { display: none; }
+.drawer-index-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 0;
+}
+.drawer-index-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+.drawer-index-link:hover .drawer-index-dot { background: #7059DC; transform: scale(1.3); }
+.drawer-index-link:hover .drawer-index-lbl { color: #261E48; }
+.drawer-index-link.active .drawer-index-dot { background: #7059DC; transform: scale(1.25); }
+.drawer-index-link.active .drawer-index-lbl { color: #261E48; }
+.drawer-index-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(38,30,72,0.18);
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+.drawer-index-lbl {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #9B98B8;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s;
+}
+.drawer-main-content { min-width: 0; }
+/* Hide index in quick-read view */
+.drawer-view-quick .drawer-index-panel { display: none; }
+.drawer-view-quick .drawer-with-index { grid-template-columns: 1fr; }
+/* Only show index on wide enough drawers */
+@media (max-width: 900px) {
+  .drawer-with-index { grid-template-columns: 1fr; }
+  .drawer-index-panel { display: none; }
+}
+
+/* ── VIEW TOGGLE inside drawer ── */
+.drawer-view-toggle {
+  display: flex;
+  justify-content: center;
+  padding: 0 0 32px;
+}
+.drawer-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border2);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 2px;
+  box-shadow: 0 2px 10px rgba(38,30,72,0.06);
+}
+.drawer-toggle-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.18s;
+  min-width: 150px;
+}
+.drawer-toggle-btn:hover:not(.dv-active) { background: rgba(38,30,72,0.04); }
+.drawer-toggle-btn.dv-active { background: var(--dark); }
+.drawer-toggle-lbl {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--light);
+  line-height: 1;
+  margin-bottom: 3px;
+  transition: color 0.18s;
+}
+.drawer-toggle-btn.dv-active .drawer-toggle-lbl { color: rgba(255,255,255,0.5); }
+.drawer-toggle-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1;
+  transition: color 0.18s;
+}
+.drawer-toggle-btn.dv-active .drawer-toggle-name { color: #fff; }
+.drawer-toggle-sep {
+  width: 1px; height: 26px;
+  background: var(--border2);
+  flex-shrink: 0;
+}
+/* Elements hidden in quick view */
+.drawer-full-only { display: block; }
+.drawer-full-only.drawer-steps { display: grid; }
+.drawer-full-only.drawer-insights { display: grid; }
+.drawer-full-only.drawer-heuristic-grid { display: grid; }
+.drawer-full-only.drawer-ba { display: grid; }
+.drawer-view-quick .drawer-full-only { display: none !important; }
+
 .drawer-proto {
   display: inline-flex;
   align-items: center;
@@ -3049,6 +3335,86 @@ button.proj-gallery-item {
   transition: background 0.2s;
 }
 .drawer-proto:hover { background: var(--accent); color: #fff; }
+
+/* ── Drawer image blocks ── */
+.drawer-img-block {
+  margin: 28px 0;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(38,30,72,0.09);
+}
+.drawer-img-block img {
+  width: 100%;
+  display: block;
+}
+.drawer-img-caption {
+  padding: 10px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9B98B8;
+  background: #FAFAFC;
+  border-top: 1px solid rgba(38,30,72,0.07);
+  font-family: var(--font-sans);
+}
+.drawer-img-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 16px;
+  row-gap: 16px;
+  margin: 28px 0;
+}
+.drawer-img-grid.grid-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.drawer-img-grid-item {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(38,30,72,0.09);
+}
+.drawer-img-grid-item img { width: 100%; display: block; }
+.drawer-img-grid-item .drawer-img-caption { font-size: 0.7rem; }
+.drawer-stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: 14px;
+  row-gap: 14px;
+  margin: 28px 0;
+}
+.drawer-stat { background:#F5F6FF; border:1px solid rgba(38,30,72,0.10); border-radius:14px; padding:24px 16px; text-align:center; }
+.drawer-stat-num { font-size:1.6rem; font-weight:700; color:#261E48; line-height:1; margin-bottom:6px; }
+.drawer-stat-label { font-size:0.78rem; color:#655F8C; line-height:1.4; }
+.drawer-hmw { margin: 28px 0 28px; background:#261E48; color:#fff; border-radius:16px; padding:28px 32px; }
+.drawer-hmw-label { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:#9B98B8; margin-bottom:10px; }
+.drawer-hmw p { font-size: 14px; font-style: italic; line-height: 1.6; color:#fff; margin:0; }
+.drawer-ux-note { background:#E2E5FD; border-radius:10px; padding:14px 18px; font-size:0.83rem; color:#261E48; margin:20px 0 24px; }
+.drawer-quote-user {
+  margin: 14px 0;
+  background: #F5F6FF;
+  border-left: 3px solid #7059DC;
+  border-radius: 0 10px 10px 0;
+  padding: 13px 18px;
+  font-size: 13px;
+  color: var(--mid);
+  font-style: italic;
+  line-height: 1.6;
+}
+/* Stack quote callouts inside rich blocks with consistent gap */
+.drawer-full-only:has(> .drawer-quote-user) {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.drawer-full-only:has(> .drawer-quote-user) > .drawer-quote-user {
+  margin: 0;
+}
+
+@media(max-width:640px){
+  .drawer-img-grid { grid-template-columns: 1fr; row-gap: 16px; }
+  .drawer-stat-row { grid-template-columns: 1fr; row-gap: 14px; }
+}
+
 @media (max-width: 760px) {
   .drawer-kd-card {
     grid-template-columns: 1fr;
@@ -3063,7 +3429,7 @@ button.proj-gallery-item {
 }
 @media (max-width: 720px) {
   .drawer-meta { grid-template-columns: 1fr; }
-  .drawer-two, .drawer-personas, .drawer-stat-row { grid-template-columns: 1fr; }
+  .drawer-two, .drawer-personas, .drawer-stat-row { grid-template-columns: 1fr; row-gap: 14px; }
   .drawer-content { padding: 28px 22px 48px; }
   .drawer-cover { padding: 24px 18px 28px; min-height: 220px; }
 }
@@ -3518,7 +3884,7 @@ button.proj-gallery-item {
 }
 @media (max-width: 560px) {
   .kpi-grid { grid-template-columns: 1fr 1fr; }
-  .featured-metrics { grid-template-columns: repeat(3, 1fr); }
+  .featured-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   .drawer-metrics { grid-template-columns: 1fr 1fr 1fr; }
   .cmdk-foot-hint { margin-left: 0; flex-basis: 100%; }
 }
@@ -3810,24 +4176,24 @@ button.proj-gallery-item {
               </div>
             </article>
 
-            <article class="featured" data-project-id="mila-ai" role="button" tabindex="0" aria-label="Open case study: Mila AI">
+            <article class="featured" data-project-id="joblink" role="button" tabindex="0" aria-label="Open case study: JobLink">
               <div class="featured-body">
                 <div class="featured-tags">
-                  <span class="tag ac">AI Product</span>
+                  <span class="tag ac">UX Research</span>
                   <span class="tag ac">Mobile · iOS</span>
-                  <span class="tag">UX Architecture</span>
+                  <span class="tag">A/B Testing</span>
                 </div>
-                <div class="featured-title">Mila AI — your language coach</div>
-                <p class="featured-desc">From web platform to an AI-first iOS app — clearer progression, one-tap resume, personalisation users actually notice.</p>
+                <div class="featured-title">JobLink — multi-profile job search</div>
+                <p class="featured-desc">Full research-to-UI process — surveys, competitive analysis, A/B testing, and an iOS design that scored 98% intuitive vs 67% for Indeed.</p>
                 <div class="featured-metrics">
-                  <div><div class="fm-num">85%</div><div class="fm-lbl">Tests · uplift</div></div>
-                  <div><div class="fm-num">1 tap</div><div class="fm-lbl">Resume</div></div>
-                  <div><div class="fm-num">AI</div><div class="fm-lbl">Surfaced</div></div>
+                  <div><div class="fm-num">60%</div><div class="fm-lbl">Higher task success</div></div>
+                  <div><div class="fm-num">98%</div><div class="fm-lbl">Rated intuitive</div></div>
+                  <div><div class="fm-num">3 min</div><div class="fm-lbl">2nd profile + apply</div></div>
                 </div>
               </div>
               <div class="featured-thumb">
                 <div class="pcard-mock">
-                  <img src="/Public/Images/mila.png" alt="Mila AI language learning app">
+                  <img src="/Public/Images/joblink.png" alt="JobLink multi-profile job search app">
                 </div>
               </div>
             </article>
@@ -4603,12 +4969,18 @@ const PROJECTS = [
         { label: "Team", value: "Stakeholders + Engineering" },
         { label: "Year", value: "2025–2026" }
       ],
-      nda: "Visual designs and proprietary workflows are omitted under NDA. What follows documents design thinking, system architecture and the compliance-driven UX approach.",
+      nda: "Due to a signed NDA, all interface visuals have been recreated as representative abstractions. Screen content, workflows, and data structures reflect the actual system design; names, entities, and identifying details are fictional.",
       lead: "A SaaS platform for organisational management and regulatory compliance — covering GDPR, occupational health and cross-departmental processes. The product required granular access control, strict data separation between organisations, and auditability designed into every user action.",
       body: [
         "I led the project end-to-end: from translating legal requirements into product structure, to defining the IA, designing all 10 modules, and working directly with stakeholders and engineering to ship it."
       ],
-      sections: [],
+      sections: [
+        {
+          img: "/Public/Images/dashboard-saas.png",
+          imgAlt: "Enterprise SaaS platform — dashboard overview",
+          imgCaption: "Platform dashboard — compliance status across all organisations"
+        }
+      ],
       quote: "How do you translate 850 rows of Excel and dense legal documents — written for lawyers — into a system that non-technical users can follow without ever making a compliance error?",
       beforeAfter: {
         leftTitle: "Before — the problems",
@@ -4654,6 +5026,13 @@ const PROJECTS = [
         { icon: "🤝", text: "<strong>Stakeholder translation:</strong> Bridging legal experts, operations and engineers — design as the common language that made requirements concrete and shippable." }
       ],
       prototype: { label: "Open interactive prototype", href: "/Public/Lexquoris%20Compliance%20OS%20_standalone_.html" },
+      drawerIndex: [
+        { id: "d-overview", label: "Overview" },
+        { id: "d-challenge", label: "The challenge" },
+        { id: "d-approach", label: "Design approach" },
+        { id: "d-decisions-kd", label: "Key decisions" },
+        { id: "d-learnings", label: "Learnings" }
+      ],
       links: [
         { label: "Discuss this project", action: "goto-contact" }
       ]
@@ -4717,12 +5096,33 @@ const PROJECTS = [
         { num: "Strategy 04", title: "Resume & continuity", desc: "Progress saves automatically. \"Continue Learning\" is the primary action on every return — one tap to resume without losing context." }
       ],
       sectionsAfter: [
+        {
+          h: "Onboarding flow",
+          intro: "Users define goals, level and target language on first launch. The system adapts immediately — AI goes from a hidden backend process to a visible feature users can see and trust from day one.",
+          img: "/Public/Images/mila-onboarding.png",
+          imgAlt: "Mila AI — personalised onboarding flow",
+          imgCaption: "Onboarding flow — personalisation visible from first launch"
+        },
+        {
+          h: "Adaptive learning roadmap",
+          intro: "A dynamic roadmap unlocks content based on performance. Users can finally see where they are, what they've completed, and what's next — making progression tangible and motivating return.",
+          img: "/Public/Images/roadmap-mila.png",
+          imgAlt: "Mila AI — adaptive learning roadmap",
+          imgCaption: "Learning roadmap — AI adaptation made visible"
+        },
         { h: "Outcome", items: [] }
       ],
+      insightsSectionTitle: "Outcome",
       insights: [
         { icon: "✅", text: "<strong>85% usability improvement</strong> in structured testing with early users — measured against the previous web experience." },
         { icon: "✅", text: "<strong>Progression clarity resolved</strong> — users knew exactly where they were, what they'd done and what to do next without guidance or prompts." },
         { icon: "✅", text: "<strong>AI perceived as visible and personal</strong> — users described the app as feeling like it was \"learning them\", rather than serving generic content." }
+      ],
+      drawerIndex: [
+        { id: "d-overview", label: "Overview" },
+        { id: "d-challenge", label: "The challenge" },
+        { id: "d-strategy", label: "Design strategy" },
+        { id: "d-outcome", label: "Outcome" }
       ],
       links: [
         { label: "Discuss this project", action: "goto-contact" }
@@ -4825,12 +5225,33 @@ const PROJECTS = [
         { num: "Phase 06", title: "A/B testing", desc: "Detailed descriptions upfront lost to quick-scan cards. Result: restructured listing IA and dual-mode Quick Apply / Standard Apply." }
       ],
       sectionsAfter: [
-        { h: "Wireframe evolution", intro: "Six iterations from home → search → listing → profile → tracker → apply; full wireframe set in project documentation.", items: [] },
-        { h: "A/B testing", intro: "Version B matched the mental model — key details in the order users scan. That restructured the listing IA and split the apply flow into two modes.", items: [
-          "<strong>Version A (not selected):</strong> Users hunted across screens; order didn’t match how they decided.",
-          "<strong>Version B (selected):</strong> Card order matched expectations — faster decisions and apply."
-        ]},
-        { h: "Design system", intro: "Structured tokens, typography and components before high-fidelity UI — consistency and faster iteration; the system board lives with the extended project files.", items: [] }
+        {
+          h: "Wireframe evolution",
+          intro: "Six iterations from home \u2192 search \u2192 listing \u2192 profile \u2192 tracker \u2192 apply \u2014 structure and hierarchy validated before visual design.",
+          imgGrid: [
+            { src: "https://framerusercontent.com/images/YrhEa7arXayfH47sgDT32cyGss.png", alt: "Wireframe home", caption: "Home" },
+            { src: "https://framerusercontent.com/images/oqEE56CrfrgqYHUOybruiyHhlHQ.png", alt: "Wireframe search", caption: "Search" },
+            { src: "https://framerusercontent.com/images/yvqByZUjxbhm84z77FeWVVYgOJs.png", alt: "Wireframe listing", caption: "Listing" },
+            { src: "https://framerusercontent.com/images/AEWwITkvQLCwihQFJlnKlIxhsDs.png", alt: "Wireframe profile", caption: "Profile" },
+            { src: "https://framerusercontent.com/images/VQkqDwOBvkIhnQRydpTeUmjZ4gw.png", alt: "Wireframe tracker", caption: "Tracker" },
+            { src: "https://framerusercontent.com/images/O65iuWeVDOIoBxsb2ercmF2EQ.png", alt: "Wireframe apply", caption: "Apply" }
+          ]
+        },
+        {
+          h: "A/B testing",
+          intro: "My assumption \u2014 detailed descriptions upfront \u2014 was wrong. Users wanted quick-scan cards. This restructured the listing IA and led to the dual-mode apply flow.",
+          imgGrid: [
+            { src: "https://framerusercontent.com/images/jF9f8S2q8v70uYHk12TCbhAKms.png", alt: "A/B Version A", caption: "Version A \u2014 not selected" },
+            { src: "https://framerusercontent.com/images/aHF30kylJjIR0mNYsVvO25864.png", alt: "A/B Version B", caption: "Version B \u2014 selected, faster apply" }
+          ]
+        },
+        {
+          h: "Design system",
+          intro: "Tokens, typography and components established before high-fidelity UI.",
+          img: "https://framerusercontent.com/images/yTTbMLpuMeZZ0GvLkyh1DKRuhE.png",
+          imgAlt: "JobLink design system",
+          imgCaption: "Design system \u2014 colours, typography, components"
+        }
       ],
       impactIntro: "The redesigned experience significantly changed how users searched and applied — the before/after difference was structural.",
       impactCompare: {
@@ -4856,6 +5277,15 @@ const PROJECTS = [
         { icon: "🧪", text: "<strong>A/B testing proved my assumptions wrong.</strong> Detailed upfront wasn’t better; the IA changed — test before committing." },
         { icon: "✂️", text: "<strong>Simplicity is the feature.</strong> Profile switching and one-tap apply won; heavier “smart” features went unused — lower cognitive load beat more functionality." }
       ],
+      drawerIndex: [
+        { id: "d-overview", label: "Overview" },
+        { id: "d-problem", label: "The problem" },
+        { id: "d-research", label: "Research" },
+        { id: "d-solution", label: "Solution" },
+        { id: "d-process", label: "Process" },
+        { id: "d-impact", label: "Impact" },
+        { id: "d-learnings", label: "Learnings" }
+      ],
       prototype: { label: "Try the Figma prototype", href: "https://www.figma.com/proto/mXsuDaxHFXnzNPYvIc3JYx/Joblink-%2F-Prototype?page-id=0%3A1&node-id=0-5003&node-type=canvas&viewport=585%2C451%2C0.08&t=nyP7HRBnchlYf8WS-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=0%3A4512&show-proto-sidebar=1" },
       links: [
         { label: "Discuss this project", action: "goto-contact" }
@@ -4863,39 +5293,388 @@ const PROJECTS = [
     }
   },
   {
-    id: "ux-audit",
-    title: "UX Audit Sprint — service offering",
-    slug: "UX Audit",
-    year: "Ongoing",
-    role: "Solo · 1-week sprint",
-    tags: ["audit", "saas"],
-    chips: [{label:"UX Audit", cls:"ac"}, {label:"1 week"}, {label:"Service"}],
-    desc: "A productised, fixed-scope audit for live products that aren't converting or retaining. Heuristic + funnel + 3-user test → prioritised report in 7 days.",
-    img: "/Public/Images/ux-audit.png",
-    status: "live",
-    statusLabel: "Open",
+    id: "rover",
+    title: "Rover.com — Redesigning Trust for Pet Owners",
+    slug: "Rover Redesign",
+    year: "2022/2023",
+    role: "UX Designer (end-to-end)",
+    tags: ["research", "web"],
+    chips: [{label:"UX Research", cls:"ac"}, {label:"UX Writing", cls:"ac"}, {label:"Web Redesign"}, {label:"Concept"}],
+    readTime: "~12 min",
+    desc: "A research-led redesign of Rover's dashboard and search — validated through two rounds of tree testing, remote usability testing, and a new Pet Tracker feature with 98% user acceptance.",
+    img: "/Public/Images/rover.png",
+    status: "shipped",
+    statusLabel: "Concept",
     metrics: [
-      {n: "7d", l: "Turnaround"},
-      {n: "12+", l: "Issues found avg."},
-      {n: "Prio", l: "By impact"}
+      {n: "8%→90%", l: "Tree testing task success"},
+      {n: "5/5", l: "Remote testing completion"},
+      {n: "98%", l: "Pet Tracker acceptance"}
     ],
     drawer: {
-      lead: "Productised audit for founders and PMs. You get a prioritised list of friction points, ranked by impact and effort, in 7 days. No deck theatre — it's a Notion doc you can act on Monday.",
-      sections: [
-        { h: "What's included", items: [
-          "Heuristic review of your top 3 user paths",
-          "Funnel analytics review (if available)",
-          "3 moderated user tests (recordings included)",
-          "Prioritised findings: high-impact / quick-win / strategic",
-          "30-min walkthrough call to align with your team"
-        ]},
-        { h: "What you'll know after", items: [
-          "Where users actually drop off (not where you think they do)",
-          "Which 2–3 fixes will move the needle this quarter",
-          "Whether you need a full redesign or just surgical edits"
-        ]}
+      metricsSectionId: "d-glance",
+      subtitle: "A research-led redesign of Rover's dashboard and search experience — reducing booking friction, surfacing pet updates, and introducing Pet Tracker as a new feature validated through two rounds of tree testing and remote usability sessions.",
+      meta: [
+        { label: "Role", value: "UX Designer (end-to-end)" },
+        { label: "Scope", value: "Research · UX strategy · UX writing · UI design" },
+        { label: "Platform", value: "Web (desktop)" },
+        { label: "Year", value: "2024" }
       ],
-      links: [{ label: "Get in touch", action: "goto-contact" }]
+      lead: "Rover.com connects pet owners with trusted sitters and dog walkers. The service itself was well-regarded — sitters were getting five-star reviews — but the platform experience was consistently criticised. Users struggled to navigate it confidently, and the post-booking experience left them with no visibility into how their pet was doing.",
+      body: [
+        "This is a research-led redesign focused on three areas: the search and discovery experience, the dashboard, and Pet Tracker — a new feature proposed and validated entirely through user data. It also included a complete UX writing layer covering voice, tone and microcopy standards."
+      ],
+      hmw: "Help pet owners find a trusted sitter with confidence — and feel reassured once their pet is in someone else's care?",
+      richSections: [
+        {
+          type: "quote",
+          text: "\"The sitter was incredible. But the app is difficult to navigate — and once you book, you have no idea what's happening with your pet.\""
+        },
+        {
+          type: "prose",
+          text: "Rover's core tension: a trusted service with an experience that undermined that trust. The anxiety didn't end at checkout — it started there."
+        },
+        {
+          type: "beforeAfter",
+          leftTitle: "User pain points",
+          rightTitle: "The consequence",
+          left: [
+            "Confused by navigation on first visit — 8 out of 13 users",
+            "Had to open sitter profiles one by one — no quick comparison",
+            "Filters buried and unused — 10 out of 13 didn't use them",
+            "Dashboard mixed bookings with messages",
+            "No visibility into pet status after booking"
+          ],
+          right: [
+            "High drop-off during search — too much cognitive load",
+            "Users messaged multiple sitters due to lack of confidence",
+            "Repeat customers relied on memory, not the platform",
+            "Post-booking trust gap — owners couldn't track pet welfare",
+            "The platform felt like it served sitters, not owners"
+          ]
+        },
+        {
+          type: "anchor",
+          id: "d-research"
+        },
+        {
+          type: "subheading",
+          text: "Research & discovery"
+        },
+        {
+          type: "prose",
+          text: "The process moved through secondary research first — desk research, trend analysis, competitive benchmarking and heuristic analysis — before moving to primary research with actual users. The goal was to understand not just what was broken, but why users behaved the way they did."
+        },
+        {
+          type: "methods",
+          tags: ["Desk research","Trend analysis","Competitive benchmarking","Heuristic analysis","User survey (13 users)","User persona","Journey mapping","Lean Canvas","FVD prioritisation","Tree testing ×2","Remote usability testing"]
+        },
+        {
+          type: "subheading",
+          text: "Competitive benchmarking"
+        },
+        {
+          type: "prose",
+          text: "I analysed Rover against Pawshake and Gudog across three dimensions: vocabulary, UI design and navigability. Rover scored well on familiarity but fell short on information hierarchy and search clarity."
+        },
+        {
+          type: "benchtable",
+          headers: ["Dimension","Rover","Pawshake","Gudog"],
+          rows: [
+            ["Vocabulary","Clear for search, breaks down in booking flow","Consistent, minor errors","Understandable but function labels unclear"],
+            ["UI Design","Dashboard too minimal — omits key elements","Balanced, nothing critical missing","Cluttered search, buttons hard to identify"],
+            ["Steps to register","2","2","1"],
+            ["Steps to book","5","5","5"]
+          ]
+        },
+        {
+          type: "subheading",
+          text: "Heuristic analysis — Nielsen's 10 principles"
+        },
+        {
+          type: "prose",
+          text: "Applied Nielsen's heuristics to the existing Rover interface. Six principles passed, four failed — the failures all pointed to the same cluster: the user had too little control and too little feedback at critical moments."
+        },
+        {
+          type: "heuristic",
+          items: [
+            { label: "Visibility of system status", pass: false },
+            { label: "Match with real world", pass: true },
+            { label: "User control & freedom", pass: false },
+            { label: "Consistency & standards", pass: true },
+            { label: "Error prevention", pass: false },
+            { label: "Recognition over recall", pass: true },
+            { label: "Flexibility & efficiency", pass: false },
+            { label: "Aesthetic & minimalist design", pass: true },
+            { label: "Error recognition & recovery", pass: false },
+            { label: "Help & documentation", pass: true }
+          ]
+        },
+        {
+          type: "subheading",
+          text: "Survey — 13 users, 18 questions"
+        },
+        {
+          type: "prose",
+          text: "80% women, 20% men, ages 30–50. All pet owners. The data confirmed what the heuristic analysis suggested — navigation and trust were the two dominant friction points."
+        },
+        {
+          type: "stats",
+          items: [
+            { n: "10/13", label: "Needed a tutorial to understand the platform on first use" },
+            { n: "11/13", label: "Prioritised reviews — but couldn't filter sitters by them" },
+            { n: "10/13", label: "Didn't use search filters — they were too buried to notice" }
+          ]
+        },
+        {
+          type: "userquotes",
+          quotes: [
+            "\"I would like the sitter to contact me more when my pets are at their place.\"",
+            "\"It frustrates me to have to open profiles one by one.\"",
+            "\"Initially, it was difficult to understand how to make a reservation.\""
+          ]
+        },
+        {
+          type: "subheading",
+          text: "User persona — Isabella"
+        },
+        {
+          type: "prose",
+          text: "The research converged on a clear primary user. Isabella — 34, project manager in London, solo pet owner. Her frustration starts at search (opening profiles one by one, no review filter) and peaks post-booking when she has no visibility into Max's day. The journey map showed her emotional low point at step 7 — waiting for updates that never came."
+        },
+        {
+          type: "rawHtml",
+          html: `<div class="drawer-full-only" style="margin: 24px 0 0;">
+            <div style="background:#fff;border:1px solid rgba(38,30,72,0.10);border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(38,30,72,0.07);">
+              <div style="display:grid;grid-template-columns:200px 1fr;min-height:240px;">
+                <div style="background:linear-gradient(160deg,#e8e6f8 0%,#d2cef5 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;gap:10px;border-right:1px solid rgba(38,30,72,0.08);">
+                  <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#9b8aed,#7059DC);display:flex;align-items:center;justify-content:center;font-size:2.2rem;box-shadow:0 4px 16px rgba(112,89,220,0.25);">🐕</div>
+                  <div style="text-align:center;"><div style="font-family:var(--font-display);font-size:1.3rem;font-weight:700;color:#261E48;letter-spacing:-0.02em;">Isabella</div><div style="font-size:0.75rem;color:#655F8C;margin-top:3px;">34 yrs · Project Manager · London</div></div>
+                  <div style="display:flex;flex-direction:column;gap:5px;margin-top:4px;width:100%;">
+                    <div style="display:flex;align-items:center;gap:7px;font-size:0.73rem;color:#655F8C;"><span>🏙️</span> City centre apartment</div>
+                    <div style="display:flex;align-items:center;gap:7px;font-size:0.73rem;color:#655F8C;"><span>✈️</span> Travels for work often</div>
+                    <div style="display:flex;align-items:center;gap:7px;font-size:0.73rem;color:#655F8C;"><span>🐶</span> Solo owner of Max</div>
+                  </div>
+                </div>
+                <div style="padding:20px 24px;display:flex;flex-direction:column;gap:16px;">
+                  <p style="font-size:0.82rem;color:#655F8C;line-height:1.65;margin:0;">Isabella is a pet-loving professional who lives alone with her dog Max. With a busy schedule, she often travels for work and needs a trustworthy sitter she can rely on.</p>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    <div style="background:#f5f6ff;border:1px solid rgba(38,30,72,0.08);border-radius:12px;padding:14px 16px;">
+                      <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:#7059DC;margin-bottom:8px;">Motivation &amp; Goals</div>
+                      <ul style="margin:0;padding-left:14px;font-size:0.78rem;color:#3D3566;line-height:1.6;display:flex;flex-direction:column;gap:5px;">
+                        <li>Find a reliable, caring sitter for Max</li>
+                        <li>Ensure proper attention, love and exercise</li>
+                        <li>Regular updates and photos for peace of mind</li>
+                      </ul>
+                    </div>
+                    <div style="background:#fff8f8;border:1px solid rgba(192,57,43,0.12);border-radius:12px;padding:14px 16px;">
+                      <div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:#C0392B;margin-bottom:8px;">Frustrations</div>
+                      <ul style="margin:0;padding-left:14px;font-size:0.78rem;color:#3D3566;line-height:1.6;display:flex;flex-direction:column;gap:5px;">
+                        <li>Difficulty trusting unknown caregivers</li>
+                        <li>Previous sitters were less attentive</li>
+                        <li>Profiles lack info to decide confidently</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="margin-top:28px;">
+              <div style="font-size:0.82rem;color:#655F8C;line-height:1.65;margin:0 0 16px;">Isabella has a work trip planned and needs to leave Max in the care of a responsible person for a week. Goal: find a sitter quickly, with clear communication throughout.</div>
+              <div style="background:#fff;border:1px solid rgba(38,30,72,0.10);border-radius:20px;overflow:hidden;box-shadow:0 4px 20px rgba(38,30,72,0.07);">
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-bottom:1px solid rgba(38,30,72,0.08);">
+                  <div style="padding:12px 16px;border-right:1px solid rgba(38,30,72,0.07);"><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:#7059DC;margin-bottom:4px;">Log in</div><div style="font-size:0.75rem;color:#655F8C;">1. Log in<br>2. Pets profile</div></div>
+                  <div style="padding:12px 16px;border-right:1px solid rgba(38,30,72,0.07);"><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:#7059DC;margin-bottom:4px;">Search / Select</div><div style="font-size:0.75rem;color:#655F8C;">3. Search profile<br>4. Select sitter</div></div>
+                  <div style="padding:12px 16px;border-right:1px solid rgba(38,30,72,0.07);"><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:#7059DC;margin-bottom:4px;">Meet / Pay</div><div style="font-size:0.75rem;color:#655F8C;">5. Meet sitter<br>6. Confirm &amp; pay</div></div>
+                  <div style="padding:12px 16px;"><div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:#C0392B;margin-bottom:4px;">Feedback</div><div style="font-size:0.75rem;color:#655F8C;">7. Pet info &amp; updates</div></div>
+                </div>
+                <div style="padding:16px 20px 8px;background:#fafbff;">
+                  <svg viewBox="0 0 700 90" width="100%" preserveAspectRatio="none" style="display:block;height:70px;">
+                    <defs><linearGradient id="jFill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7059DC" stop-opacity="0.12"/><stop offset="100%" stop-color="#7059DC" stop-opacity="0.01"/></linearGradient></defs>
+                    <path d="M 40 28 C 100 22, 150 18, 200 32 C 250 46, 300 42, 350 52 C 400 62, 450 76, 500 80 C 540 83, 570 70, 620 77 L 660 85 L 700 90 L 0 90 Z" fill="url(#jFill2)"/>
+                    <path d="M 40 28 C 100 22, 150 18, 200 32 C 250 46, 300 42, 350 52 C 400 62, 450 76, 500 80 C 540 83, 570 70, 620 77" fill="none" stroke="#7059DC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <circle cx="40" cy="28" r="10" fill="#58DB69" stroke="#fff" stroke-width="2"/><text x="40" y="32" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#fff">1</text>
+                    <circle cx="160" cy="20" r="10" fill="#58DB69" stroke="#fff" stroke-width="2"/><text x="160" y="24" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#fff">2</text>
+                    <circle cx="290" cy="45" r="10" fill="#F5A623" stroke="#fff" stroke-width="2"/><text x="290" y="49" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#fff">3</text>
+                    <circle cx="390" cy="56" r="10" fill="#F5A623" stroke="#fff" stroke-width="2"/><text x="390" y="60" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#fff">4</text>
+                    <circle cx="490" cy="79" r="10" fill="#E05B5B" stroke="#fff" stroke-width="2"/><text x="490" y="83" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#fff">5</text>
+                    <circle cx="580" cy="70" r="10" fill="#F5A623" stroke="#fff" stroke-width="2"/><text x="580" y="74" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#fff">6</text>
+                    <circle cx="648" cy="77" r="10" fill="#E05B5B" stroke="#fff" stroke-width="2"/><text x="648" y="81" text-anchor="middle" font-family="sans-serif" font-weight="700" font-size="10" fill="#fff">7</text>
+                  </svg>
+                  <div style="display:flex;gap:14px;justify-content:center;margin-top:6px;margin-bottom:4px;font-size:0.7rem;color:#9B98B8;">
+                    <div style="display:flex;align-items:center;gap:4px;"><span style="width:7px;height:7px;border-radius:50%;background:#58DB69;display:inline-block;"></span> Positive</div>
+                    <div style="display:flex;align-items:center;gap:4px;"><span style="width:7px;height:7px;border-radius:50%;background:#F5A623;display:inline-block;"></span> Neutral / mixed</div>
+                    <div style="display:flex;align-items:center;gap:4px;"><span style="width:7px;height:7px;border-radius:50%;background:#E05B5B;display:inline-block;"></span> Frustration</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`
+        },
+        {
+          type: "subheading",
+          text: "Prioritisation — FVD matrix"
+        },
+        {
+          type: "prose",
+          text: "With the problem space mapped, I ran a Feasibility / Viability / Desirability matrix across all proposed improvements. Three priorities emerged at the intersection of high user value and high implementation feasibility: Pet Tracker, dashboard restructure and search optimisation. These became the core of the redesign."
+        },
+        {
+          type: "note",
+          text: "<strong>Priority 1:</strong> Pet Tracker + search filter visibility + dashboard tab restructure. <strong>Priority 2:</strong> Onboarding improvements + button improvements. The FVD matrix prevented scope creep — everything that made it into the final design had a clear justification from the data."
+        },
+        {
+          type: "anchor",
+          id: "d-ia"
+        },
+        {
+          type: "subheading",
+          text: "Information architecture"
+        },
+        {
+          type: "prose",
+          text: "Tree testing on the existing IA revealed a critical structural failure: only 8% of users reached bookings through the correct path, and \"Track your pets\" didn't exist as a concept at all. The root cause wasn't visual — it was structural. The dashboard wasn't organised around what users actually needed after booking."
+        },
+        {
+          type: "imgGrid",
+          items: [
+            { src: "/Public/Images/rover-ia-old.png", alt: "Task 1 — Find your active booking and see its status", caption: "Task 1 — Where do you find your active booking?" },
+            { src: "/Public/Images/rover-ia-new.png", alt: "Task 2 — Your pet is with the sitter — find out how they're doing", caption: "Task 2 — Where do you find information about your pet?" }
+          ]
+        },
+
+        {
+          type: "subheading",
+          text: "Wireflows"
+        },
+        {
+          type: "prose",
+          text: "Before moving to high-fidelity, I mapped the two primary tasks through wireflows — connecting screens to user decisions and validating the restructured IA before building the UI."
+        },
+        {
+          type: "img",
+          src: "/Public/Images/rover-wireflows.png",
+          alt: "Wireflows — task 1 and task 2",
+          caption: "Wireflows — Task 1 (booking a sitter) and Task 2 (checking pet status)"
+        },
+        {
+          type: "steps",
+          items: [
+            { num: "Decision 01", title: "Search filters — top bar", desc: "10/13 survey users didn't use filters — they were buried in a sidebar. Moving them to a persistent top bar made them visible from the first interaction, without competing with the results list for space." },
+            { num: "Decision 02", title: "Top 5 recommendations surfaced", desc: "Users felt overwhelmed opening profiles one by one. A curated \"Our recommendation\" block with 5 pre-ranked sitters — ordered by rating, availability and match — reduced decision load and gave a clear starting point without eliminating choice." },
+            { num: "Decision 03", title: "Dashboard — bookings separated from messages", desc: "The original dashboard conflated two different mental models: managing reservations and communicating with sitters. Separating them into clear tabs — Bookings, Track your pets, Past bookings — made each section immediately scannable and purposeful." },
+            { num: "Decision 04", title: "Pet Tracker — new feature from user data", desc: "Post-booking anxiety was the most common frustration across surveys, reviews and testing. Pet Tracker activates when a booking starts: the sitter logs food, exercise, potty breaks, medicine and photos daily. Owners see a live timeline from the dashboard. Users described it as the feature they didn't know they needed. 98% acceptance in testing." }
+          ]
+        },
+        {
+          type: "img",
+          src: "/Public/Images/rover-search.png",
+          alt: "Rover — redesigned search",
+          caption: "Search — redesigned · Filters in the top bar, visible from first interaction. Top 5 recommendations ranked by review."
+        },
+        {
+          type: "subheading",
+          text: "Pet Tracker — the key feature"
+        },
+        {
+          type: "prose",
+          text: "When a booking is active, sitters log daily updates — food portions, exercise, potty breaks, medicine and photos. Owners see a live timeline from the dashboard without needing to message the sitter directly. The feature closes the post-booking trust gap that surveys and reviews consistently identified."
+        },
+        {
+          type: "imgGrid",
+          items: [
+            { src: "/Public/Images/rover-pettracker.png", alt: "Pet Tracker feature — food, exercise, potty breaks, medicine, photos", caption: "Pet Tracker — sitters log food, exercise, potty breaks, medicine and photos daily" }
+          ]
+        },
+        {
+          type: "anchor",
+          id: "d-uxwriting"
+        },
+        {
+          type: "prose",
+          text: "A platform that handles someone's pet can't afford ambiguous or generic copy. The tone needed to shift depending on context — warm and empathetic during discovery, clear and direct at high-stakes moments like payment and booking confirmation."
+        },
+        {
+          type: "prose",
+          text: "I defined a complete writing system: a voice and tone matrix across three brand values (Empathy, Trust, Security), a tone spectrum mapped to the user journey, and a style guide covering every component type."
+        },
+        {
+          type: "subheading",
+          text: "Tone spectrum across the user journey"
+        },
+        {
+          type: "prose",
+          text: "The tone shifts from inspirational and friendly during search and sitter contact — where users need to feel reassured — to serious and direct at login, booking and payment — where clarity and accuracy matter most."
+        },
+        {
+          type: "subheading",
+          text: "Style guide — examples"
+        },
+        {
+          type: "uxwriting",
+          avoid: ["HIRE A DOG WALKER","Click to pay","ENTER TEXT HERE","Error / Could not load","You booked!"],
+          use: ["Find trusted pet sitters near you","Pay now","Write a message to Nikola","Please enter a valid email address","Your booking for Max is confirmed"]
+        },
+        {
+          type: "note",
+          text: "<strong>Why this matters:</strong> Trust is Rover's core value proposition. Every button label, error message and confirmation either reinforces or erodes it. Designing the microcopy alongside the UI — not as an afterthought — is what makes the experience feel coherent end to end."
+        },
+        {
+          type: "anchor",
+          id: "d-testing"
+        },
+        {
+          type: "subheading",
+          text: "Usability testing"
+        },
+        {
+          type: "prose",
+          text: "Two rounds of testing validated the redesign. Round 1 — Zoom, 5 existing Rover users — tested the prototype against the two primary tasks. Round 2 — Maze, 12 non-users — validated whether first-time visitors could navigate the restructured IA without prior knowledge of the platform."
+        },
+        {
+          type: "img",
+          src: "/Public/Images/rover-testing.png",
+          alt: "Remote usability testing results",
+          caption: "Remote testing — 5 users, 2 tasks. Task 1: 5/5 (avg 1 min 15 sec). Task 2: 5/5 (avg 20 sec to Pet Tracker)."
+        },
+        {
+          type: "twoCols",
+          leftTitle: "What worked",
+          rightTitle: "What to improve",
+          left: [
+            "Finding sitter profiles — easy, no major navigation issues",
+            "Dashboard booking view — immediately understood",
+            "Message access — felt well-controlled",
+            "Pet Tracker found in under 20 seconds on average"
+          ],
+          right: [
+            "Sitter profile card info — some details still unclear",
+            "Guide text in home search bar — needs more direction",
+            "Button organisation in bookings — some confusion remained"
+          ]
+        }
+      ],
+      drawerIndex: [
+        { id: "d-glance", label: "At a glance" },
+        { id: "d-overview", label: "Overview" },
+        { id: "d-problem", label: "The problem" },
+        { id: "d-research", label: "Research" },
+        { id: "d-ia", label: "Architecture" },
+        { id: "d-decisions", label: "Decisions" },
+        { id: "d-uxwriting", label: "UX writing" },
+        { id: "d-testing", label: "Testing" },
+        { id: "d-outcome", label: "Outcome" }
+      ],
+      insightsSectionTitle: "Outcome",
+      insights: [
+        { icon: "📊", text: "<strong>Tree testing: 8% → 90% task success</strong> on finding bookings after restructuring the IA — from failed indirect navigation to direct, confident completion." },
+        { icon: "✅", text: "<strong>5/5 task completion</strong> in remote testing — users navigated both the booking flow and Pet Tracker without guidance or confusion. Average 20 seconds to locate Pet Tracker from the dashboard." },
+        { icon: "🐾", text: "<strong>Pet Tracker: 98% acceptance rate</strong> — users described it as addressing an anxiety they hadn't been able to articulate before the test. The feature was proposed and validated entirely from research data, not assumption." },
+        { icon: "✍️", text: "<strong>UX writing system defined</strong> — voice matrix, tone spectrum and style guide covering every component type. Designed alongside the UI, not added at the end." },
+        { icon: "🔍", text: "<strong>What I'd do differently:</strong> Task 2 still had a 30% failure rate — \"Track your pets\" wasn't intuitive for all users. I'd A/B test alternative labels (\"Pet updates\", \"Live care\") before finalising. The naming of features matters as much as their placement." }
+      ],
+      links: [
+        { label: "Discuss this project", action: "goto-contact" }
+      ]
     }
   }
 ];
@@ -5476,9 +6255,14 @@ function openDrawer(id) {
   const bodyParas = (d.body || []).map(t => `<p class="drawer-prose">${t}</p>`).join('');
 
   const secHtml = (arr) => (arr || []).map(s => `
-      <h4>${s.h}</h4>
+      ${s.h ? `<h4>${s.h}</h4>` : ''}
       ${s.intro ? `<p class="drawer-prose">${s.intro}</p>` : ''}
       ${s.items && s.items.length ? `<ul class="drawer-list">${s.items.map(i => `<li>${i}</li>`).join('')}</ul>` : ''}
+      ${s.stats && s.stats.length ? `<div class="drawer-stat-row">${s.stats.map(st => `<div class="drawer-stat"><div class="drawer-stat-num">${st.n}</div><div class="drawer-stat-label">${st.label}</div></div>`).join('')}</div>` : ''}
+      ${s.quotes && s.quotes.length ? s.quotes.map(q => `<div class="drawer-quote-user">${q}</div>`).join('') : ''}
+      ${s.img ? `<div class="drawer-img-block"><img src="${s.img}" alt="${s.imgAlt||''}" loading="lazy"><div class="drawer-img-caption">${s.imgCaption||''}</div></div>` : ''}
+      ${s.imgGrid && s.imgGrid.length ? `<div class="drawer-img-grid${s.imgGrid.length >= 4 ? ' grid-3' : ''}">${s.imgGrid.map(gi => `<div class="drawer-img-grid-item"><img src="${gi.src}" alt="${gi.alt||''}" loading="lazy">${gi.caption ? `<div class="drawer-img-caption">${gi.caption}</div>` : ''}</div>`).join('')}</div>` : ''}
+      ${s.note ? `<div class="drawer-ux-note">${s.note}</div>` : ''}
     `).join('');
 
   const quote = d.quote ? `<blockquote class="drawer-quote">${d.quote}</blockquote>` : '';
@@ -5612,44 +6396,185 @@ function openDrawer(id) {
     return `<button type="button" class="btn btn-dark">${l.label}</button>`;
   }).join('');
 
+  // ── Rich sections renderer (Rover case study) ──────────────────────────
+  const renderRichSections = (sections) => {
+    if (!sections || !sections.length) return '';
+    return sections.map(s => {
+      if (s.type === 'anchor') {
+        return `<div id="${s.id}" style="scroll-margin-top:80px"></div>`;
+      }
+      if (s.type === 'methods') {
+        return `<div class="drawer-method-tags drawer-full-only">${s.tags.map(t => `<span class="drawer-method-tag"><span class="drawer-method-dot"></span>${t}</span>`).join('')}</div>`;
+      }
+      if (s.type === 'quote') {
+        return `<div id="d-problem" style="scroll-margin-top:80px"></div><div class="drawer-quote">${s.text}</div>`;
+      }
+      if (s.type === 'beforeAfter') {
+        return `<div class="drawer-ba drawer-full-only"><div class="drawer-ba-col"><div class="drawer-ba-label">${s.leftTitle}</div><ul>${s.left.map(i=>`<li>${i}</li>`).join('')}</ul></div><div class="drawer-ba-col"><div class="drawer-ba-label">${s.rightTitle}</div><ul>${s.right.map(i=>`<li>${i}</li>`).join('')}</ul></div></div>`;
+      }
+      if (s.type === 'subheading') {
+        return `<div class="drawer-subsection-title drawer-full-only">${s.text}</div>`;
+      }
+      if (s.type === 'benchtable') {
+        return `<div class="drawer-full-only"><table class="drawer-bench-table"><thead><tr>${s.headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${s.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+      }
+      if (s.type === 'heuristic') {
+        return `<div class="drawer-heuristic-grid drawer-full-only">${s.items.map(i=>`<div class="drawer-heuristic-item"><div class="drawer-heuristic-status ${i.pass?'pass':'fail'}">${i.pass?'✓':'✕'}</div>${i.label}</div>`).join('')}</div>`;
+      }
+      if (s.type === 'stats') {
+        return `<div class="drawer-stat-row drawer-full-only">${s.items.map(i=>`<div class="drawer-stat"><div class="drawer-stat-num">${i.n}</div><div class="drawer-stat-label">${i.label}</div></div>`).join('')}</div>`;
+      }
+      if (s.type === 'userquotes') {
+        return `<div class="drawer-full-only">${s.quotes.map(q=>`<div class="drawer-quote-user">${q}</div>`).join('')}</div>`;
+      }
+      if (s.type === 'imgGrid') {
+        return `<div class="drawer-img-grid drawer-full-only">${s.items.map(i=>`<div class="drawer-img-grid-item"><img src="${i.src}" alt="${i.alt||''}" loading="lazy">${i.caption?`<div class="drawer-img-caption">${i.caption}</div>`:''}</div>`).join('')}</div>`;
+      }
+      if (s.type === 'img') {
+        const head = s.anchorId ? `<div id="${s.anchorId}" style="scroll-margin-top:80px"></div>` : '';
+        return `${head}<div class="drawer-img-block drawer-full-only"><img src="${s.src}" alt="${s.alt||''}" loading="lazy"><div class="drawer-img-caption">${s.caption||''}</div></div>`;
+      }
+      if (s.type === 'steps') {
+        return `<div id="d-decisions" style="scroll-margin-top:80px"></div><div class="drawer-steps drawer-full-only">${s.items.map(i=>`<div class="drawer-step"><div class="drawer-step-num">${i.num}</div><div class="drawer-step-title">${i.title}</div><p class="drawer-step-desc">${i.desc}</p></div>`).join('')}</div>`;
+      }
+      if (s.type === 'uxwriting') {
+        return `<div class="drawer-writing-example drawer-full-only"><div class="drawer-writing-col bad"><div class="drawer-writing-col-label">✕ Avoid</div><ul>${s.avoid.map(i=>`<li>${i}</li>`).join('')}</ul></div><div class="drawer-writing-col good"><div class="drawer-writing-col-label">✓ Use instead</div><ul>${s.use.map(i=>`<li>${i}</li>`).join('')}</ul></div></div>`;
+      }
+      if (s.type === 'treetest') {
+        let wrap = '';
+        if (s.anchorId === false) wrap = '';
+        else if (s.anchorId != null && s.anchorId !== '') wrap = `<div id="${s.anchorId}" style="scroll-margin-top:80px"></div>`;
+        else wrap = `<div id="d-testing" style="scroll-margin-top:80px"></div>`;
+        return `${wrap}<div class="drawer-tree-result drawer-full-only">${s.tasks.map(t=>`<div class="drawer-tree-task"><div class="drawer-tree-task-label">${t.label}</div><div class="drawer-tree-task-desc">${t.desc}</div><div class="drawer-tree-bar-row"><div class="drawer-tree-bar-label">Before</div><div class="drawer-tree-bar-track"><div class="drawer-tree-bar-fill before" style="width:${t.before}%"></div></div><div class="drawer-tree-bar-val">${t.before}%</div></div><div class="drawer-tree-bar-row"><div class="drawer-tree-bar-label">After</div><div class="drawer-tree-bar-track"><div class="drawer-tree-bar-fill after" style="width:${t.after}%"></div></div><div class="drawer-tree-bar-val">${t.after}%</div></div></div>`).join('')}</div>`;
+      }
+      if (s.type === 'twoCols') {
+        const head = s.id ? `<div id="${s.id}" style="scroll-margin-top:80px"></div>` : '';
+        return `${head}<div class="drawer-ba drawer-full-only"><div class="drawer-ba-col"><div class="drawer-ba-label">${s.leftTitle}</div><ul>${s.left.map(i=>`<li>${i}</li>`).join('')}</ul></div><div class="drawer-ba-col"><div class="drawer-ba-label">${s.rightTitle}</div><ul>${s.right.map(i=>`<li>${i}</li>`).join('')}</ul></div></div>`;
+      }
+      if (s.type === 'note') {
+        return `<div class="drawer-ux-note drawer-full-only">${s.text}</div>`;
+      }
+      if (s.type === 'prose') {
+        return `<p class="drawer-prose drawer-full-only">${s.text}</p>`;
+      }
+      if (s.type === 'rawHtml') {
+        return s.html || '';
+      }
+      return '';
+    }).join('');
+  };
+
+  const richSectionsHtml = d.richSections ? renderRichSections(d.richSections) : '';
+
+    const toggleHtml = `
+    <div class="drawer-view-toggle">
+      <div class="drawer-toggle-wrap">
+        <button class="drawer-toggle-btn dv-active" data-dview="full">
+          <span class="drawer-toggle-lbl">Full case study</span>
+          <span class="drawer-toggle-name">Full deep-dive</span>
+        </button>
+        <div class="drawer-toggle-sep"></div>
+        <button class="drawer-toggle-btn" data-dview="quick">
+          <span class="drawer-toggle-lbl">Quick read</span>
+          <span class="drawer-toggle-name">30-second skim</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Build drawer index HTML
+  const drawerIndexHtml = (d.drawerIndex && d.drawerIndex.length) ? `
+    <nav class="drawer-index-panel" aria-label="Case study navigation">
+      <div class="drawer-index-inner">
+        ${d.drawerIndex.map(item => `<button class="drawer-index-link" data-target="${item.id}">
+          <span class="drawer-index-dot"></span>
+          <span class="drawer-index-lbl">${item.label}</span>
+        </button>`).join('')}
+      </div>
+    </nav>` : '';
+
+  const hasIndex = d.drawerIndex && d.drawerIndex.length > 0;
+
   drawerBody.innerHTML = `
     <div class="drawer-cover"><img src="${p.img}" alt="${p.title}"></div>
+    <div class="${hasIndex ? 'drawer-with-index' : ''}">
+      ${drawerIndexHtml}
+      <div class="${hasIndex ? 'drawer-main-content' : ''}">
     <div class="drawer-content">
       <div class="featured-tags">${p.chips.map(c => `<span class="tag ${c.cls||''}">${c.label}</span>`).join('')}</div>
       <h2>${p.title}</h2>
       ${subtitle}
       ${meta}
-      <p class="lead">${d.lead || ''}</p>
+      ${toggleHtml}
+      <div id="d-overview" style="scroll-margin-top:80px">${d.lead ? `<p class="lead">${d.lead}</p>` : ''}${bodyParas}</div>
       ${nda}
-      <div class="drawer-metrics">
+      <div class="drawer-metrics"${d.metricsSectionId ? ` id="${d.metricsSectionId}" style="scroll-margin-top:80px"` : ''}>
         ${p.metrics.map(m => `<div><div class="n">${m.n}</div><div class="l">${m.l}</div></div>`).join('')}
       </div>
-      ${bodyParas}
-      ${secHtml(d.sections)}
-      ${quote}
-      ${beforeAfter}
-      ${hmw}
-      ${researchBlock}
-      ${secHtml(d.sectionsMid)}
-      ${stepsHdr}
-      ${stepsHtml}
-      ${keyDecisionHtml}
-      ${secHtml(d.sectionsAfter)}
-      ${impactIntroHtml}
-      ${impactCompare}
-      ${whyWorkedHtml}
-      ${insightsHdr}
-      ${insightsHtml}
+      ${d.richSections ? richSectionsHtml : `<div class="drawer-full-only">${secHtml(d.sections)}</div><div id="d-challenge"></div>${quote}${beforeAfter}`}
+      ${hmw ? `<div class="drawer-full-only">${hmw}</div>` : ''}
+      ${researchBlock ? `<div class="drawer-full-only">${researchBlock}</div>` : ''}
+      ${secHtml(d.sectionsMid) ? `<div class="drawer-full-only">${secHtml(d.sectionsMid)}</div>` : ''}
+      <div class="drawer-full-only" id="d-approach" style="scroll-margin-top:80px"><div id="d-process" style="scroll-margin-top:80px"></div>${stepsHdr}${stepsHtml}</div>
+      ${keyDecisionHtml ? `<div class="drawer-full-only" id="d-decisions-kd" style="scroll-margin-top:80px">${keyDecisionHtml}</div>` : ''}
+      <div class="drawer-full-only" id="d-learnings" style="scroll-margin-top:80px">${secHtml(d.sectionsAfter)}</div>
+      <div class="drawer-full-only">${impactIntroHtml}${impactCompare}${whyWorkedHtml}</div>
+      <div id="d-outcome" style="scroll-margin-top:80px">${insightsHdr || ''}${insightsHtml || ''}</div>
       ${proto}
       <div class="drawer-cta">
         ${linkBtns}
         <button type="button" class="btn btn-outline" onclick="closeDrawer()">Close</button>
       </div>
     </div>
+    ${hasIndex ? '</div></div>' : ''}
   `;
+
+  // Wire up drawer toggle
+  drawerBody.querySelectorAll('.drawer-toggle-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const view = btn.dataset.dview;
+      drawerBody.querySelectorAll('.drawer-toggle-btn').forEach(b => b.classList.toggle('dv-active', b.dataset.dview === view));
+      const content = drawerBody.querySelector('.drawer-content');
+      if (view === 'quick') {
+        content.classList.add('drawer-view-quick');
+      } else {
+        content.classList.remove('drawer-view-quick');
+      }
+    });
+  });
   drawer.querySelectorAll('[data-action="goto-contact"]').forEach(b => {
     b.addEventListener('click', e => { e.preventDefault(); closeDrawer(); setView('contact'); });
   });
+
+  // Wire up drawer index navigation
+  if (d.drawerIndex && d.drawerIndex.length) {
+    const indexLinks = drawerBody.querySelectorAll('.drawer-index-link[data-target]');
+    const drawerScroll = drawer.querySelector('.drawer-body') || drawer;
+
+    // Smooth scroll to section
+    indexLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        const target = drawerBody.querySelector('#' + link.dataset.target);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // Active state tracking
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          indexLinks.forEach(l => l.classList.toggle('active', l.dataset.target === id));
+        }
+      });
+    }, { threshold: 0.3, rootMargin: '-10% 0px -60% 0px' });
+
+    d.drawerIndex.forEach(item => {
+      const el = drawerBody.querySelector('#' + item.id);
+      if (el) observer.observe(el);
+    });
+  }
+
   drawer.querySelectorAll('[data-action="goto-about"]').forEach(b => {
     b.addEventListener('click', e => { e.preventDefault(); closeDrawer(); setView('about'); });
   });

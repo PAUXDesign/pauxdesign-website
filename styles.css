@@ -1587,6 +1587,7 @@ h1 em { font-style: italic; color: var(--accent); font-weight: 600; }
 .wthumb.t1 { background-image: url('/Public/Images/dashboard-saas.png'); }
 .wthumb.t2 { background-image: url('/Public/Images/mila.png'); }
 .wthumb.t3 { background-image: url('/Public/Images/joblink.png'); }
+.wthumb.t4 { background-image: url('/Public/Images/rover.png'); }
 
 .work-more-wrap {
   display: flex;
