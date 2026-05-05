@@ -567,7 +567,7 @@ h2 em {
 .about-body strong { color: var(--dark); font-weight: 600; }
 .about-tools {
   display: flex; flex-wrap: wrap; gap: 7px;
-  margin-top: 28px; margin-bottom: 32px;
+  margin-top: 28px; margin-bottom: 22px;
 }
 .about-tool {
   font-family: var(--font-sans);
@@ -575,6 +575,26 @@ h2 em {
   color: var(--mid); background: var(--bg-soft);
   border: 1px solid var(--border2); background-color: #ffffff;
   padding: 5px 12px; border-radius: 999px;
+}
+.about-dash-note {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--mid);
+  margin: 0 0 26px;
+  max-width: 38rem;
+  opacity: 0.95;
+}
+.about-dash-note a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(112, 89, 220, 0.28);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.about-dash-note a:hover {
+  border-bottom-color: rgba(112, 89, 220, 0.55);
+  color: #5a4bc9;
 }
 
 @media (max-width: 900px) {
@@ -3195,6 +3215,7 @@ footer {
           <span class="about-tool">Cursor</span>
           <span class="about-tool">HTML / CSS</span>
         </div>
+        <p class="about-dash-note reveal reveal-d5">Hiring or curious to see more? There&rsquo;s an interactive <a href="/dashboard/">portfolio dashboard</a> with case studies, metrics and how I work day to day.</p>
         <div class="about-cta-wrap reveal reveal-d5">
           <a href="/contact/" class="btn btn-dark">Let's talk</a>
         </div>

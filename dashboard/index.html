@@ -1525,12 +1525,26 @@ button.proj-gallery-item {
   align-items: start;
 }
 .about-grid > .about-profile-col {
+  grid-column: 1;
+  grid-row: 1;
   justify-self: start;
   width: 100%;
   max-width: 320px;
   display: flex;
   flex-direction: column;
   gap: 18px;
+  min-width: 0;
+}
+.about-grid > .block-tools-sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  width: 100%;
+  max-width: 320px;
+  justify-self: start;
+}
+.about-grid > .about-blocks {
+  grid-column: 2;
+  grid-row: 1 / span 2;
   min-width: 0;
 }
 .about-profile-col .profile-card {
@@ -3846,7 +3860,16 @@ button.proj-gallery-item {
     max-width: min(200px, 100%);
   }
   .about-grid { grid-template-columns: 1fr; }
-  .about-grid > .about-profile-col { max-width: none; justify-self: stretch; align-self: stretch; }
+  .about-grid > .about-profile-col,
+  .about-grid > .about-blocks,
+  .about-grid > .block-tools-sidebar {
+    grid-column: 1;
+    grid-row: auto;
+    max-width: none;
+    justify-self: stretch;
+    align-self: stretch;
+    width: 100%;
+  }
   .contact-grid { grid-template-columns: 1fr; }
   .kanban { grid-template-columns: 1fr; }
   .view-wrap { padding: 20px 16px; }
@@ -4404,24 +4427,6 @@ button.proj-gallery-item {
                 </a>
               </div>
             </div>
-
-            <div class="block block-tools-sidebar" aria-label="Tools I use daily">
-              <div class="block-head">
-                <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
-                <h3>Tools I use daily</h3>
-              </div>
-              <div class="tools-grid">
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Figma</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> FigJam</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Framer</div>
-                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Adobe CC</div>
-                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Maze</div>
-                <div class="tool"><span class="dot l2" aria-hidden="true"></span> Notion</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Claude AI</div>
-                <div class="tool"><span class="dot l1" aria-hidden="true"></span> Cursor</div>
-                <div class="tool"><span class="dot l3" aria-hidden="true"></span> HTML / CSS</div>
-              </div>
-            </div>
           </div>
 
           <div class="about-blocks">
@@ -4493,6 +4498,24 @@ button.proj-gallery-item {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          <div class="block block-tools-sidebar" aria-label="Tools I use daily">
+            <div class="block-head">
+              <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 2 7l10 5 10-5-10-5z"/><path d="m2 17 10 5 10-5"/><path d="m2 12 10 5 10-5"/></svg></div>
+              <h3>Tools I use daily</h3>
+            </div>
+            <div class="tools-grid">
+              <div class="tool"><span class="dot l1" aria-hidden="true"></span> Figma</div>
+              <div class="tool"><span class="dot l1" aria-hidden="true"></span> FigJam</div>
+              <div class="tool"><span class="dot l1" aria-hidden="true"></span> Framer</div>
+              <div class="tool"><span class="dot l2" aria-hidden="true"></span> Adobe CC</div>
+              <div class="tool"><span class="dot l2" aria-hidden="true"></span> Maze</div>
+              <div class="tool"><span class="dot l2" aria-hidden="true"></span> Notion</div>
+              <div class="tool"><span class="dot l1" aria-hidden="true"></span> Claude AI</div>
+              <div class="tool"><span class="dot l1" aria-hidden="true"></span> Cursor</div>
+              <div class="tool"><span class="dot l3" aria-hidden="true"></span> HTML / CSS</div>
             </div>
           </div>
         </div>
@@ -5048,8 +5071,8 @@ const PROJECTS = [
     chips: [{label:"AI Product", cls:"ac"}, {label:"Mobile · iOS", cls:"ac"}, {label:"UX Architecture"}],
     desc: "Redesigning a web-based platform into an AI-driven mobile app — reducing friction and making personalisation visible to the user.",
     img: "/Public/Images/mila.png",
-    status: "live",
-    statusLabel: "Live",
+    status: "shipped",
+    statusLabel: "Shipped",
     metrics: [
       {n: "85%", l: "Usability improvement (tests)"},
       {n: "1 tap", l: "To resume a lesson"},
@@ -5140,7 +5163,7 @@ const PROJECTS = [
     desc: "Full UX research, A/B testing and iOS design for a smarter job app that respects their time.",
     img: "/Public/Images/joblink.png",
     status: "shipped",
-    statusLabel: "Shipped",
+    statusLabel: "Concept",
     metrics: [
       {n: "60%", l: "Higher task success vs benchmarks"},
       {n: "98%", l: "Rated intuitive (vs 67% Indeed)"},
@@ -6517,10 +6540,9 @@ function openDrawer(id) {
       ${secHtml(d.sectionsMid) ? `<div class="drawer-full-only">${secHtml(d.sectionsMid)}</div>` : ''}
       <div class="drawer-full-only" id="d-approach" style="scroll-margin-top:80px"><div id="d-process" style="scroll-margin-top:80px"></div>${stepsHdr}${stepsHtml}</div>
       ${keyDecisionHtml ? `<div class="drawer-full-only" id="d-decisions-kd" style="scroll-margin-top:80px">${keyDecisionHtml}</div>` : ''}
-      <div class="drawer-full-only" id="d-learnings" style="scroll-margin-top:80px">${secHtml(d.sectionsAfter)}</div>
+      <div class="drawer-full-only" id="d-learnings" style="scroll-margin-top:80px">${secHtml(d.sectionsAfter)}${proto}</div>
       <div class="drawer-full-only">${impactIntroHtml}${impactCompare}${whyWorkedHtml}</div>
       <div id="d-outcome" style="scroll-margin-top:80px">${insightsHdr || ''}${insightsHtml || ''}</div>
-      ${proto}
       <div class="drawer-cta">
         ${linkBtns}
         <button type="button" class="btn btn-outline" onclick="closeDrawer()">Close</button>

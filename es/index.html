@@ -543,6 +543,26 @@ h2 em {
   border: 1px solid var(--border2); background-color: #ffffff;
   padding: 5px 12px; border-radius: 999px;
 }
+.about-dash-note {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--mid);
+  margin: 0 0 26px;
+  max-width: 38rem;
+  opacity: 0.95;
+}
+.about-dash-note a {
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(112, 89, 220, 0.28);
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.about-dash-note a:hover {
+  border-bottom-color: rgba(112, 89, 220, 0.55);
+  color: #5a4bc9;
+}
 
 @media (max-width: 900px) {
   .about-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -3149,6 +3169,7 @@ footer {
           <span class="about-tool">Cursor</span>
           <span class="about-tool">HTML / CSS</span>
         </div>
+        <p class="about-dash-note reveal reveal-d5">&iquest;Contratando o con ganas de ver mas detalle? Hay un <a href="/dashboard/">portfolio dashboard</a> interactivo con casos, metricas y como trabajo dia a dia.</p>
         <div class="about-cta-wrap reveal reveal-d5">
           <a href="/es/contact/" class="btn btn-dark">Hablemos</a>
         </div>
