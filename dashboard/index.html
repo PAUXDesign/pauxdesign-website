@@ -3269,6 +3269,15 @@ button.proj-gallery-item {
   gap: 12px;
 }
 .dc-sheet-grid .full { grid-column: 1 / -1; }
+.dc-name-with-avatar {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 10px;
+  align-items: end;
+}
+.dc-name-input-wrap {
+  min-width: 0;
+}
 .dc-sheet-label {
   display: block;
   font-family: var(--font-display);
@@ -3417,18 +3426,12 @@ button.proj-gallery-item {
 }
 .dc-sheet-compose-row {
   margin-top: 12px;
-  display: flex;
-  gap: 12px;
-  align-items: flex-start;
-  min-width: 0;
+  display: block;
 }
 @media (max-width: 520px) {
-  .dc-sheet-compose-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-  .dc-sheet-compose-row .dc-user-peek + .dc-msg-compose-box {
-    border-left: 1px solid var(--border2);
+  .dc-name-with-avatar {
+    grid-template-columns: 40px minmax(0, 1fr);
+    align-items: start;
   }
   .dc-compose-bar {
     flex-wrap: wrap;
@@ -4791,6 +4794,14 @@ button.proj-gallery-item {
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto 1fr;
   }
+  .featured-thumb {
+    max-height: none;
+    height: clamp(150px, 42vw, 220px);
+  }
+  .featured-thumb .pcard-mock {
+    top: 8px;
+    bottom: 8px;
+  }
   .about-grid { grid-template-columns: 1fr; }
   .about-grid > .about-profile-col,
   .about-grid > .about-blocks,
@@ -5932,8 +5943,13 @@ button.proj-gallery-item {
               <form id="dashboard-contact-form" action="#" novalidate>
                 <div class="dc-sheet-grid">
                   <div>
-                    <label class="dc-sheet-label" for="cf-name">Name</label>
-                    <input class="dc-sheet-input" id="cf-name" name="name" type="text" placeholder="Your name" required autocomplete="name">
+                    <div class="dc-name-with-avatar">
+                      <div class="dc-user-peek" id="dc-user-letter" aria-hidden="true">?</div>
+                      <div class="dc-name-input-wrap">
+                        <label class="dc-sheet-label" for="cf-name">Name</label>
+                        <input class="dc-sheet-input" id="cf-name" name="name" type="text" placeholder="Your name" required autocomplete="name">
+                      </div>
+                    </div>
                   </div>
                   <div>
                     <label class="dc-sheet-label" for="cf-email">Email</label>
@@ -5946,7 +5962,6 @@ button.proj-gallery-item {
                 </div>
 
                 <div class="dc-sheet-compose-row">
-                  <div class="dc-user-peek" id="dc-user-letter" aria-hidden="true">?</div>
                   <div class="dc-msg-compose-box" style="flex:1;min-width:0;margin-top:0">
                     <label class="dc-sheet-label" for="cf-message" style="display:none">Message</label>
                     <textarea class="dc-msg-only" id="cf-message" name="message" required placeholder="What would you like to discuss?"></textarea>
