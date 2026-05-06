@@ -5963,7 +5963,11 @@ button.proj-gallery-item {
             <div class="dc-msg-feed contact-ai-thread" id="dc-dash-feed" role="log" aria-live="polite" aria-relevant="additions"></div>
 
             <div class="dc-msg-sheet contact-ai-panel" id="dc-contact-form-panel">
-              <form id="dashboard-contact-form" action="#" novalidate>
+              <iframe name="dashboardContactTarget" id="dashboardContactTarget" title="Dashboard contact submission" style="display:none;width:0;height:0;border:0;"></iframe>
+              <form id="dashboard-contact-form" action="https://formsubmit.co/paulaalonso.design@gmail.com" method="POST" target="dashboardContactTarget" novalidate>
+                <input type="hidden" name="_subject" value="New dashboard enquiry from pauxdesign.uk">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_next" value="">
                 <div class="dc-sheet-grid">
                   <div>
                     <div class="dc-name-with-avatar">
@@ -7508,11 +7512,8 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     window.setTimeout(() => {
       rmTyping();
       row(false, 'P', '', reply, 'Paula · auto');
-      showToast('Opening your mail app…');
-      const rt = window.__cfRoleType ? (' · ' + window.__cfRoleType) : '';
-      const mailtoUrl = 'mailto:paulaalonso.design@gmail.com?subject=' + encodeURIComponent('Role enquiry · ' + name + rt) +
-        '&body=' + encodeURIComponent('From: ' + name + ' <' + email + '>' + '\n\n' + body + '\n');
-      window.location.href = mailtoUrl;
+      form.submit();
+      showToast('Message sent. Thanks!');
       sending = false;
       if (subBtn) subBtn.disabled = false;
     }, 1000);
