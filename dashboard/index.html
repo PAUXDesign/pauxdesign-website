@@ -720,8 +720,9 @@ input, textarea { font-family: inherit; color: inherit; }
   align-items: stretch;
 }
 .row-overview > .featured-stack {
-  align-self: start;
+  align-self: stretch;
   min-width: 0;
+  min-height: 0;
 }
 .row-overview > .card-activity {
   min-height: 0;
@@ -772,9 +773,11 @@ input, textarea { font-family: inherit; color: inherit; }
 /* ── FEATURED PROJECT ── */
 .featured {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(168px, 200px);
-  grid-template-rows: auto;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
   align-items: stretch;
+  min-height: 0;
+  height: 100%;
   gap: 0;
   width: 100%;
   max-width: 100%;
@@ -785,10 +788,9 @@ input, textarea { font-family: inherit; color: inherit; }
   overflow: hidden;
   position: relative;
   cursor: default;
-  transition: box-shadow 220ms ease, border-color 220ms ease, transform 220ms ease;
+  transition: box-shadow 220ms ease, border-color 220ms ease;
 }
 .featured:hover {
-  transform: translateY(-2px);
   box-shadow: var(--shadow-3);
   border-color: var(--accent);
 }
@@ -800,24 +802,28 @@ input, textarea { font-family: inherit; color: inherit; }
   outline-offset: 3px;
 }
 .featured-stack {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  align-items: stretch;
   min-width: 0;
   width: 100%;
 }
 .featured-body {
-  padding: 18px 20px;
+  grid-row: 2;
+  padding: 14px 18px 18px;
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
   min-width: 0;
 }
 .featured-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
 .tag {
   font-family: var(--font-display);
-  font-size: 9.5px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: var(--pill);
@@ -842,20 +848,47 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .tag.outline { background: transparent; border: 1px solid var(--border2); }
 
-.featured-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 1.28;
-  letter-spacing: -0.02em;
-  color: var(--dark);
+.featured-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
   margin-bottom: 6px;
 }
+.featured-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.22;
+  letter-spacing: -0.03em;
+  color: var(--dark);
+  margin-bottom: 0;
+  flex: 1;
+  min-width: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.featured-title-arrow {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: var(--mid);
+  opacity: 0.7;
+  transition: transform 220ms ease, opacity 220ms ease, color 220ms ease;
+}
+.featured:hover .featured-title-arrow {
+  opacity: 1;
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
 .featured-desc {
-  font-size: 12.5px;
+  font-size: 13px;
   color: var(--mid);
   line-height: 1.55;
-  margin-bottom: 12px;
+  margin-bottom: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -866,24 +899,24 @@ input, textarea { font-family: inherit; color: inherit; }
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px 12px;
   margin-top: auto;
-  padding-top: 14px;
-  border-top: 1px solid rgba(38, 30, 72, 0.07);
+  padding-top: 16px;
+  border-top: 1px solid rgba(38, 30, 72, 0.09);
 }
 .featured-metrics > div {
   min-width: 0;
 }
 .fm-num {
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 14px;
-  color: var(--mid);
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--dark);
+  letter-spacing: -0.03em;
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
 .fm-lbl {
   font-family: var(--font-sans);
-  font-size: 8.5px;
+  font-size: 9px;
   font-weight: 500;
   color: var(--light);
   letter-spacing: 0.07em;
@@ -897,52 +930,69 @@ input, textarea { font-family: inherit; color: inherit; }
 }
 .featured-thumb {
   position: relative;
-  background: linear-gradient(135deg, #eff0fb 0%, #cbcefa 100%);
-  background-size: 100% 100%;
-  display: grid;
-  place-items: center;
-  place-content: center;
-  padding: 18px 14px;
-  min-height: 220px;
-  min-width: 0;
-  box-sizing: border-box;
-  perspective: 960px;
-  perspective-origin: 50% 50%;
-  transition: background-size 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.featured:hover .featured-thumb {
-  background-size: 115% 115%;
-}
-.featured-thumb .pcard-mock {
-  width: fit-content;
-  max-width: min(168px, 100%);
+  grid-row: 1;
   margin: 0;
-  justify-self: center;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: linear-gradient(135deg, #eff0fb 0%, #cbcefa 100%);
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
+  max-height: min(280px, 32vw);
+  overflow: hidden;
+  isolation: isolate;
+  perspective: 900px;
+  perspective-origin: 50% 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.featured-thumb .pcard-mock img {
-  display: block;
-  width: auto;
-  max-width: min(168px, 100%);
-  height: auto;
-  margin: 0 auto;
-  border-radius: 10px;
-  box-shadow:
-    0 10px 26px rgba(38, 30, 72, .14),
-    0 2px 4px rgba(38, 30, 72, .06);
-  transition: box-shadow 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+/* ── Post-style tags (dot + label, shared: overview + projects) ── */
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
 }
-.featured:hover .pcard-mock {
-  transform: perspective(960px) rotateX(-5deg) rotateY(5deg) translateY(-8px) scale(1.045);
-  filter: drop-shadow(0 16px 28px rgba(112, 89, 220, .18));
+.featured-body > .post-tags,
+.pcard-body > .post-tags {
+  margin-top: auto;
+  padding-top: 14px;
 }
-.featured:hover .pcard-mock::after {
-  opacity: 1;
-  transform: translateX(18%) rotate(0.001deg);
+.post-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--dark);
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border2);
 }
-.featured:hover .featured-thumb .pcard-mock img {
-  box-shadow:
-    0 22px 48px rgba(38, 30, 72, .2),
-    0 8px 16px rgba(112, 89, 220, .12);
+.post-tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background: var(--mid);
+}
+.post-tag-dot.t-accent { background: var(--accent); }
+.post-tag-dot.t-dark { background: var(--dark); }
+.post-tag-dot.t-green { background: var(--green); }
+.post-tag-dot.t-mid { background: var(--mid); opacity: 0.85; }
+
+@media (hover: hover) and (pointer: fine) {
+  @media not (prefers-reduced-motion: reduce) {
+    .featured:hover .featured-thumb .pcard-mock img,
+    .pcard:hover .pcard-thumb .pcard-mock img {
+      transform: perspective(900px) rotateX(-6deg) rotateY(7deg) translate3d(0, -12px, 14px) scale(1.06);
+    }
+  }
 }
 
 /* ── ACTIVITY FEED ── */
@@ -1090,65 +1140,93 @@ input, textarea { font-family: inherit; color: inherit; }
   gap: 14px;
   min-width: 0;
 }
-.proj-grid.list { grid-template-columns: minmax(0, 1fr); }
+.proj-grid:not(.list) .pcard {
+  grid-template-rows: auto 1fr;
+}
 .proj-grid.list .pcard { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); }
-.proj-grid.list .pcard-thumb { min-height: 100%; padding: 18px; }
-.proj-grid.list .pcard-mock { max-width: 220px; }
-.proj-grid.list .pcard-mock img { max-width: 100%; }
-
-.pcard {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  min-width: 0;
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  cursor: pointer;
-  transition: all 220ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  box-shadow: var(--shadow-1);
-}
-.pcard:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-3);
-  border-color: var(--accent);
-}
-.pcard-thumb {
-  position: relative;
-  background: linear-gradient(135deg, #eff0fb 0%, #cbcefa 100%);
-  background-size: 100% 100%;
-  padding: 24px;
-  display: flex; align-items: center; justify-content: center;
-  perspective: 960px;
-  perspective-origin: 50% 42%;
-  transition: background-size 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-}
-/* Grid view: fixed visual slot so chips/titles/descriptions align across cards */
-.proj-grid:not(.list) .pcard-thumb {
-  aspect-ratio: 4 / 3;
-  min-height: clamp(240px, 42vw, 320px);
-  padding: 14px 14px 16px;
-  box-sizing: border-box;
-}
-.proj-grid:not(.list) .pcard-mock {
+.proj-grid.list .pcard-thumb {
+  min-height: 100%;
+  margin: 12px 0 12px 12px;
+  border-radius: 16px;
+  padding: 18px 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: stretch;
-  width: 100%;
-  max-width: min(400px, 98%);
-  margin: 0 auto;
-  min-height: 0;
 }
-.proj-grid:not(.list) .pcard-thumb img {
+.proj-grid.list .pcard-mock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 220px;
+}
+.proj-grid.list .pcard-mock img {
   max-width: 100%;
   max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
 }
-.pcard:hover .pcard-thumb {
-  background-size: 115% 115%;
+
+.pcard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-width: 0;
+  container-type: inline-size;
+  container-name: pcard;
+  align-items: stretch;
+  height: 100%;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 220ms ease, border-color 220ms ease;
+  box-shadow: var(--shadow-1);
+}
+.pcard:hover {
+  box-shadow: var(--shadow-3);
+  border-color: var(--accent);
+}
+.pcard-thumb {
+  position: relative;
+  background: linear-gradient(135deg, #eff0fb 0%, #cbcefa 100%);
+  min-height: 0;
+  perspective: 900px;
+  perspective-origin: 50% 50%;
+}
+/* Projects grid — full width; height from card width (16:9) capped so max-height does not shrink width */
+.proj-grid:not(.list) .pcard-thumb {
+  position: relative;
+  margin: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  width: 100%;
+  min-height: 0;
+  height: min(280px, 100cqw * 9 / 16);
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.proj-grid:not(.list) .pcard-thumb .pcard-mock {
+  position: absolute !important;
+  inset: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.proj-grid:not(.list) .pcard-thumb .pcard-mock img {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  object-fit: contain !important;
+  object-position: center center !important;
 }
 .pcard-mock {
   position: relative;
@@ -1156,88 +1234,82 @@ input, textarea { font-family: inherit; color: inherit; }
   width: 100%;
   max-width: 280px;
   margin: 0 auto;
-  transform-style: preserve-3d;
-  border-radius: 12px;
-  transition:
-    transform 0.55s cubic-bezier(0.23, 1, 0.32, 1),
-    filter 0.45s ease;
-  will-change: transform;
 }
 .pcard-mock::after {
-  content: "";
+  display: none;
+}
+/* Featured thumb: inset mock so PNG breathes; project grid uses full-bleed rules above */
+.featured-thumb .pcard-mock {
   position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  background: linear-gradient(
-    105deg,
-    transparent 0%,
-    transparent 38%,
-    rgba(255, 255, 255, 0.55) 49%,
-    rgba(255, 255, 255, 0.12) 53%,
-    transparent 65%
-  );
-  opacity: 0;
-  transform: translateX(-18%) rotate(0.001deg);
-  transition:
-    opacity 0.45s ease,
-    transform 0.65s cubic-bezier(0.23, 1, 0.32, 1);
-  pointer-events: none;
-  mix-blend-mode: soft-light;
-}
-.pcard:hover .pcard-mock::after {
-  opacity: 1;
-  transform: translateX(18%) rotate(0.001deg);
-}
-.pcard-thumb img {
-  display: block;
-  max-width: 280px;
-  width: 100%;
+  left: 0;
+  right: 0;
+  top: clamp(12px, 4%, 20px);
+  bottom: clamp(12px, 4%, 20px);
+  max-width: none;
+  width: auto;
   height: auto;
-  border-radius: 10px;
-  box-shadow:
-    0 10px 26px rgba(38, 30, 72, .14),
-    0 2px 4px rgba(38, 30, 72, .06);
-  transition: box-shadow 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
-.pcard:hover .pcard-mock {
-  transform: perspective(960px) rotateX(-5deg) rotateY(5deg) translateY(-8px) scale(1.045);
-  filter: drop-shadow(0 16px 28px rgba(112, 89, 220, .18));
+.pcard-thumb .pcard-mock img {
+  display: block;
+  border-radius: 0;
+  box-shadow: none;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.52s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
-.pcard:hover .pcard-thumb img {
-  box-shadow:
-    0 22px 48px rgba(38, 30, 72, .2),
-    0 8px 16px rgba(112, 89, 220, .12);
+/* Featured-thumb img: full fill, centered */
+.featured-thumb .pcard-mock img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center center;
+  border-radius: 0;
+  box-shadow: none;
+  transform: translate3d(0, 0, 0);
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
+.proj-grid:not(.list) .pcard-thumb .pcard-mock img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  object-position: center center;
+}
+.proj-grid.list .pcard-thumb .pcard-mock img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .featured,
-  .pcard-thumb,
-  .featured-thumb,
-  .pcard-mock,
-  .pcard-mock::after,
-  .pcard-thumb img,
-  .featured-thumb .pcard-mock img {
+  .featured-thumb .pcard-mock img,
+  .pcard-thumb .pcard-mock img {
     transition: none !important;
   }
-  .featured:hover {
-    transform: none;
-  }
-  .pcard:hover .pcard-thumb,
-  .featured:hover .featured-thumb {
-    background-size: 100% 100%;
-  }
-  .pcard:hover .pcard-mock,
-  .featured:hover .pcard-mock {
-    transform: none;
-    filter: none;
-  }
-  .pcard:hover .pcard-mock::after,
-  .featured:hover .pcard-mock::after {
-    opacity: 0;
+  .featured:hover .featured-thumb .pcard-mock img,
+  .pcard:hover .pcard-thumb .pcard-mock img {
     transform: none;
   }
 }
 .pcard-status {
   position: absolute;
+  z-index: 2;
   top: 12px; right: 12px;
   display: inline-flex; align-items: center; gap: 5px;
   font-family: var(--font-display);
@@ -1254,72 +1326,62 @@ input, textarea { font-family: inherit; color: inherit; }
 .pcard-status .d { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
 .pcard-status.shipped .d { background: var(--green); }
 .pcard-status.live .d { background: var(--accent); }
-.pcard-body { padding: 16px 18px 20px; min-width: 0; }
-.pcard-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 1.3;
-  color: var(--dark);
-  letter-spacing: -0.2px;
-  margin-top: 8px;
-  overflow-wrap: break-word;
-}
-.pcard-desc {
-  font-size: 12.5px;
-  color: var(--mid);
-  line-height: 1.55;
-  margin-top: 6px;
-  margin-bottom: 2px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-.pcard-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  column-gap: 12px;
-  row-gap: 0;
-  align-items: start;
-  margin-top: 14px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(38, 30, 72, 0.07);
-}
-.pcard-metrics > div {
+.pcard-body {
+  padding: 14px 18px 20px;
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  flex: 1;
+  min-height: 0;
 }
-.pcard-metrics div .n {
-  font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 13px;
-  color: var(--mid);
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.pcard-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
 }
-.pcard-metrics div .l {
-  font-family: var(--font-sans);
-  font-size: 8.5px;
-  font-weight: 500;
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
-  color: var(--light);
-  margin-top: 0;
-  line-height: 1.3;
+.pcard-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 1.25;
+  color: var(--dark);
+  letter-spacing: -0.03em;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-
-/* ── Projects: More UI gallery band (below grid, not a project card) ── */
+.pcard-title-arrow {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  color: var(--mid);
+  opacity: 0.7;
+  transition: transform 220ms ease, opacity 220ms ease, color 220ms ease;
+}
+.pcard:hover .pcard-title-arrow {
+  opacity: 1;
+  color: var(--accent);
+  transform: translate(2px, -2px);
+}
+.pcard-desc {
+  font-size: 13px;
+  color: var(--mid);
+  line-height: 1.6;
+  margin-top: 0;
+  margin-bottom: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .proj-gallery-band {
   margin-top: 24px;
   width: 100%;
@@ -2353,55 +2415,134 @@ button.proj-gallery-item {
   gap: 14px;
 }
 .kcol {
-  background: var(--bg-soft);
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 14px;
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
 }
 .kcol-head {
   display: flex; align-items: center; justify-content: space-between;
-  padding-bottom: 12px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid var(--border);
+  padding: 12px 14px 11px;
 }
+.kcol:nth-child(1) .kcol-head { background: #EDE9FE; }
+.kcol:nth-child(2) .kcol-head { background: #E0F2FE; }
+.kcol:nth-child(3) .kcol-head { background: #DCFCE7; }
+.kcol:nth-child(4) .kcol-head { background: #FEF9C3; }
 .kcol-head .t {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--mid);
+  letter-spacing: 0.09em;
+  color: var(--dark);
 }
 .kcol-head .c {
   font-family: var(--font-mono);
-  font-size: 11px;
-  padding: 1px 6px;
+  font-size: 10px;
+  padding: 2px 8px;
   border-radius: var(--pill);
-  background: var(--bg-accent);
-  color: var(--accent);
+  background: rgba(255,255,255,0.65);
+  color: var(--mid);
+  border: 1px solid rgba(38,30,72,0.09);
 }
+.kcol-body { padding: 10px; }
 .kcard {
-  background: #fff;
+  background: var(--bg-soft);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 12px;
-  margin-bottom: 8px;
-  cursor: grab;
-  transition: all 180ms ease;
+  padding: 12px 13px;
+  margin-bottom: 7px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
-.kcard:hover { border-color: var(--accent); box-shadow: var(--shadow-1); }
+.kcard:last-child { margin-bottom: 0; }
+.kcard:hover { border-color: rgba(112,89,220,0.35); box-shadow: var(--shadow-1); transform: translateY(-1px); }
 .kcard h5 {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 12.5px;
   color: var(--dark);
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  letter-spacing: -0.1px;
 }
 .kcard p {
-  font-size: 11.5px; color: var(--mid); line-height: 1.5;
+  font-size: 11.5px; color: var(--mid); line-height: 1.55;
 }
-.kcard .meta { display:flex; justify-content:space-between; margin-top: 8px; font-family: var(--font-mono); font-size: 10px; color: var(--mid); }
-.kcard .meta span:first-child { color: var(--accent); font-weight: 600; }
+.kcard .meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 10px; padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 10px;
+}
+.kcard .meta span:first-child {
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--accent);
+}
+.kcard .meta span:last-child {
+  background: var(--bg-accent); color: var(--accent);
+  padding: 1px 8px; border-radius: var(--pill); font-size: 9.5px;
+}
+/* ── COLLAB TABS ── */
+.collab-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+.collab-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+}
+.collab-tab {
+  flex: 1;
+  display: flex; align-items: center; gap: 8px;
+  padding: 14px 18px;
+  font-family: var(--font-display);
+  font-size: 13px; font-weight: 600;
+  color: var(--mid);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease, background 160ms ease;
+  background: none;
+  border-top: none; border-left: none; border-right: none;
+  text-align: left;
+}
+.collab-tab svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+.collab-tab:hover { color: var(--dark); background: var(--bg-soft); }
+.collab-tab.active { color: var(--dark); border-bottom: 2px solid var(--accent); }
+.collab-tab.active svg { color: var(--accent); }
+.collab-panel { display: none; }
+.collab-panel.active { display: block; }
+.collab-item {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  min-height: 56px;
+  border-bottom: 1px solid var(--border);
+}
+.collab-item:last-child { border-bottom: none; }
+.collab-item-icon {
+  display: flex; align-items: center; justify-content: center;
+  border-right: 1px solid var(--border);
+}
+.collab-item-icon-box {
+  width: 26px; height: 26px; border-radius: 8px;
+  display: grid; place-items: center;
+  background: var(--accent-soft); color: var(--accent);
+}
+.collab-item-icon-box svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.collab-item-text {
+  padding: 11px 16px;
+  display: flex; flex-direction: column; justify-content: center; gap: 2px;
+}
+.collab-item-main { font-family: var(--font-display); font-size: 13px; font-weight: 600; color: var(--dark); line-height: 1.3; }
+.collab-item-sub { font-size: 12px; color: var(--mid); line-height: 1.4; }
+.collab-item-tag {
+  display: inline-block;
+  font-family: var(--font-mono); font-size: 9.5px; font-weight: 500;
+  padding: 1px 7px; border-radius: var(--pill);
+  background: var(--bg-accent); color: var(--accent);
+  margin-top: 3px; align-self: flex-start;
+}
 
 
 /* Contact / forms */
@@ -2573,7 +2714,729 @@ button.proj-gallery-item {
   color: rgba(255,255,255,0.6);
 }
 
-/* ──────────────────── DETAIL DRAWER ──────────────────── */
+/* ── Dashboard contact · modern inbox ── */
+.dc-inbox-grid {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  gap: 0 22px;
+  margin-top: 8px;
+  min-height: 580px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow-1);
+}
+.dc-msg-sidebar {
+  background: linear-gradient(175deg, #eef0f8 0%, #f0f2fa 52%, #eceef8 100%);
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.contact-ai-rail-note {
+  margin: auto 12px 0;
+  padding: 8px 0;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--mid);
+  border-top: 1px solid var(--border2);
+}
+.contact-ai-rail-footer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 12px 12px;
+}
+.contact-ai-host-av {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.contact-ai-host-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.contact-ai-rail-icons {
+  display: inline-flex;
+  gap: 6px;
+}
+.msg-ico-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  border: 1px solid var(--border2);
+  background: #fff;
+  color: var(--mid);
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.msg-ico-btn:hover {
+  border-color: rgba(112, 89, 220, 0.35);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.msg-ico-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  fill: none;
+}
+.contact-ai-rail-ico-solid {
+  fill: currentColor !important;
+  stroke: none !important;
+}
+.dc-msg-sidebar-head {
+  padding: 16px 14px 12px;
+  border-bottom: 1px solid var(--border2);
+}
+.dc-msg-sidebar-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.dc-msg-sidebar-label svg {
+  width: 16px;
+  height: 16px;
+  stroke: var(--accent);
+  stroke-width: 1.65;
+  fill: none;
+  flex-shrink: 0;
+}
+.dc-msg-sidebar-title {
+  flex: 1;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--dark);
+}
+.dc-msg-count-pill {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(112, 89, 220, 0.1);
+  border: 1px solid rgba(112, 89, 220, 0.2);
+}
+.dc-avatar-cloud {
+  padding: 12px 11px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  flex: 1;
+  overflow-y: auto;
+}
+.dc-av {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 8px rgba(38, 30, 72, 0.1);
+  flex-shrink: 0;
+}
+.dc-avatar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+.dc-avatar-row-mid {
+  min-width: 0;
+  flex: 1;
+}
+.dc-avatar-row-from {
+  display: block;
+  font-size: 11px;
+  color: var(--dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dc-avatar-row-when {
+  font-size: 10px;
+  color: var(--light);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.dc-msg-panel {
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 560px;
+}
+.contact-ai-main {
+  align-items: stretch;
+  justify-content: flex-start;
+}
+.contact-ai-hub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: min(34vh, 268px);
+  padding: 12px 20px 8px;
+  box-sizing: border-box;
+}
+.contact-ai-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+.contact-ai-orb-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 22px;
+  flex-shrink: 0;
+  cursor: default;
+}
+.contact-ai-orb-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -28%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(112, 89, 220, 0.35), transparent 68%);
+  filter: blur(18px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+.contact-ai-orb-spin {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(112,89,220,0.15), var(--accent), #c4b5fd, #6b9ee0, #e8c0f0, var(--accent), rgba(112,89,220,0.15));
+  animation: contact-ai-orb-spin 3s linear infinite, contact-ai-orb-glow 2.8s ease-in-out infinite;
+  filter: blur(1px);
+  box-shadow:
+    0 0 32px rgba(112, 89, 220, 0.28),
+    0 0 16px rgba(112, 89, 220, 0.15);
+  opacity: 0.92;
+}
+.contact-ai-orb-core {
+  position: absolute;
+  inset: 5px;
+  z-index: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  box-shadow:
+    inset 0 0 24px rgba(255, 255, 255, 0.95),
+    inset 0 -8px 20px rgba(112, 89, 220, 0.06),
+    0 1px 2px rgba(38, 30, 72, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contact-ai-orb-core img {
+  width: 48%;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+  animation: contact-ai-logo-idle 3.2s ease-in-out infinite;
+}
+.contact-ai-orb-wrap:hover .contact-ai-orb-core img,
+.contact-ai-orb-wrap:focus-visible .contact-ai-orb-core img {
+  animation: none;
+  transform: translate(5px, -7px) scale(1.1);
+}
+@keyframes contact-ai-orb-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes contact-ai-orb-glow {
+  0%, 100% { opacity: 0.78; filter: blur(1.2px); }
+  50% { opacity: 1; filter: blur(0.5px); }
+}
+@keyframes contact-ai-logo-idle {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(0, -2px) scale(1.03); }
+}
+.contact-ai-orb-wrap:focus-visible {
+  outline: none;
+}
+.contact-ai-orb-wrap:focus-visible .contact-ai-orb-core {
+  box-shadow:
+    inset 0 0 24px rgba(255, 255, 255, 0.95),
+    0 0 0 3px rgba(112, 89, 220, 0.25);
+}
+.contact-ai-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.35rem, 3.5vw, 1.75rem);
+  color: var(--dark);
+  letter-spacing: -0.03em;
+  line-height: 1.28;
+  margin: 0 0 12px;
+  text-align: center;
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.contact-ai-heading em {
+  font-style: italic;
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.72em;
+  line-height: 1.2;
+}
+.contact-ai-heading-sub {
+  font-size: clamp(1.05rem, 2.8vw, 1.35rem);
+  font-weight: 600;
+  color: var(--dark);
+  display: block;
+}
+.contact-ai-micro {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--mid);
+  max-width: 440px;
+  margin: -4px 0 0;
+  text-align: center;
+}
+.dc-msg-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 11px 16px 11px 18px;
+  border-bottom: 1px solid var(--border2);
+  background: linear-gradient(180deg, #fff 0%, #fafbff 100%);
+}
+.dc-msg-panel-head-main {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+.dc-online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #22c55e;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
+}
+.dc-msg-panel-head strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+}
+.dc-msg-panel-head .muted {
+  display: block;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--mid);
+}
+.dc-msg-panel-tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  max-width: 100%;
+}
+.dc-tool {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid var(--border2);
+  background: #fff;
+  display: grid;
+  place-items: center;
+  color: var(--mid);
+  cursor: pointer;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+}
+.dc-tool:hover {
+  border-color: rgba(112, 89, 220, 0.35);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+.dc-tool svg {
+  width: 16px;
+  height: 16px;
+}
+.dc-msg-feed {
+  flex: 1;
+  overflow-y: auto;
+  padding: 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 220px;
+  max-height: 320px;
+  background: linear-gradient(180deg, #fafbfd 0%, #fff 30%);
+}
+.contact-ai-thread:empty {
+  display: none !important;
+}
+.contact-ai-thread:not(:empty) {
+  flex: 0 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  min-height: 100px;
+  max-height: min(260px, 36vh);
+  margin: 0 12px 12px;
+  padding: 14px 16px !important;
+  border-radius: 14px;
+  border: 1px solid var(--border2);
+  background: linear-gradient(180deg, #fbfbfe 0%, #fff 40%);
+  box-sizing: border-box;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+.dc-msg-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  max-width: 92%;
+}
+.dc-msg-row.is-me {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+.dc-msg-avatar {
+  width: 31px;
+  height: 31px;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+.dc-msg-avatar.is-paux {
+  background: linear-gradient(135deg, #7059dc, #4934a8);
+}
+.dc-msg-bubble {
+  padding: 11px 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--dark);
+}
+.dc-msg-row:not(.is-me) .dc-msg-bubble {
+  background: #f3f5fa;
+  border-bottom-left-radius: 4px;
+}
+.dc-msg-row.is-me .dc-msg-bubble {
+  background: linear-gradient(135deg, rgba(112, 89, 220, 0.11), rgba(112, 89, 220, 0.05));
+  border: 1px solid rgba(112, 89, 220, 0.16);
+  border-bottom-right-radius: 4px;
+}
+.dc-msg-meta {
+  font-size: 10px;
+  color: var(--light);
+  margin-top: 4px;
+}
+.dc-typing-dot {
+  display: inline-flex;
+  gap: 4px;
+}
+.dc-typing-dot span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0.38;
+  animation: dcDots 1.1s ease-in-out infinite;
+}
+.dc-typing-dot span:nth-child(2) { animation-delay: 0.15s; }
+.dc-typing-dot span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes dcDots {
+  0%, 80%, 100% { opacity: 0.38; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-3px); }
+}
+.dc-msg-sheet {
+  border-top: 1px solid var(--border);
+  padding: 14px 16px 16px;
+  background: #fff;
+}
+.contact-ai-panel {
+  width: 100%;
+  max-width: none;
+  margin: 28px 0 0;
+  border-radius: 16px;
+  border: 1px solid var(--border2);
+  border-top-color: #fff;
+  background: linear-gradient(180deg, var(--bg-soft) 0%, #fff 100%);
+  box-shadow: 0 1px 0 rgba(38, 30, 72, 0.04);
+  padding: 16px 20px 18px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+.dc-after-send {
+  margin: 16px;
+  padding: 22px 18px 20px;
+  text-align: center;
+  border-radius: 16px;
+  border: 1px solid var(--border2);
+  background: linear-gradient(180deg, var(--bg-soft) 0%, #fff 100%);
+  box-sizing: border-box;
+}
+.dc-after-send[hidden] { display: none !important; }
+.dc-after-send-lead {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--mid);
+  margin: 0 auto 16px;
+  max-width: 360px;
+}
+.dc-after-send .btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 28px;
+  padding-right: 28px;
+  text-align: center;
+}
+.dc-sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.dc-sheet-grid .full { grid-column: 1 / -1; }
+.dc-sheet-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--mid);
+  margin-bottom: 5px;
+}
+.dc-sheet-input,
+.dc-msg-sheet textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font-size: 13px;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--bg-soft);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.dc-sheet-input:focus,
+.dc-msg-sheet textarea:focus {
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.dc-msg-sheet textarea {
+  min-height: 88px;
+  resize: vertical;
+  font-family: inherit;
+}
+.dc-user-peek + .dc-msg-compose-box {
+  border-left: none;
+}
+.dc-msg-compose-box {
+  margin-top: 12px;
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fafbfd;
+}
+.dc-msg-compose-box:focus-within {
+  border-color: rgba(112, 89, 220, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: #fff;
+}
+.dc-msg-compose-box textarea.dc-msg-only {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 84px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  padding: 12px;
+  resize: vertical;
+}
+.dc-msg-compose-box textarea.dc-msg-only:focus {
+  box-shadow: none;
+}
+.dc-compose-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 8px;
+  border-top: none;
+  background: #fafbfd;
+}
+.dc-compose-tools {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.dc-emoji-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.dc-emoji-pop {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+  width: max-content;
+  max-width: min(280px, calc(100vw - 40px));
+  padding: 8px;
+  margin: 0;
+  background: #fff;
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(38, 30, 72, 0.12);
+  z-index: 30;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+.dc-emoji-pop[hidden] {
+  display: none !important;
+}
+.dc-emoji-pop .dc-emoji-choice {
+  appearance: none;
+  -webkit-appearance: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 10px;
+  background: rgba(112, 89, 220, 0.06);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.dc-emoji-pop .dc-emoji-choice:hover {
+  background: rgba(112, 89, 220, 0.14);
+}
+.dc-msg-split {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.dc-user-peek {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(145deg, #b4a9f5, #7059dc 60%, #4f42b0);
+  flex-shrink: 0;
+}
+.dc-sheet-compose-row {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  min-width: 0;
+}
+@media (max-width: 520px) {
+  .dc-sheet-compose-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .dc-sheet-compose-row .dc-user-peek + .dc-msg-compose-box {
+    border-left: 1px solid var(--border2);
+  }
+  .dc-compose-bar {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .dc-compose-bar .btn {
+    flex: 1 1 100%;
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+}
+@media (max-width: 940px) {
+  .dc-inbox-grid {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    row-gap: 22px;
+    column-gap: 0;
+  }
+  .dc-msg-sidebar {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: none;
+  }
+  .dc-avatar-cloud {
+    max-height: 220px;
+  }
+  .dc-sheet-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .drawer-backdrop {
   position: fixed; inset: 0;
   background: rgba(38,30,72,0.45);
@@ -3853,11 +4716,10 @@ button.proj-gallery-item {
     align-items: flex-start;
   }
   .row-3 { grid-template-columns: 1fr; }
-  .featured { grid-template-columns: 1fr; }
-  .featured-thumb { min-height: 220px; }
-  .featured-thumb .pcard-mock,
-  .featured-thumb .pcard-mock img {
-    max-width: min(200px, 100%);
+  .featured-stack { grid-template-columns: 1fr; }
+  .featured {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr;
   }
   .about-grid { grid-template-columns: 1fr; }
   .about-grid > .about-profile-col,
@@ -3870,7 +4732,7 @@ button.proj-gallery-item {
     align-self: stretch;
     width: 100%;
   }
-  .contact-grid { grid-template-columns: 1fr; }
+  .dc-inbox-grid { grid-template-columns: 1fr; }
   .kanban { grid-template-columns: 1fr; }
   .view-wrap { padding: 20px 16px; }
   .topbar {
@@ -3898,9 +4760,19 @@ button.proj-gallery-item {
 @media (max-width: 639px) {
   .proj-grid:not(.list) { grid-template-columns: minmax(0, 1fr); }
   .proj-grid.list .pcard { grid-template-columns: minmax(0, 1fr); }
-  .proj-grid.list .pcard-thumb { min-height: 160px; }
+  .proj-grid.list .pcard-thumb {
+    margin: 12px 12px 0;
+    min-height: 160px;
+    align-self: stretch;
+    justify-self: stretch;
+    width: auto;
+  }
   .proj-grid.list .pcard-mock { max-width: 100%; }
-  .proj-grid.list .pcard-mock img { max-width: 100%; }
+  .proj-grid.list .pcard-mock img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
   .contact-side-inner { padding: 22px 18px; }
   .contact-side .meta { flex-wrap: wrap; gap: 12px 20px; }
   .proj-gallery-band-inner { padding: 18px 16px 16px; }
@@ -4178,45 +5050,42 @@ button.proj-gallery-item {
         <div class="row row-overview">
           <div class="featured-stack">
             <article class="featured" data-project-id="enterprise-saas" role="button" tabindex="0" aria-label="Open case study: Enterprise compliance platform">
-              <div class="featured-body">
-                <div class="featured-tags">
-                  <span class="tag ac">Enterprise SaaS</span>
-                  <span class="tag ac">Lead Product Designer</span>
-                  <span class="tag">UX Architecture</span>
-                </div>
-                <div class="featured-title">Enterprise compliance platform</div>
-                <p class="featured-desc">Dense legal and ops requirements turned into guided workflows — so teams stay compliant without living in spreadsheets.</p>
-                <div class="featured-metrics">
-                  <div><div class="fm-num">10</div><div class="fm-lbl">Modules</div></div>
-                  <div><div class="fm-num">0</div><div class="fm-lbl">Unsafe paths</div></div>
-                  <div><div class="fm-num">850+</div><div class="fm-lbl">Rows cut</div></div>
-                </div>
-              </div>
               <div class="featured-thumb">
                 <div class="pcard-mock">
                   <img src="/Public/Images/dashboard-saas.png" alt="Enterprise SaaS dashboard">
                 </div>
               </div>
+              <div class="featured-body">
+                <div class="featured-title-row">
+                  <div class="featured-title">Enterprise compliance platform</div>
+                  <svg class="featured-title-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+                </div>
+                <p class="featured-desc">Dense legal and ops requirements turned into guided workflows — so teams stay compliant without living in spreadsheets.</p>
+                <div class="post-tags">
+                  <span class="post-tag"><span class="post-tag-dot t-accent"></span>Enterprise SaaS</span>
+                  <span class="post-tag"><span class="post-tag-dot t-accent"></span>Lead Product Designer</span>
+                  <span class="post-tag"><span class="post-tag-dot t-mid"></span>UX Architecture</span>
+                </div>
+              </div>
             </article>
 
             <article class="featured" data-project-id="joblink" role="button" tabindex="0" aria-label="Open case study: JobLink">
-              <div class="featured-body">
-                <div class="featured-tags">
-                  <span class="tag ac">UX Research</span>
-                  <span class="tag ac">Mobile · iOS</span>
-                  <span class="tag">A/B Testing</span>
-                </div>
-                <div class="featured-title">JobLink — multi-profile job search</div>
-                <p class="featured-desc">Full research-to-UI process — surveys, competitive analysis, A/B testing, and an iOS design that scored 98% intuitive vs 67% for Indeed.</p>
-                <div class="featured-metrics">
-                  <div><div class="fm-num">60%</div><div class="fm-lbl">Higher task success</div></div>
-                  <div><div class="fm-num">98%</div><div class="fm-lbl">Rated intuitive</div></div>
-                  <div><div class="fm-num">3 min</div><div class="fm-lbl">2nd profile + apply</div></div>
-                </div>
-              </div>
               <div class="featured-thumb">
                 <div class="pcard-mock">
                   <img src="/Public/Images/joblink.png" alt="JobLink multi-profile job search app">
+                </div>
+              </div>
+              <div class="featured-body">
+                <div class="featured-title-row">
+                  <div class="featured-title">JobLink — multi-profile job search</div>
+                  <svg class="featured-title-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+                </div>
+                <p class="featured-desc">Full research-to-UI process — surveys, competitive analysis, A/B testing, and an iOS design that scored 98% intuitive vs 67% for Indeed.</p>
+                <div class="post-tags">
+                  <span class="post-tag"><span class="post-tag-dot t-accent"></span>UX Research</span>
+                  <span class="post-tag"><span class="post-tag-dot t-accent"></span>Mobile · iOS</span>
+                  <span class="post-tag"><span class="post-tag-dot t-mid"></span>A/B Testing</span>
+                  <span class="post-tag"><span class="post-tag-dot t-mid"></span>Concept</span>
                 </div>
               </div>
             </article>
@@ -4756,62 +5625,179 @@ button.proj-gallery-item {
         <div class="kanban">
           <div class="kcol">
             <div class="kcol-head"><span class="t">1 · Discover</span><span class="c">Phase 1</span></div>
-            <div class="kcard"><h5>Kick-off &amp; alignment</h5><p>Understand product goals, users, technical constraints and team rituals.</p><div class="meta"><span>OUTPUT</span><span>brief</span></div></div>
-            <div class="kcard"><h5>Heuristic audit</h5><p>Review product surface, key flows and any existing design system.</p><div class="meta"><span>OUTPUT</span><span>findings</span></div></div>
-            <div class="kcard"><h5>Stakeholder map</h5><p>Who decides, who builds, who's blocked. Where the friction lives.</p><div class="meta"><span>OUTPUT</span><span>FigJam board</span></div></div>
+            <div class="kcol-body">
+              <div class="kcard">
+                <h5>Kick-off &amp; alignment</h5>
+                <p>Product goals, user assumptions, tech constraints. I read the brief and challenge it.</p>
+                <div class="meta"><span>Output</span><span>brief</span></div>
+              </div>
+              <div class="kcard">
+                <h5>Heuristic audit</h5>
+                <p>Current surface, key flows, existing design system — what's broken and what's worth keeping.</p>
+                <div class="meta"><span>Output</span><span>findings</span></div>
+              </div>
+              <div class="kcard">
+                <h5>Stakeholder map</h5>
+                <p>Who decides, who builds, who's blocked. Where the friction lives before design starts.</p>
+                <div class="meta"><span>Output</span><span>FigJam board</span></div>
+              </div>
+            </div>
           </div>
 
           <div class="kcol">
             <div class="kcol-head"><span class="t">2 · Define</span><span class="c">Phase 2</span></div>
-            <div class="kcard"><h5>User research</h5><p>Generative interviews, surveys or analytics review — synthesised into themes.</p><div class="meta"><span>OUTPUT</span><span>insights</span></div></div>
-            <div class="kcard"><h5>IA &amp; user flows</h5><p>The bones. Where every screen lives, what it does, how users move.</p><div class="meta"><span>OUTPUT</span><span>sitemap · flows</span></div></div>
-            <div class="kcard"><h5>Hypotheses &amp; metrics</h5><p>What we're testing, what success looks like, how we'll know.</p><div class="meta"><span>OUTPUT</span><span>spec</span></div></div>
+            <div class="kcol-body">
+              <div class="kcard">
+                <h5>User research</h5>
+                <p>Interviews, surveys or analytics — synthesised into patterns, not just quotes.</p>
+                <div class="meta"><span>Output</span><span>insights</span></div>
+              </div>
+              <div class="kcard">
+                <h5>IA &amp; user flows</h5>
+                <p>Where every screen lives, what it does, how users move. Architecture before pixels.</p>
+                <div class="meta"><span>Output</span><span>sitemap · flows</span></div>
+              </div>
+              <div class="kcard">
+                <h5>Hypotheses &amp; metrics</h5>
+                <p>What we're testing, what success looks like, how we'll know it worked.</p>
+                <div class="meta"><span>Output</span><span>spec</span></div>
+              </div>
+            </div>
           </div>
 
           <div class="kcol">
             <div class="kcol-head"><span class="t">3 · Design</span><span class="c">Phase 3</span></div>
-            <div class="kcard"><h5>Wireframes</h5><p>Low-fi to validate logic and IA before any pixels are pushed.</p><div class="meta"><span>OUTPUT</span><span>Figma</span></div></div>
-            <div class="kcard"><h5>Hi-fi UI</h5><p>Production-ready screens, tokens, components, states and motion.</p><div class="meta"><span>OUTPUT</span><span>design system</span></div></div>
-            <div class="kcard"><h5>Usability testing</h5><p>Maze or moderated tests. Iterate based on what users actually do.</p><div class="meta"><span>OUTPUT</span><span>test report</span></div></div>
+            <div class="kcol-body">
+              <div class="kcard">
+                <h5>Wireframes</h5>
+                <p>Low-fi to validate logic and IA. No pixels until the structure holds.</p>
+                <div class="meta"><span>Output</span><span>Figma</span></div>
+              </div>
+              <div class="kcard">
+                <h5>Hi-fi UI</h5>
+                <p>Production-ready screens — tokens, components, states, motion. Built to hand off.</p>
+                <div class="meta"><span>Output</span><span>design system</span></div>
+              </div>
+              <div class="kcard">
+                <h5>Usability testing</h5>
+                <p>Maze or moderated. Iterate on what users actually do, not what they say they'd do.</p>
+                <div class="meta"><span>Output</span><span>test report</span></div>
+              </div>
+            </div>
           </div>
 
           <div class="kcol">
             <div class="kcol-head"><span class="t">4 · Ship</span><span class="c">Phase 4</span></div>
-            <div class="kcard"><h5>Dev handoff</h5><p>Specs, motion, edge cases. Pair with engineers throughout build.</p><div class="meta"><span>OUTPUT</span><span>handoff</span></div></div>
-            <div class="kcard"><h5>QA &amp; polish</h5><p>Review staging until it matches Figma. No drift, no compromises on detail.</p><div class="meta"><span>OUTPUT</span><span>QA log</span></div></div>
-            <div class="kcard"><h5>Post-launch review</h5><p>Look at the metrics. What worked, what to iterate, what ships next.</p><div class="meta"><span>OUTPUT</span><span>retrospective</span></div></div>
+            <div class="kcol-body">
+              <div class="kcard">
+                <h5>Dev handoff</h5>
+                <p>Specs, motion, edge cases. I pair with engineers — not hand off and disappear.</p>
+                <div class="meta"><span>Output</span><span>handoff doc</span></div>
+              </div>
+              <div class="kcard">
+                <h5>QA &amp; polish</h5>
+                <p>Review staging until it matches Figma. No drift, no negotiated corners.</p>
+                <div class="meta"><span>Output</span><span>QA log</span></div>
+              </div>
+              <div class="kcard">
+                <h5>Post-launch review</h5>
+                <p>What the metrics say. What to keep, what to cut, what ships in the next cycle.</p>
+                <div class="meta"><span>Output</span><span>retrospective</span></div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div class="row" style="margin-top: 14px">
-          <div class="card">
-            <div class="card-head"><div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>
-              How I collaborate
-            </div></div>
-            <div class="card-body">
-              <ul class="drawer-list">
-                <li>Embed with the team — async-first, sync when it matters</li>
-                <li>Pair closely with PMs, engineers and stakeholders</li>
-                <li>Communicate trade-offs early and clearly</li>
-                <li>Document decisions in Figma, Notion or wherever the team lives</li>
-                <li>Bring tools (Figma · Maze · Cursor · Claude) but adapt to yours</li>
-              </ul>
+        <div class="row" style="margin-top: 14px; align-items: stretch;">
+          <div class="collab-card" style="display:flex; flex-direction:column;">
+            <div class="collab-tabs">
+              <button class="collab-tab active" style="pointer-events:none; cursor:default; border-bottom: none; color: var(--dark);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                How I collaborate
+              </button>
+            </div>
+            <div class="collab-panel active">
+              <div class="collab-item">
+                <div class="collab-item-icon"><div class="collab-item-icon-box"><svg viewBox="0 0 24 24"><path d="M8 6v6"/><path d="M15 6v6"/><path d="M2 12h19.6"/><path d="M18 18v-2.5a3.5 3.5 0 0 0-7 0V18"/></svg></div></div>
+                <div class="collab-item-text">
+                  <span class="collab-item-main">Embedded, not external</span>
+                  <span class="collab-item-sub">I work inside your rhythm — async by default, sync when it moves things forward</span>
+                </div>
+              </div>
+              <div class="collab-item">
+                <div class="collab-item-icon"><div class="collab-item-icon-box"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div></div>
+                <div class="collab-item-text">
+                  <span class="collab-item-main">Paired with PMs &amp; engineers</span>
+                  <span class="collab-item-sub">Design decisions happen in the open — no black box, no surprises at handoff</span>
+                </div>
+              </div>
+              <div class="collab-item">
+                <div class="collab-item-icon"><div class="collab-item-icon-box"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></div></div>
+                <div class="collab-item-text">
+                  <span class="collab-item-main">Trade-offs on the table early</span>
+                  <span class="collab-item-sub">Scope, constraints, risks — named before they become problems</span>
+                </div>
+              </div>
+              <div class="collab-item">
+                <div class="collab-item-icon"><div class="collab-item-icon-box"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div></div>
+                <div class="collab-item-text">
+                  <span class="collab-item-main">Decisions documented</span>
+                  <span class="collab-item-sub">In Figma, Notion, or wherever your team already lives — not in my inbox</span>
+                </div>
+              </div>
+              <div class="collab-item">
+                <div class="collab-item-icon"><div class="collab-item-icon-box"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div></div>
+                <div class="collab-item-text">
+                  <span class="collab-item-main">Tools that fit your stack</span>
+                  <span class="collab-item-sub">Figma · Maze · Cursor · Claude — I bring what works, and drop what doesn't</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="card">
-            <div class="card-head"><div class="card-title">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-              What I bring to a team
-            </div></div>
-            <div class="card-body">
-              <ul class="drawer-list">
-                <li>End-to-end ownership — research through dev handoff</li>
-                <li>Systems thinking from a graphic-design + people-ops background</li>
-                <li>Comfort with regulated, complex domains (compliance, HR, legal)</li>
-                <li>AI/LLM UX patterns — making model behaviour visible and trustworthy</li>
-                <li>HTML/CSS literacy — I can read what engineers ship and align to it</li>
-              </ul>
+
+          <div class="collab-card" style="display:flex; flex-direction:column;">
+            <div class="collab-tabs">
+              <button class="collab-tab active" style="pointer-events:none; cursor:default; border-bottom: none; color: var(--dark);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                What I bring to a team
+              </button>
+            </div>
+            <div class="collab-panel active" style="flex:1;">
+              <div class="collab-item" style="grid-template-columns: 1fr;">
+                <div class="collab-item-text">
+                  <span class="collab-item-main">End-to-end ownership</span>
+                  <span class="collab-item-sub">Research through dev handoff — one person accountable for the full arc</span>
+                  <span class="collab-item-tag">full cycle</span>
+                </div>
+              </div>
+              <div class="collab-item" style="grid-template-columns: 1fr;">
+                <div class="collab-item-text">
+                  <span class="collab-item-main">Systems thinking</span>
+                  <span class="collab-item-sub">Graphic design + people-ops background — I design the logic, not just the screen</span>
+                  <span class="collab-item-tag">org design</span>
+                </div>
+              </div>
+              <div class="collab-item" style="grid-template-columns: 1fr;">
+                <div class="collab-item-text">
+                  <span class="collab-item-main">Regulated domains</span>
+                  <span class="collab-item-sub">Compliance, HR, legal — complex constraints translated into usable products</span>
+                  <span class="collab-item-tag">complex UX</span>
+                </div>
+              </div>
+              <div class="collab-item" style="grid-template-columns: 1fr;">
+                <div class="collab-item-text">
+                  <span class="collab-item-main">AI/LLM UX patterns</span>
+                  <span class="collab-item-sub">Making model behaviour visible, predictable, trustworthy — not just functional</span>
+                  <span class="collab-item-tag">AI-native</span>
+                </div>
+              </div>
+              <div class="collab-item" style="grid-template-columns: 1fr;">
+                <div class="collab-item-text">
+                  <span class="collab-item-main">HTML/CSS literate</span>
+                  <span class="collab-item-sub">I can read what engineers ship — and catch the drift before it becomes debt</span>
+                  <span class="collab-item-tag">dev-adjacent</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -4827,63 +5813,99 @@ button.proj-gallery-item {
           </div>
         </div>
 
-        <div class="contact-grid">
-          <form class="form-card" id="contact-form" onsubmit="event.preventDefault(); showToast('Message ready — click your email client to send.'); window.location.href='mailto:paulaalonso.design@gmail.com?subject=' + encodeURIComponent('Role enquiry · ' + (this.elements.name.value||'') + (window.__cfRoleType?(' · '+window.__cfRoleType):'')) + '&body=' + encodeURIComponent(this.elements.message.value||'');">
-            <div class="field">
-              <label for="cf-name">Your name</label>
-              <input id="cf-name" name="name" type="text" placeholder="Jane Recruiter" required>
-            </div>
-            <div class="field">
-              <label for="cf-email">Email</label>
-              <input id="cf-email" name="email" type="email" placeholder="you@company.com" required>
-            </div>
-            <div class="field">
-              <label>Role type</label>
-              <div class="chips" id="cf-role-chips" role="group" aria-label="Role type">
-                <button type="button" class="chip" data-role="Full-time">Full-time</button>
-                <button type="button" class="chip" data-role="Contract">Contract</button>
-                <button type="button" class="chip" data-role="Freelance">Freelance</button>
-                <button type="button" class="chip" data-role="Advisory">Advisory</button>
-                <button type="button" class="chip" data-role="Other">Other</button>
+        <div class="dc-inbox-grid">
+          <aside class="dc-msg-sidebar">
+            <div class="dc-msg-sidebar-head">
+              <div class="dc-msg-sidebar-label">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <p class="dc-msg-sidebar-title">Messages</p>
+                <span class="dc-msg-count-pill" id="dc-sent-pill">0</span>
               </div>
             </div>
-            <div class="field">
-              <label for="cf-message">A bit about the role</label>
-              <textarea id="cf-message" name="message" rows="5" placeholder="Team, product stage, location, salary band — anything that helps me understand the fit."></textarea>
+            <div class="dc-avatar-cloud" id="dc-avatar-cloud"></div>
+            <p class="contact-ai-rail-note">Send your message here - others already reached out this way.</p>
+            <div class="contact-ai-rail-footer">
+              <div class="contact-ai-host-av">
+                <img src="/Public/Images/paula.jpg" alt="Paula Alonso">
+              </div>
+              <div class="contact-ai-rail-icons" aria-label="Quick contact">
+                <a class="msg-ico-btn" href="mailto:contact@pauxdesign.uk" title="Email" aria-label="Email">
+                  <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                </a>
+                <a class="msg-ico-btn" href="https://www.linkedin.com/in/paula-alonso-design/" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn">
+                  <svg class="contact-ai-rail-ico-solid" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+              </div>
             </div>
-            <button type="submit" class="btn btn-dark" style="width:100%; justify-content: center">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
-              Send message
-            </button>
-          </form>
+          </aside>
 
-          <div class="contact-side-shell">
-            <div class="contact-side-shine" aria-hidden="true"></div>
-            <aside class="contact-side">
-              <div class="contact-side-inner">
-                <h3>Reply within<br><em>24 hours.</em></h3>
-                <p>Reach me directly by email. Tell me about the role, team and product — I'll reply with availability, expectations and next steps.</p>
-
-                <a class="item" href="mailto:paulaalonso.design@gmail.com">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-                  <span>paulaalonso.design@gmail.com</span>
-                </a>
-                <a class="item" href="https://www.linkedin.com/in/paula-alonso-design/" target="_blank" rel="noopener">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                  <span>linkedin.com/in/paula-alonso-design</span>
-                </a>
-                <a class="item" href="/dashboard/paula_alonso_cv.html" target="_blank" rel="noopener">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
-                  <span>Download / view CV</span>
-                </a>
-
-                <div class="meta">
-                  <span>London · GMT</span>
-                  <span>Available May 2026</span>
-                  <span>Spanish · English</span>
+          <div class="dc-msg-panel contact-ai-main">
+            <div class="contact-ai-hub">
+              <div class="contact-ai-hero">
+                <div class="contact-ai-orb-wrap" aria-hidden="true">
+                  <div class="contact-ai-orb-spin"></div>
+                  <div class="contact-ai-orb-core">
+                    <img src="/Public/Images/logo.png" alt="">
+                  </div>
                 </div>
+                <h2 class="contact-ai-heading"><em>Good to see you</em><span class="contact-ai-heading-sub">How can I help you?</span></h2>
+                <p class="contact-ai-micro">Tell me what challenge your product is facing - or what you'd like to improve.</p>
               </div>
-            </aside>
+            </div>
+
+            <div class="dc-msg-feed contact-ai-thread" id="dc-dash-feed" role="log" aria-live="polite" aria-relevant="additions"></div>
+
+            <div class="dc-msg-sheet contact-ai-panel" id="dc-contact-form-panel">
+              <form id="dashboard-contact-form" action="#" novalidate>
+                <div class="dc-sheet-grid">
+                  <div>
+                    <label class="dc-sheet-label" for="cf-name">Name</label>
+                    <input class="dc-sheet-input" id="cf-name" name="name" type="text" placeholder="Your name" required autocomplete="name">
+                  </div>
+                  <div>
+                    <label class="dc-sheet-label" for="cf-email">Email</label>
+                    <input class="dc-sheet-input" id="cf-email" name="email" type="email" placeholder="you@email.com" required autocomplete="email">
+                  </div>
+                  <div class="full">
+                    <label class="dc-sheet-label" for="cf-company">Company (optional)</label>
+                    <input class="dc-sheet-input" id="cf-company" name="company" type="text" placeholder="Company" autocomplete="organization">
+                  </div>
+                </div>
+
+                <div class="dc-sheet-compose-row">
+                  <div class="dc-user-peek" id="dc-user-letter" aria-hidden="true">?</div>
+                  <div class="dc-msg-compose-box" style="flex:1;min-width:0;margin-top:0">
+                    <label class="dc-sheet-label" for="cf-message" style="display:none">Message</label>
+                    <textarea class="dc-msg-only" id="cf-message" name="message" required placeholder="What would you like to discuss?"></textarea>
+                    <div class="dc-compose-bar">
+                      <div class="dc-compose-tools">
+                        <div class="dc-emoji-wrap">
+                          <button type="button" class="dc-tool" style="width:34px;height:34px" id="dc-composer-emoji-btn" aria-label="Choose emoji" aria-expanded="false" aria-haspopup="true" aria-controls="dc-composer-emoji-pop">
+                            <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+                          </button>
+                          <div class="dc-emoji-pop" id="dc-composer-emoji-pop" role="menu" hidden>
+                            <button type="button" class="dc-emoji-choice" role="menuitem" data-emoji="🙂" aria-label="Smile">🙂</button>
+                            <button type="button" class="dc-emoji-choice" role="menuitem" data-emoji="👋" aria-label="Wave">👋</button>
+                            <button type="button" class="dc-emoji-choice" role="menuitem" data-emoji="✨" aria-label="Sparkles">✨</button>
+                            <button type="button" class="dc-emoji-choice" role="menuitem" data-emoji="💡" aria-label="Idea">💡</button>
+                            <button type="button" class="dc-emoji-choice" role="menuitem" data-emoji="🙏" aria-label="Thanks">🙏</button>
+                            <button type="button" class="dc-emoji-choice" role="menuitem" data-emoji="🚀" aria-label="Launch">🚀</button>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-dark" id="dashboard-contact-submit">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
+                        Send message
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div id="dc-after-send" class="dc-after-send" hidden aria-hidden="true">
+              <p class="dc-after-send-lead" id="dc-after-send-lead">Your message is on its way. If you need anything else, you can always come back from the home page.</p>
+              <a href="/" class="btn btn-dark" id="dc-home-btn">Back to home</a>
+            </div>
           </div>
         </div>
       </section>
@@ -4985,7 +6007,7 @@ const PROJECTS = [
       {n: "850+", l: "Excel rows replaced"}
     ],
     drawer: {
-      subtitle: "Designing a compliance-first SaaS that transforms dense legal complexity into intuitive workflows non-technical users can navigate confidently.",
+      subtitle: "A compliance-first SaaS built for law firms and HR teams — where getting the UX wrong has legal consequences.",
       meta: [
         { label: "Role", value: "Lead Product Designer / UX Architect" },
         { label: "Scope", value: "End-to-end product design" },
@@ -4993,9 +6015,9 @@ const PROJECTS = [
         { label: "Year", value: "2025–2026" }
       ],
       nda: "Due to a signed NDA, all interface visuals have been recreated as representative abstractions. Screen content, workflows, and data structures reflect the actual system design; names, entities, and identifying details are fictional.",
-      lead: "A SaaS platform for organisational management and regulatory compliance — covering GDPR, occupational health and cross-departmental processes. The product required granular access control, strict data separation between organisations, and auditability designed into every user action.",
+      lead: "A law firm came with a real problem: their entire compliance operation lived in Excel. 850 rows. Manual reminders. Legal documents written for lawyers that non-legal staff had to follow — without making a single regulatory mistake. The ask was to turn that into a SaaS covering GDPR, occupational health, HR and cross-departmental workflows, for multiple organisations, each with different roles and legal responsibilities.",
       body: [
-        "I led the project end-to-end: from translating legal requirements into product structure, to defining the IA, designing all 10 modules, and working directly with stakeholders and engineering to ship it."
+        "I was brought in as Lead Product Designer and UX Architect. I owned the project end-to-end: reading the regulatory frameworks, translating them into product logic, defining the IA, designing all 10 modules, and working directly with stakeholders and engineering until it shipped."
       ],
       sections: [
         {
@@ -5004,55 +6026,85 @@ const PROJECTS = [
           imgCaption: "Platform dashboard — compliance status across all organisations"
         }
       ],
-      quote: "How do you translate 850 rows of Excel and dense legal documents — written for lawyers — into a system that non-technical users can follow without ever making a compliance error?",
+      quote: "How do you translate 850 rows of Excel and dense legal documents — written for lawyers — into a system non-technical users can follow without ever making a compliance error?",
       beforeAfter: {
-        leftTitle: "Before — the problems",
-        rightTitle: "After — the vision",
+        leftTitle: "Before",
+        rightTitle: "The vision",
         left: [
-          "850+ Excel rows tracking certifications manually",
+          "850+ rows of Excel tracking certifications manually",
           "Legal documents written for lawyers, not end users",
-          "Manual email reminders for every deadline",
-          "No visibility into who approved or signed what",
-          "Undocumented, error-prone audit processes"
+          "Manual email reminders for every deadline and approval",
+          "No visibility into who reviewed, approved or signed what",
+          "Audit processes undocumented and error-prone"
         ],
         right: [
-          "Guided workflows enforce compliance automatically",
-          "Legal requirements translated into step-by-step UI",
-          "System-triggered notifications based on real-time status",
-          "Audit trail integrated into every action",
-          "Role-based access scoped per organisation type"
+          "Compliance enforced by structure — not user discipline",
+          "Legal logic translated into guided, step-by-step UI",
+          "Automated notifications based on real-time status",
+          "Full audit trail built into every action",
+          "Role-based access configured per organisation type"
         ]
       },
-      stepsSectionTitle: "Design approach",
+      richSections: [
+        {
+          type: "subheading",
+          text: "My role"
+        },
+        {
+          type: "steps",
+          items: [
+            { num: "01", title: "Read the law, then design the product", desc: "Spent weeks in actual regulatory documentation — GDPR, occupational health law, internal compliance frameworks — extracting mandatory processes and validation rules before touching Figma." },
+            { num: "02", title: "Define the product architecture", desc: "Translated regulatory requirements into product structure: what each module needed to do, how 10 interconnected areas would share data, and where legal constraints had to live inside the IA itself." },
+            { num: "03", title: "Design role-based systems", desc: "Built a configurable permission system where roles adapt per organisation — different navigation, different data, different actions — so access is baked into the architecture, not applied as a filter." },
+            { num: "04", title: "Collaborate across three worlds", desc: "Bridged legal experts who spoke in regulations, engineers who spoke in data models, and operations managers who just needed it to work — making abstract requirements concrete and shippable." }
+          ]
+        },
+        {
+          type: "subheading",
+          text: "Design approach"
+        },
+        {
+          type: "prose",
+          text: "The core insight was that compliance can't be a warning layer. If you rely on users to read alerts and choose correctly — you've already failed. The system had to make non-compliance structurally impossible: every legal constraint embedded into the architecture itself, not bolted on after."
+        }
+      ],
+      stepsSectionTitle: "Four strategies",
       steps: [
-        { num: "Strategy 01", title: "Legal requirements as UX constraints", desc: "Analysed regulatory frameworks to extract mandatory processes — then designed the UX to enforce them invisibly, not through warnings or error messages." },
-        { num: "Strategy 02", title: "Information architecture as a safety layer", desc: "Structured navigation so unauthorised actions were structurally impossible — not blocked by alerts, but absent from the interface." },
-        { num: "Strategy 03", title: "Role-based mental models", desc: "Roles as configurable containers — complex permission matrices became something admins could manage with confidence." },
-        { num: "Strategy 04", title: "Guided workflows by default", desc: "Users couldn't take non-compliant paths because those paths simply didn't exist in the product." }
+        { num: "01", title: "Legal requirements as invisible constraints", desc: "Every mandatory process, validation and actor responsibility was embedded directly into the product logic — enforced silently by the system, never left to the user." },
+        { num: "02", title: "Architecture as the safety mechanism", desc: "Navigation, content and available actions adapt per authenticated role — users can only see and do what they're authorised for, by design." },
+        { num: "03", title: "Reduce user responsibility for compliance", desc: "HR managers, legal assistants and operations staff are not compliance experts. The goal was to guide every action, surface only what's relevant, and remove what isn't." },
+        { num: "04", title: "System-first, screens second", desc: "The design challenge was architecting how 10 modules share state, enforce permissions and maintain audit trails across complex multi-actor journeys. Screens came after the system made sense." }
       ],
       keyDecisionCards: [
-        { icon: "🏗️", title: "System-first architecture", desc: "10 interconnected modules sharing unified logic with strict data separation — designed as a coherent system, not a collection of screens. Every module shares state, permissions and audit logic.", img: "assets/kd-system.svg", imgHd: "/Public/Images/system.png", imgAlt: "System architecture overview" },
-        { icon: "🔐", title: "Role-based access as configurable containers", desc: "Instead of fixed permission profiles, roles were designed as flexible containers. Non-technical admins could manage who sees what without needing to understand the underlying data model.", img: "assets/kd-role.svg", imgHd: "/Public/Images/role.png", imgAlt: "Role-based access configuration UI" },
-        { icon: "⚙️", title: "Automated compliance workflows", desc: "Document assignment, review, approval and signature were structured through predefined flows that enforce the correct actor involvement — removing the possibility of skipping a required step.", img: "assets/kd-flow.svg", imgHd: "/Public/Images/flow.png", imgAlt: "Compliance workflow UI" }
+        { icon: "🏗️", title: "System-first architecture", desc: "10 interconnected modules sharing unified logic with strict data separation. Every module shares state, permissions and audit logic — one coherent system, not a collection of screens.", img: "assets/kd-system.svg", imgHd: "/Public/Images/system.png", imgAlt: "System architecture overview" },
+        { icon: "🔐", title: "Roles as configurable containers", desc: "Instead of fixed permission profiles, roles are flexible containers scoped per organisation. Same role, different access in different contexts — non-technical admins manage it without needing to understand the data model.", img: "assets/kd-role.svg", imgHd: "/Public/Images/role.png", imgAlt: "Role-based access configuration" },
+        { icon: "⚙️", title: "Guided compliance workflows", desc: "Document assignment, review, approval and signature flow through predefined sequences that enforce correct actor involvement at each step — structurally impossible to skip a required action.", img: "assets/kd-flow.svg", imgHd: "/Public/Images/flow.png", imgAlt: "Compliance workflow UI" }
       ],
-      keyDecisionFoot: {
-        icon: "👤",
-        text: "<strong>Designing for non-technical users:</strong> The UX had to provide clear mental models and guide high-stakes actions without ambiguity — embedding compliance into the product itself, not bolted on as a warning layer."
-      },
       sectionsAfter: [
-        { h: "Prototype", intro: "Open the interactive prototype to explore the dashboard, modules and compliance flows in a dedicated view.", items: [] }
+        {
+          h: "How workflows actually enforce compliance",
+          intro: "The hardest problem wasn't building the flows — it was making sure they couldn't be broken. Each step is locked to a specific role. Deadlines and pending actions trigger automatically. The next step isn't available until the current one is complete and valid. Every action is logged — who reviewed, who signed, when, in what state. Users are never asked what to do next. The system already knows.",
+          items: []
+        },
+        {
+          h: "Outcome & impact",
+          intro: "A compliance-first platform that doesn't compromise usability — both treated as hard requirements from the start. Legal processes significantly more secure: compliance enforced by architecture, removing an entire category of human error. Users operate correctly from day one — no training on regulatory rules required. What previously required manual tracking across 850+ Excel rows now runs through structured, auditable digital flows.",
+          items: []
+        },
+        { h: "Prototype", intro: "Explore the platform in action — navigate modules, interact with the compliance dashboard, and see how the system guides users through regulatory workflows.", items: [] }
       ],
       insightsSectionTitle: "Key learnings",
       insights: [
-        { icon: "📖", text: "<strong>Translating legal complexity:</strong> Reading GDPR and occupational health law — then extracting what must be enforced through design, not documentation. The skill is knowing what to make invisible." },
-        { icon: "🔗", text: "<strong>Systems over screens:</strong> The challenge was architecting how 10 modules share data, enforce permissions and maintain audit trails across multi-actor journeys." },
-        { icon: "🤝", text: "<strong>Stakeholder translation:</strong> Bridging legal experts, operations and engineers — design as the common language that made requirements concrete and shippable." }
+        { icon: "📖", text: "<strong>You have to read the law before you can design for it.</strong> The design decisions came from weeks in actual regulatory documentation — not assumptions about what compliance looks like." },
+        { icon: "🔗", text: "<strong>The hardest design problems were invisible.</strong> Nobody sees how 10 modules share state, enforce permissions and maintain audit trails — but getting that wrong breaks everything. Systems thinking was the real work." },
+        { icon: "🤝", text: "<strong>Design was the shared language.</strong> Legal experts and engineers don't naturally speak to each other. Translating between them — turning abstract regulatory requirements into concrete product decisions — was a core part of the role." },
+        { icon: "🗂️", text: "<strong>10 modules meant 10 different domains.</strong> Corporate governance, occupational health, HR, live webinars — each had its own regulatory framework and user mental model. Breadth and depth at the same time." }
       ],
       prototype: { label: "Open interactive prototype", href: "/Public/Lexquoris%20Compliance%20OS%20_standalone_.html" },
       drawerIndex: [
         { id: "d-overview", label: "Overview" },
-        { id: "d-challenge", label: "The challenge" },
-        { id: "d-approach", label: "Design approach" },
+        { id: "d-challenge", label: "The problem" },
+        { id: "d-approach", label: "Approach" },
         { id: "d-decisions-kd", label: "Key decisions" },
         { id: "d-learnings", label: "Learnings" }
       ],
@@ -6086,6 +7138,251 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
   });
 });
 
+/* Dashboard contact · inbox chat + avatar strip */
+(function initDashboardContactInbox() {
+  const STORAGE = 'paux_dashboard_contact_avatars';
+  const COLORS = ['#7059dc', '#3d7eae', '#2e9f6b', '#c45c9a', '#d97a35', '#5c6bbd'];
+  const WALL_SHOWCASE = [
+    { letter: 'S', seed: 'demo:spain', from: 'From Spain', time: '09:12' },
+    { letter: 'A', seed: 'demo:argentina', from: 'From Argentina', time: '11:45' },
+    { letter: 'P', seed: 'demo:portugal', from: 'From Portugal', time: '08:30' },
+    { letter: 'U', seed: 'demo:usa', from: 'From USA', time: '14:22' },
+    { letter: 'G', seed: 'demo:germany', from: 'From Germany', time: '16:03' },
+  ];
+  function hashHue(str) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) h = ((h << 5) - h) + str.charCodeAt(i);
+    return Math.abs(h);
+  }
+  function bg(seed) {
+    return COLORS[hashHue(String(seed || 'x')) % COLORS.length];
+  }
+  function letterFrom(str) {
+    const t = (str || '').trim();
+    if (!t) return '?';
+    const ch = [...t][0];
+    return ch.toUpperCase();
+  }
+  function loadSent() {
+    try {
+      const a = JSON.parse(localStorage.getItem(STORAGE) || '[]');
+      return Array.isArray(a) ? a : [];
+    } catch (e) { return []; }
+  }
+  function saveSent(arr) {
+    try { localStorage.setItem(STORAGE, JSON.stringify(arr.slice(-32))); } catch (e) {}
+  }
+  function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+  function renderAvatars() {
+    const wall = document.getElementById('dc-avatar-cloud');
+    const pill = document.getElementById('dc-sent-pill');
+    if (!wall) return;
+    const sent = loadSent();
+    const rows = WALL_SHOWCASE.map((row) => {
+      const color = bg(row.seed + row.letter);
+      return (
+        `<div class="dc-avatar-row">` +
+          `<span class="dc-av" style="background:${color}">${esc(row.letter)}</span>` +
+          `<div class="dc-avatar-row-mid"><span class="dc-avatar-row-from">${esc(row.from)}</span></div>` +
+          `<span class="dc-avatar-row-when">${esc(row.time)}</span>` +
+        `</div>`
+      );
+    });
+    wall.innerHTML = rows.join('');
+    if (pill) pill.textContent = String(sent.length);
+  }
+
+  const feed = document.getElementById('dc-dash-feed');
+  const form = document.getElementById('dashboard-contact-form');
+  const nameEl = document.getElementById('cf-name');
+  const emailEl = document.getElementById('cf-email');
+  const msgEl = document.getElementById('cf-message');
+  const letterPeek = document.getElementById('dc-user-letter');
+  if (!feed || !form || !nameEl || !emailEl || !msgEl) return;
+
+  function row(isMe, letter, colorSeed, html, meta) {
+    const r = document.createElement('div');
+    r.className = 'dc-msg-row' + (isMe ? ' is-me' : '');
+    const av = document.createElement('div');
+    av.className = 'dc-msg-avatar' + (isMe ? '' : ' is-paux');
+    if (isMe) {
+      av.style.background = bg(colorSeed);
+      av.textContent = letter;
+    } else {
+      av.textContent = 'P';
+    }
+    const box = document.createElement('div');
+    const b = document.createElement('div');
+    b.className = 'dc-msg-bubble';
+    b.innerHTML = html;
+    box.appendChild(b);
+    if (meta) {
+      const m = document.createElement('div');
+      m.className = 'dc-msg-meta';
+      m.textContent = meta;
+      box.appendChild(m);
+    }
+    r.appendChild(av);
+    r.appendChild(box);
+    feed.appendChild(r);
+    feed.scrollTop = feed.scrollHeight;
+  }
+
+  function typing() {
+    const r = document.createElement('div');
+    r.className = 'dc-msg-row';
+    r.id = 'dc-typing-row';
+    r.innerHTML = `<div class="dc-msg-avatar is-paux">P</div><div><div class="dc-msg-bubble"><span class="dc-typing-dot"><span></span><span></span><span></span></span></div><div class="dc-msg-meta">Paula is typing…</div></div>`;
+    feed.appendChild(r);
+    feed.scrollTop = feed.scrollHeight;
+  }
+  function rmTyping() {
+    document.getElementById('dc-typing-row')?.remove();
+  }
+
+  const reply = `Thank you - I read every message myself and reply in person, usually within one business day.`;
+  function revealPostSubmit() {
+    const panel = document.querySelector('.dc-msg-sheet');
+    const wrap = document.getElementById('dc-after-send');
+    const hub = document.querySelector('.contact-ai-hub');
+    if (hub) hub.style.display = 'none';
+    if (panel) {
+      panel.hidden = true;
+      panel.setAttribute('aria-hidden', 'true');
+    }
+    if (wrap) {
+      wrap.hidden = false;
+      wrap.removeAttribute('aria-hidden');
+    }
+  }
+
+  renderAvatars();
+
+  function syncPeek() {
+    const L = letterFrom(nameEl.value);
+    letterPeek.textContent = L;
+    letterPeek.style.background = bg(nameEl.value || 'guest');
+  }
+  nameEl.addEventListener('input', syncPeek);
+  syncPeek();
+
+  function wireDashComposerEmoji() {
+    const btn = document.getElementById('dc-composer-emoji-btn');
+    const menu = document.getElementById('dc-composer-emoji-pop');
+    const ta = document.getElementById('cf-message');
+    if (!btn || !menu || !ta) return;
+    function closeMenu() {
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    function insertEmoji(ch) {
+      const ins = `${ch} `;
+      const start = ta.selectionStart ?? ta.value.length;
+      const end = ta.selectionEnd ?? start;
+      ta.value = ta.value.slice(0, start) + ins + ta.value.slice(end);
+      ta.focus();
+      const p = start + ins.length;
+      ta.setSelectionRange(p, p);
+      closeMenu();
+    }
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (menu.hidden) {
+        menu.hidden = false;
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        closeMenu();
+      }
+    });
+    menu.querySelectorAll('[data-emoji]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        insertEmoji(el.getAttribute('data-emoji') || '');
+      });
+    });
+    document.addEventListener('click', (ev) => {
+      if (menu.hidden) return;
+      const t = ev.target;
+      if (t === btn || btn.contains(t) || menu.contains(t)) return;
+      closeMenu();
+    });
+    document.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Escape') closeMenu();
+    });
+  }
+
+  function insEmoji(btn, ta) {
+    if (!btn || !ta) return;
+    btn.addEventListener('click', () => {
+      const ins = '🙂 ';
+      const start = ta.selectionStart ?? ta.value.length;
+      ta.value = ta.value.slice(0, start) + ins + ta.value.slice(ta.selectionEnd ?? start);
+      ta.focus();
+      const p = start + ins.length;
+      ta.setSelectionRange(p, p);
+    });
+  }
+  wireDashComposerEmoji();
+
+  let sending = false;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (sending) return;
+
+    const name = nameEl.value.trim();
+    const email = emailEl.value.trim();
+    const body = msgEl.value.trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!name) {
+      showToast('Add your name first.');
+      nameEl.focus();
+      return;
+    }
+    if (!emailOk.test(email)) {
+      showToast('Add a valid email.');
+      emailEl.focus();
+      return;
+    }
+    if (!body) {
+      showToast('Write a short note about the role.');
+      msgEl.focus();
+      return;
+    }
+
+    sending = true;
+    const subBtn = document.getElementById('dashboard-contact-submit');
+    if (subBtn) subBtn.disabled = true;
+
+    const escBody = esc(body).replace(/\n/g, '<br>');
+    const hub = document.querySelector('.contact-ai-hub');
+    if (hub) hub.style.display = 'none';
+    row(true, letterFrom(name), name, escBody, 'You');
+
+    const st = loadSent();
+    st.push({ l: letterFrom(name), s: name + email });
+    saveSent(st);
+    renderAvatars();
+
+    typing();
+    revealPostSubmit();
+    window.setTimeout(() => {
+      rmTyping();
+      row(false, 'P', '', reply, 'Paula · auto');
+      showToast('Opening your mail app…');
+      const rt = window.__cfRoleType ? (' · ' + window.__cfRoleType) : '';
+      const mailtoUrl = 'mailto:paulaalonso.design@gmail.com?subject=' + encodeURIComponent('Role enquiry · ' + name + rt) +
+        '&body=' + encodeURIComponent('From: ' + name + ' <' + email + '>' + '\n\n' + body + '\n');
+      window.location.href = mailtoUrl;
+      sending = false;
+      if (subBtn) subBtn.disabled = false;
+    }, 1000);
+  });
+})();
+
 window.addEventListener('hashchange', () => {
   const h = location.hash.replace('#','');
   if (VIEWS.find(v => v.id === h)) setView(h, false);
@@ -6102,46 +7399,59 @@ window.addEventListener('load', () => {
 /* ════════════════════════════════════════════════
    PROJECTS GRID + DRAWER
    ════════════════════════════════════════════════ */
-function bindMockTilt(host, thumbSelector, mockSelector) {
-  const mock = host.querySelector(mockSelector);
+
+/** 3D tilt + float on the PNG only (thumb background stays flat). */
+function bindMockImgTilt(host, thumbSelector) {
+  const thumb = host.querySelector(thumbSelector);
+  const img = thumb?.querySelector('.pcard-mock img');
   const tiltOk =
-    mock &&
+    img &&
+    thumb &&
     window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
     !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!tiltOk) return;
   let raf = 0;
   let pending = null;
-  host.addEventListener('mousemove', e => {
-    const thumb = host.querySelector(thumbSelector);
-    if (!thumb) return;
-    pending = { e, thumb };
+  thumb.addEventListener('mousemove', e => {
+    pending = { e };
     if (raf) return;
     raf = requestAnimationFrame(() => {
       raf = 0;
       if (!pending) return;
-      const { e: ev, thumb: th } = pending;
+      const ev = pending.e;
       pending = null;
-      const b = th.getBoundingClientRect();
-      const px = (ev.clientX - b.left) / b.width - 0.5;
-      const py = (ev.clientY - b.top) / b.height - 0.5;
-      const max = 11;
+      const b = thumb.getBoundingClientRect();
+      const px = (ev.clientX - b.left) / Math.max(1, b.width) - 0.5;
+      const py = (ev.clientY - b.top) / Math.max(1, b.height) - 0.5;
+      const max = 13;
       const rx = -py * max * 2;
       const ry = px * max * 2;
-      mock.style.transform =
-        `perspective(960px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-8px) scale(1.045)`;
+      img.style.transform =
+        `perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translate3d(0,-12px,14px) scale(1.06)`;
     });
   });
-  host.addEventListener('mouseleave', () => {
+  thumb.addEventListener('mouseleave', () => {
     pending = null;
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
-    mock.style.transform = '';
+    img.style.transform = '';
   });
 }
+
+function chipDotClass(cls) {
+  return !cls ? 't-mid'
+    : cls === 'ac' ? 't-accent'
+    : cls === 'bl' ? 't-dark'
+    : cls === 'gr' ? 't-green'
+    : 't-mid';
+}
+
+const PCARD_ARROW_SVG = `<svg class="pcard-title-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>`;
 
 const projGrid = document.getElementById('proj-grid');
 
 function renderProjects(filter = 'all', mode = 'grid') {
+  if (!projGrid) return;
   const list = filter === 'all' ? PROJECTS : PROJECTS.filter(p => p.tags.includes(filter));
   projGrid.classList.toggle('list', mode === 'list');
   projGrid.innerHTML = list.map(p => `
@@ -6153,20 +7463,20 @@ function renderProjects(filter = 'all', mode = 'grid') {
         </div>
       </div>
       <div class="pcard-body">
-        <div class="featured-tags">
-          ${p.chips.map(c => `<span class="tag ${c.cls||''}">${c.label}</span>`).join('')}
+        <div class="pcard-title-row">
+          <h3 class="pcard-title">${p.title}</h3>
+          ${PCARD_ARROW_SVG}
         </div>
-        <h3 class="pcard-title">${p.title}</h3>
         <p class="pcard-desc">${p.desc}</p>
-        <div class="pcard-metrics">
-          ${p.metrics.map(m => `<div><div class="n">${m.n}</div><div class="l">${m.l}</div></div>`).join('')}
+        <div class="post-tags">
+          ${p.chips.map(c => `<span class="post-tag"><span class="post-tag-dot ${chipDotClass(c.cls)}"></span>${c.label}</span>`).join('')}
         </div>
       </div>
     </article>
   `).join('');
   projGrid.querySelectorAll('.pcard').forEach(card => {
     card.addEventListener('click', () => openDrawer(card.dataset.id));
-    bindMockTilt(card, '.pcard-thumb', '.pcard-mock');
+    bindMockImgTilt(card, '.pcard-thumb');
   });
 }
 renderProjects();
@@ -6863,6 +8173,14 @@ document.addEventListener('keydown', e => {
 });
 
 /* ════════════════════════════════════════════════
+   COLLAB TABS
+   ════════════════════════════════════════════════ */
+function switchCollab(idx) {
+  document.querySelectorAll('.collab-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+  document.querySelectorAll('.collab-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+}
+
+/* ════════════════════════════════════════════════
    TOAST
    ════════════════════════════════════════════════ */
 function showToast(text, ms = 2400) {
@@ -6956,7 +8274,8 @@ document.getElementById('mobile-toggle').addEventListener('click', () => sidebar
       openDrawer(el.dataset.projectId);
     });
   });
-  document.querySelectorAll('.featured').forEach(el => bindMockTilt(el, '.featured-thumb', '.pcard-mock'));
+  document.querySelectorAll('.featured[data-project-id]').forEach(el =>
+    bindMockImgTilt(el, '.featured-thumb'));
 })();
 
 /* ════════════════════════════════════════════════

@@ -287,7 +287,11 @@ body.view-switching .cs-body {
     </a>
     <a class="cs-index-item" data-section="cs-challenge" href="#cs-challenge">
       <span class="cs-index-dot"></span>
-      <span class="cs-index-label">The challenge</span>
+      <span class="cs-index-label">The problem</span>
+    </a>
+    <a class="cs-index-item" data-section="cs-role" href="#cs-role">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">My role</span>
     </a>
     <a class="cs-index-item" data-section="cs-approach" href="#cs-approach">
       <span class="cs-index-dot"></span>
@@ -297,13 +301,21 @@ body.view-switching .cs-body {
       <span class="cs-index-dot"></span>
       <span class="cs-index-label">Key decisions</span>
     </a>
+    <a class="cs-index-item" data-section="cs-workflows" href="#cs-workflows">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Workflows</span>
+    </a>
     <a class="cs-index-item" data-section="cs-prototype" href="#cs-prototype">
       <span class="cs-index-dot"></span>
       <span class="cs-index-label">Prototype</span>
     </a>
+    <a class="cs-index-item" data-section="cs-outcome" href="#cs-outcome">
+      <span class="cs-index-dot"></span>
+      <span class="cs-index-label">Outcome</span>
+    </a>
     <a class="cs-index-item" data-section="cs-learnings" href="#cs-learnings">
       <span class="cs-index-dot"></span>
-      <span class="cs-index-label">Key learnings</span>
+      <span class="cs-index-label">Learnings</span>
     </a>
   </div>
 </div>
@@ -313,9 +325,9 @@ body.view-switching .cs-body {
   <div class="cs-body">
 
     <!-- NDA notice -->
-    <div class="cs-nda">Due to a signed NDA, all interface visuals have been recreated as representative abstractions. Screen content, workflows, and data structures reflect the actual system design; names, entities, and identifying details are fictional."</div>
+    <div class="cs-nda">Due to a signed NDA, all interface visuals have been recreated as representative abstractions. Screen content, workflows, and data structures reflect the actual system design; names, entities, and identifying details are fictional.</div>
 
-    <!-- Metrics -->
+    <!-- ── At a glance ── -->
     <div class="cs-metrics" id="cs-metrics">
       <div class="cs-metric">
         <div class="cs-metric-num">10</div>
@@ -323,7 +335,7 @@ body.view-switching .cs-body {
       </div>
       <div class="cs-metric">
         <div class="cs-metric-num">0</div>
-        <div class="cs-metric-label">Non-compliant user paths — built out of the UX structure</div>
+        <div class="cs-metric-label">Non-compliant user paths — removed by design</div>
       </div>
       <div class="cs-metric">
         <div class="cs-metric-num">850+</div>
@@ -331,85 +343,115 @@ body.view-switching .cs-body {
       </div>
     </div>
 
-    <!-- Overview -->
+    <!-- ── Overview (quick + full) ── -->
     <div class="cs-section" id="cs-overview">
       <div class="cs-section-title">Overview</div>
-      <p class="cs-text">A SaaS platform for organisational management and regulatory compliance — covering GDPR, occupational health and cross-departmental processes. The product required <strong>granular access control, strict data separation between organisations, and auditability designed into every user action</strong>.</p>
-      <p class="cs-text">I led the project end-to-end: from translating legal requirements into product structure, to defining the IA, designing all 10 modules, and working directly with stakeholders and engineering to ship it.</p>
+      <p class="cs-text">A law firm came to me with a real problem: their entire compliance operation lived in Excel. 850 rows. Manual reminders. Legal documents written for lawyers that non-legal staff had to somehow follow — without making a single regulatory mistake.</p>
+      <p class="cs-text">The ask was to turn that into a SaaS. But not just any SaaS — one that would cover GDPR, occupational health, HR processes and cross-departmental workflows, for multiple types of organisations, each with different roles, permissions and legal responsibilities. <strong>A product where getting it wrong had legal consequences.</strong></p>
+      <p class="cs-text full-only">I was brought in as Lead Product Designer and UX Architect. I owned the project end-to-end: reading the regulatory frameworks, translating them into product logic, defining the IA, designing all 10 modules, and working directly with stakeholders and engineering until it shipped.</p>
     </div>
 
-    <!-- The challenge -->
+    <!-- ── The problem (quick + full) ── -->
     <div class="cs-section" id="cs-challenge">
-      <div class="cs-section-title">The challenge</div>
-      <div class="cs-quote">"How do you translate 850 rows of Excel and dense legal documents — written for lawyers — into a system that non-technical users can follow without ever making a compliance error?"</div>
+      <div class="cs-section-title">The problem</div>
+      <div class="cs-quote">"How do you translate 850 rows of Excel and dense legal documents — written for lawyers — into a system non-technical users can follow without ever making a compliance error?"</div>
       <div class="cs-two">
         <div class="cs-col before">
-          <div class="cs-col-label">Before — the problems</div>
+          <div class="cs-col-label">Before</div>
           <ul>
-            <li>850+ Excel rows tracking certifications manually</li>
+            <li>850+ rows of Excel tracking certifications manually</li>
             <li>Legal documents written for lawyers, not end users</li>
-            <li>Manual email reminders for every deadline</li>
-            <li>No visibility into who approved or signed what</li>
-            <li>Undocumented, error-prone audit processes</li>
+            <li>Manual email reminders for every deadline and approval</li>
+            <li>No visibility into who reviewed, approved or signed what</li>
+            <li>Audit processes undocumented and error-prone</li>
           </ul>
         </div>
         <div class="cs-col after">
-          <div class="cs-col-label">After — the vision</div>
+          <div class="cs-col-label">The vision</div>
           <ul>
-            <li>Guided workflows enforce compliance automatically</li>
-            <li>Legal requirements translated into step-by-step UI</li>
-            <li>System-triggered notifications based on real-time status</li>
-            <li>Audit trail integrated into every action</li>
-            <li>Role-based access scoped per organisation type</li>
+            <li>Compliance enforced by structure — not user discipline</li>
+            <li>Legal logic translated into guided, step-by-step UI</li>
+            <li>Automated notifications based on real-time status</li>
+            <li>Full audit trail built into every action</li>
+            <li>Role-based access configured per organisation type</li>
           </ul>
         </div>
       </div>
     </div>
 
-    <!-- Image: platform overview -->
+    <!-- ── Dashboard image ── -->
     <div class="cs-img-ref">
-      <img src="/Public/Images/dashboard-saas.png" alt="SaaS platform — dashboard overview">
-      <div class="cs-img-caption">Platform dashboard — organisational overview with compliance status</div>
+      <img src="/Public/Images/dashboard-saas.png" alt="Enterprise SaaS platform — dashboard overview">
+      <div class="cs-img-caption">Platform dashboard — compliance status across all organisations</div>
     </div>
 
-    <!-- Design approach -->
-    <div class="cs-section full-only" id="cs-approach">
-      <div class="cs-section-title">Design approach</div>
+    <!-- ── My role (full only) ── -->
+    <div class="cs-section full-only" id="cs-role">
+      <div class="cs-section-title">My role</div>
+      <p class="cs-text">I owned product definition and UX architecture from day one through implementation. No handoffs — I was the single design voice across all 10 modules, working directly with legal experts, operations managers and the engineering team.</p>
       <div class="cs-steps">
         <div class="cs-step">
-          <div class="cs-step-num">Strategy 01</div>
-          <div class="cs-step-title">Legal requirements as UX constraints</div>
-          <p class="cs-step-desc">Analysed regulatory frameworks to extract mandatory processes — then designed the UX to enforce them invisibly, not through warnings or error messages.</p>
+          <div class="cs-step-num">01</div>
+          <div class="cs-step-title">Read the law, then design the product</div>
+          <p class="cs-step-desc">I spent weeks reading GDPR, occupational health law and internal compliance frameworks — extracting mandatory processes, validation rules and actor responsibilities before touching Figma.</p>
         </div>
         <div class="cs-step">
-          <div class="cs-step-num">Strategy 02</div>
-          <div class="cs-step-title">Information architecture as a safety layer</div>
-          <p class="cs-step-desc">Structured navigation to make unauthorised actions structurally impossible — not blocked by alerts, but simply absent from the interface.</p>
+          <div class="cs-step-num">02</div>
+          <div class="cs-step-title">Define the product architecture</div>
+          <p class="cs-step-desc">Translated regulatory requirements into product structure: what each module needed to do, how 10 interconnected areas would share data, and where the legal constraints had to live inside the IA itself.</p>
         </div>
         <div class="cs-step">
-          <div class="cs-step-num">Strategy 03</div>
-          <div class="cs-step-title">Role-based mental models</div>
-          <p class="cs-step-desc">Roles as configurable containers, not fixed profiles — transforming complex permission matrices into something admins could manage with confidence.</p>
+          <div class="cs-step-num">03</div>
+          <div class="cs-step-title">Design role-based systems</div>
+          <p class="cs-step-desc">Built a configurable permission system where roles adapt per organisation — different navigation, different data, different actions — so access is baked into the architecture, not applied as a filter.</p>
         </div>
         <div class="cs-step">
-          <div class="cs-step-num">Strategy 04</div>
-          <div class="cs-step-title">Guided workflows by default</div>
-          <p class="cs-step-desc">Users couldn't take non-compliant paths — not because the interface blocked them, but because those paths simply didn't exist.</p>
+          <div class="cs-step-num">04</div>
+          <div class="cs-step-title">Collaborate across three worlds</div>
+          <p class="cs-step-desc">Acted as the bridge between legal experts who spoke in regulations, engineers who spoke in data models, and operations managers who just needed it to work — making abstract requirements concrete and shippable.</p>
         </div>
       </div>
     </div>
 
-    <!-- Key decisions with images -->
-    <div class="cs-section" id="cs-decisions">
-      <div class="cs-section-title">Key decisions</div>
-      <div class="cs-insight-flex">
+    <!-- ── Design approach (full only) ── -->
+    <div class="cs-section full-only" id="cs-approach">
+      <div class="cs-section-title">Design approach</div>
+      <p class="cs-text">The core insight was that compliance can't be a warning layer. If you rely on users to read alerts, remember rules, and choose correctly — you've already failed. The system had to make non-compliance structurally impossible.</p>
+      <div class="cs-steps">
+        <div class="cs-step">
+          <div class="cs-step-num">Strategy 01</div>
+          <div class="cs-step-title">Legal requirements as invisible constraints</div>
+          <p class="cs-step-desc">Every mandatory process, validation and actor responsibility was extracted from the legal documentation and embedded directly into the product logic — enforced silently by the system, never left to the user.</p>
+        </div>
+        <div class="cs-step">
+          <div class="cs-step-num">Strategy 02</div>
+          <div class="cs-step-title">Architecture as the safety mechanism</div>
+          <p class="cs-step-desc">The information architecture itself is the access control layer. Navigation, content and available actions adapt per authenticated role — so users can only see and do what they're authorised for, by design.</p>
+        </div>
+        <div class="cs-step">
+          <div class="cs-step-num">Strategy 03</div>
+          <div class="cs-step-title">Reduce user responsibility for compliance</div>
+          <p class="cs-step-desc">Most end users — HR managers, legal assistants, operations staff — are not compliance experts. The goal was to take that responsibility off them entirely: guide every action, surface only what's relevant, remove what isn't.</p>
+        </div>
+        <div class="cs-step">
+          <div class="cs-step-num">Strategy 04</div>
+          <div class="cs-step-title">System-first, screens second</div>
+          <p class="cs-step-desc">The real design challenge wasn't the interfaces — it was architecting how 10 modules share state, enforce permissions and maintain audit trails across complex multi-actor journeys. Screens came after the system made sense.</p>
+        </div>
+      </div>
+    </div>
 
+    <!-- ── Key decisions (full only) ── -->
+    <div class="cs-section full-only" id="cs-decisions">
+      <div class="cs-section-title">Key decisions</div>
+
+      <div class="cs-insight-flex">
         <div class="cs-insight-card">
           <div class="cs-insight-card-text">
             <div class="cs-insight-i">🏗️</div>
             <div class="cs-insight-t">
               <strong>System-first architecture</strong>
-              <p>10 interconnected modules sharing unified logic with strict data separation — designed as a coherent system, not a collection of screens. Every module shares state, permissions and audit logic.</p>
+              <p>10 interconnected modules sharing unified logic with strict data separation between organisations. Every module shares state, permissions and audit logic — designed as one coherent system, not a collection of screens.</p>
             </div>
           </div>
           <div class="cs-insight-card-img">
@@ -421,12 +463,12 @@ body.view-switching .cs-body {
           <div class="cs-insight-card-text">
             <div class="cs-insight-i">🔐</div>
             <div class="cs-insight-t">
-              <strong>Role-based access as configurable containers</strong>
-              <p>Instead of fixed permission profiles, roles were designed as flexible containers. Non-technical admins could manage who sees what without needing to understand the underlying data model.</p>
+              <strong>Roles as configurable containers</strong>
+              <p>Instead of fixed permission profiles, roles are flexible containers scoped per organisation. The same role can have different access in different contexts — non-technical admins manage it with confidence, no data model knowledge required.</p>
             </div>
           </div>
           <div class="cs-insight-card-img">
-            <img src="/Public/Images/role.png" alt="Role-based access configuration UI">
+            <img src="/Public/Images/role.png" alt="Role-based access configuration">
           </div>
         </div>
 
@@ -434,69 +476,104 @@ body.view-switching .cs-body {
           <div class="cs-insight-card-text">
             <div class="cs-insight-i">⚙️</div>
             <div class="cs-insight-t">
-              <strong>Automated compliance workflows</strong>
-              <p>Document assignment, review, approval and signature were structured through predefined flows that enforce the correct actor involvement — removing the possibility of skipping a required step.</p>
+              <strong>Guided compliance workflows</strong>
+              <p>Document assignment, review, approval and signature flow through predefined sequences that enforce correct actor involvement at each step — making it structurally impossible to skip a required action.</p>
             </div>
           </div>
           <div class="cs-insight-card-img">
             <img src="/Public/Images/flow.png" alt="Compliance workflow UI">
           </div>
         </div>
+      </div>
 
-      </div>
-      <div class="cs-insight">
-        <div class="cs-insight-i">👤</div>
-        <div class="cs-insight-t"><strong>Designing for non-technical users:</strong> The UX had to provide clear mental models and guide high-stakes actions without ambiguity — embedding compliance into the product itself, not bolted on as a warning layer.</div>
-      </div>
     </div>
 
+    <!-- ── Guided workflows deep-dive (full only) ── -->
+    <div class="cs-section full-only" id="cs-workflows">
+      <div class="cs-section-title">How workflows actually enforce compliance</div>
+      <p class="cs-text">The hardest problem wasn't building the flows — it was making sure they couldn't be broken. In a regulated environment, one skipped step or wrong signature has legal consequences. So the system doesn't ask users to remember the rules. It removes the possibility of breaking them.</p>
+      <div class="cs-insight">
+        <div class="cs-insight-i">✅</div>
+        <div class="cs-insight-t"><strong>Correct actors, every time.</strong> Each step of a workflow — review, approval, signature — is locked to a specific role. The system won't let the wrong person act, and won't advance until the right person does.</div>
+      </div>
+      <div class="cs-insight">
+        <div class="cs-insight-i">🔔</div>
+        <div class="cs-insight-t"><strong>Automated notifications replace manual reminders.</strong> Deadlines and pending actions trigger automatically based on real-time document status. No one needs to remember to chase anyone — the system does it.</div>
+      </div>
+      <div class="cs-insight">
+        <div class="cs-insight-i">🚫</div>
+        <div class="cs-insight-t"><strong>Non-compliant paths don't exist.</strong> Users can't skip a required step — not because they get a warning, but because the next step simply isn't available until the current one is complete and valid.</div>
+      </div>
+      <div class="cs-insight">
+        <div class="cs-insight-i">📋</div>
+        <div class="cs-insight-t"><strong>Full audit trail, built in.</strong> Every action — who reviewed, who signed, when, in what state — is logged automatically. Compliance isn't reported after the fact; it's captured as it happens.</div>
+      </div>
+      <div class="cs-quote" style="margin-top: 24px;">"Users are never asked what to do next — the system already knows."</div>
+    </div>
 
-    <!-- Prototype section -->
+    <!-- ── Prototype (full only) ── -->
     <div class="cs-section full-only" id="cs-prototype">
       <div class="cs-section-title">Prototype</div>
-      <p class="cs-text">Explore the full compliance workflow in action. Interact with the dashboard, navigate through modules, and see how users manage regulatory requirements with confidence.</p>
-      
+      <p class="cs-text">Explore the platform in action. Navigate through modules, interact with the compliance dashboard, and see how the system guides users through regulatory workflows step by step.</p>
       <div class="cs-prototype-card">
         <div class="cs-prototype-header">
-          <div class="cs-prototype-meta">
+          <div class="cs-prototype-meta"></div>
         </div>
-        
         <div class="cs-prototype-embed">
-          <iframe 
-            src="/Public/Lexquoris%20Compliance%20OS%20_standalone_.html" 
+          <iframe
+            src="/Public/Lexquoris%20Compliance%20OS%20_standalone_.html"
             title="Lexquoris Compliance OS Prototype"
             loading="lazy"
             style="width: 100%; height: 100%; border: none; border-radius: 12px; background: var(--bg-soft);">
           </iframe>
         </div>
-        
         <div class="cs-prototype-footer">
-          <p class="cs-text">Click through different modules, explore the workflow, and see how the system enforces compliance at every step.</p>
+          <p class="cs-text">Click through modules, explore the workflow, and see how the system enforces compliance at every step.</p>
         </div>
       </div>
     </div>
-    
 
-    
-    <!-- Key learnings -->
+    <!-- ── Outcome (quick + full) ── -->
+    <div class="cs-section" id="cs-outcome">
+      <div class="cs-section-title">Outcome &amp; impact</div>
+      <p class="cs-text">The result is a compliance-first platform that doesn't compromise usability — because both were treated as hard requirements from the start, not a trade-off.</p>
+      <div class="cs-insight">
+        <div class="cs-insight-i">🔒</div>
+        <div class="cs-insight-t"><strong>Legal processes significantly more secure.</strong> Compliance is enforced by architecture — removing an entire category of human error that previously existed every time someone opened a spreadsheet.</div>
+      </div>
+      <div class="cs-insight">
+        <div class="cs-insight-i">⚡</div>
+        <div class="cs-insight-t"><strong>Reduced onboarding friction.</strong> Users operate correctly from day one because the system guides every action — no training on regulatory rules required.</div>
+      </div>
+      <div class="cs-insight">
+        <div class="cs-insight-i">📈</div>
+        <div class="cs-insight-t"><strong>Workflows automated end-to-end.</strong> What previously required manual tracking across 850+ rows of Excel now runs through structured, auditable digital flows.</div>
+      </div>
+      <p class="cs-text full-only" style="margin-top: 16px; opacity: 0.7; font-style: italic;">The platform is in the testing and implementation phase — quantitative metrics will be added once live.</p>
+    </div>
+
+    <!-- ── Key learnings (full only) ── -->
     <div class="cs-section full-only" id="cs-learnings">
       <div class="cs-section-title">Key learnings</div>
       <div class="cs-insight">
         <div class="cs-insight-i">📖</div>
-        <div class="cs-insight-t"><strong>Translating legal complexity:</strong> Reading GDPR and occupational health law — then extracting what needs to be enforced through design, not documentation. The skill is knowing what to make invisible.</div>
+        <div class="cs-insight-t"><strong>You have to read the law before you can design for it.</strong> I couldn't have defined the IA or the permission model without spending weeks in the actual regulatory documentation first. The design decisions came from there.</div>
       </div>
       <div class="cs-insight">
         <div class="cs-insight-i">🔗</div>
-        <div class="cs-insight-t"><strong>Systems over screens:</strong> The real challenge was architecting how 10 modules share data, enforce permissions and maintain audit trails across complex multi-actor journeys — not designing individual screens.</div>
+        <div class="cs-insight-t"><strong>The hardest design problems were invisible.</strong> Nobody sees how 10 modules share state, enforce permissions and maintain audit trails — but getting that wrong breaks everything. Systems thinking, not screen design, was the real work.</div>
       </div>
       <div class="cs-insight">
         <div class="cs-insight-i">🤝</div>
-        <div class="cs-insight-t"><strong>Stakeholder translation:</strong> Bridging legal experts, operations managers and engineers — using design as the common language that made abstract requirements concrete and shippable.</div>
+        <div class="cs-insight-t"><strong>Design was the shared language.</strong> Legal experts and engineers don't naturally speak to each other. I spent months translating between them — turning abstract regulatory requirements into concrete product decisions both sides could align on.</div>
+      </div>
+      <div class="cs-insight">
+        <div class="cs-insight-i">🗂️</div>
+        <div class="cs-insight-t"><strong>10 modules meant 10 different domains.</strong> Corporate governance, occupational health, HR, live webinars — each had its own regulatory framework and user mental model. Designing across all of them in parallel was a constant exercise in context-switching at depth.</div>
       </div>
     </div>
 
   </div><!-- /cs-body -->
-
   </div><!-- /cs-layout -->
 </div><!-- /cs-page -->
 
