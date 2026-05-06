@@ -1683,7 +1683,7 @@ function closeMobileNav() {
     const wall = document.getElementById('avatarWall');
     const badge = document.getElementById('sentBadge');
     if (!wall) return;
-    const sent = loadRailEntries();
+    const sent = loadRailEntries().slice().sort((a, b) => (b.t || 0) - (a.t || 0));
     const fixedParts = WALL_SHOWCASE.map((row) => {
       const bg = avatarBg(row.seed + row.letter);
       const dot = `<span class="msg-av-dot" style="background:${bg}">${escapeHtml(row.letter)}</span>`;
@@ -1706,7 +1706,7 @@ function closeMobileNav() {
         `</div>`
       );
     });
-    wall.innerHTML = fixedParts.join('') + sentParts.join('');
+    wall.innerHTML = sentParts.join('') + fixedParts.join('');
     if (badge) {
       badge.textContent = String(WALL_SHOWCASE.length + sent.length);
       badge.title = COPY.badgeTotalTitle;
@@ -1879,7 +1879,7 @@ function closeMobileNav() {
     saveRailEntries(sent);
     renderAvatarWall();
     const wallEl = document.getElementById('avatarWall');
-    if (wallEl) requestAnimationFrame(() => { wallEl.scrollTop = wallEl.scrollHeight; });
+    if (wallEl) requestAnimationFrame(() => { wallEl.scrollTop = 0; });
 
     const threadEl = document.getElementById('contactThread');
     const safeMsg = msgText;

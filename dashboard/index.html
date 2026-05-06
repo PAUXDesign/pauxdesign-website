@@ -7492,7 +7492,7 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     const wall = document.getElementById('dc-avatar-cloud');
     const pill = document.getElementById('dc-sent-pill');
     if (!wall) return;
-    const sent = loadRailEntries();
+    const sent = loadRailEntries().slice().sort((a, b) => (b.t || 0) - (a.t || 0));
     const fixedRows = WALL_SHOWCASE.map((row) => {
       const color = bg(row.seed + row.letter);
       return (
@@ -7515,7 +7515,7 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
         `</div>`
       );
     });
-    wall.innerHTML = fixedRows.join('') + sentRows.join('');
+    wall.innerHTML = sentRows.join('') + fixedRows.join('');
     if (pill) pill.textContent = String(WALL_SHOWCASE.length + sent.length);
   }
 
@@ -7671,7 +7671,7 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     saveRailEntries(st);
     renderAvatars();
     const railWall = document.getElementById('dc-avatar-cloud');
-    if (railWall) requestAnimationFrame(() => { railWall.scrollTop = railWall.scrollHeight; });
+    if (railWall) requestAnimationFrame(() => { railWall.scrollTop = 0; });
 
     showTypingRow();
     revealPostSubmit();
