@@ -681,15 +681,18 @@ window.addEventListener('load', () => {
       if (!section) return;
       const rect = wrap.getBoundingClientRect();
       const scrollable = wrap.offsetHeight - window.innerHeight;
-      if (scrollable <= 0) {
-        section.style.setProperty('--cta-accent-op', '0');
-        section.style.setProperty('--cta-bg-op', '0');
-        section.style.setProperty('--cta-ease', '1');
-        section.classList.remove('cta-founder-tone', 'cta-footer-tone');
-        return;
+      let progress;
+      if (scrollable > 0) {
+        const scrolled = Math.max(0, -rect.top);
+        progress = scrolled / scrollable;
+      } else {
+        const sectionRect = section.getBoundingClientRect();
+        const vh = Math.max(window.innerHeight, 1);
+        const start = vh * 0.95;
+        const end = -sectionRect.height * 0.35;
+        progress = (start - sectionRect.top) / Math.max(1, start - end);
       }
-      const scrolled = Math.max(0, -rect.top);
-      const progress = Math.min(1, scrolled / scrollable);
+      progress = Math.min(1, Math.max(0, progress));
       const ease = 1 - Math.pow(1 - progress, 2.5);
       const accentOp = Math.min(1, Math.max(0, 4 * ease * (1 - ease)));
       const bgOp = Math.min(1, ease * ease * 1.08);

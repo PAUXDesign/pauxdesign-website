@@ -4841,6 +4841,21 @@ button.proj-gallery-item {
 @media (max-width: 639px) {
   .proj-grid:not(.list) { grid-template-columns: minmax(0, 1fr); }
   .proj-grid.list .pcard { grid-template-columns: minmax(0, 1fr); }
+  .featured-thumb {
+    height: 190px;
+  }
+  .featured-thumb .pcard-mock {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+  .featured-thumb .pcard-mock img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
   .proj-grid.list .pcard-thumb {
     margin: 12px 12px 0;
     min-height: 160px;
@@ -4857,6 +4872,14 @@ button.proj-gallery-item {
   .contact-side-inner { padding: 22px 18px; }
   .contact-side .meta { flex-wrap: wrap; gap: 12px 20px; }
   .proj-gallery-band-inner { padding: 18px 16px 16px; }
+}
+@media (max-width: 900px) {
+  .dc-sheet-grid {
+    grid-template-columns: 1fr;
+  }
+  .dc-sheet-grid .full {
+    grid-column: auto;
+  }
 }
 @media (max-width: 560px) {
   .kpi-grid { grid-template-columns: 1fr 1fr; }
