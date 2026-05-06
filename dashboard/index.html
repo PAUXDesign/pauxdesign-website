@@ -2822,6 +2822,30 @@ button.proj-gallery-item {
   text-transform: uppercase;
   color: var(--dark);
 }
+.dc-rail-toggle {
+  display: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: #fff;
+  color: var(--mid);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.dc-rail-toggle svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  transition: transform .2s ease;
+}
+.dc-msg-sidebar.is-expanded .dc-rail-toggle svg {
+  transform: rotate(180deg);
+}
 .dc-msg-count-pill {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -3421,19 +3445,65 @@ button.proj-gallery-item {
   .dc-inbox-grid {
     grid-template-columns: 1fr;
     min-height: auto;
-    row-gap: 22px;
+    row-gap: 10px;
     column-gap: 0;
   }
+  .dc-msg-panel {
+    order: 1;
+  }
   .dc-msg-sidebar {
+    order: 2;
     border-right: none;
-    border-bottom: 1px solid var(--border);
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+  }
+  .dc-msg-sidebar-head {
+    padding: 10px 12px;
+    border-bottom: none;
+  }
+  .dc-rail-toggle {
+    display: inline-flex;
+  }
+  .dc-msg-sidebar:not(.is-expanded) .dc-avatar-cloud,
+  .dc-msg-sidebar:not(.is-expanded) .contact-ai-rail-note,
+  .dc-msg-sidebar:not(.is-expanded) .contact-ai-rail-footer {
+    display: none !important;
+  }
+  .dc-msg-sidebar.is-expanded .dc-avatar-cloud {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
     max-height: none;
+    padding: 10px 12px 4px;
+    gap: 10px;
   }
-  .dc-avatar-cloud {
-    max-height: 220px;
+  .dc-msg-sidebar.is-expanded .dc-avatar-row {
+    min-width: 170px;
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 6px 8px;
+    background: rgba(255,255,255,0.82);
   }
-  .dc-sheet-grid {
-    grid-template-columns: 1fr;
+}
+@media (max-width: 620px) {
+  .dc-msg-sidebar-head {
+    padding: 12px 10px 10px;
+  }
+  .contact-ai-rail-note {
+    margin: 0 8px;
+    padding-top: 6px;
+    font-size: 10px;
+  }
+  .contact-ai-rail-footer {
+    margin: 0 8px 10px;
+    gap: 8px;
+  }
+  .dc-msg-sidebar.is-expanded .dc-avatar-row {
+    min-width: 150px;
+    padding: 6px 7px;
   }
 }
 
@@ -5820,6 +5890,9 @@ button.proj-gallery-item {
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 <p class="dc-msg-sidebar-title">Messages</p>
                 <span class="dc-msg-count-pill" id="dc-sent-pill">0</span>
+                <button type="button" class="dc-rail-toggle" id="dc-rail-toggle" aria-expanded="false" aria-label="Toggle messages panel">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
               </div>
             </div>
             <div class="dc-avatar-cloud" id="dc-avatar-cloud"></div>
@@ -7202,7 +7275,32 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
   const emailEl = document.getElementById('cf-email');
   const msgEl = document.getElementById('cf-message');
   const letterPeek = document.getElementById('dc-user-letter');
+  const rail = document.querySelector('.dc-inbox-grid .dc-msg-sidebar');
+  const railToggle = document.getElementById('dc-rail-toggle');
+  const railMq = window.matchMedia('(max-width: 940px)');
   if (!feed || !form || !nameEl || !emailEl || !msgEl) return;
+
+  function setRailExpanded(expanded) {
+    if (!rail || !railToggle) return;
+    rail.classList.toggle('is-expanded', expanded);
+    railToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
+  function syncRailForViewport() {
+    if (!rail || !railToggle) return;
+    if (railMq.matches) setRailExpanded(false);
+    else {
+      rail.classList.add('is-expanded');
+      railToggle.setAttribute('aria-expanded', 'true');
+    }
+  }
+  if (rail && railToggle) {
+    railToggle.addEventListener('click', () => {
+      setRailExpanded(!rail.classList.contains('is-expanded'));
+    });
+    if (typeof railMq.addEventListener === 'function') railMq.addEventListener('change', syncRailForViewport);
+    else if (typeof railMq.addListener === 'function') railMq.addListener(syncRailForViewport);
+    syncRailForViewport();
+  }
 
   function row(isMe, letter, colorSeed, html, meta) {
     const r = document.createElement('div');

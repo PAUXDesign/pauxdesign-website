@@ -12,6 +12,7 @@
   min-height: 100vh;
   padding: 132px 20px 72px;
   background: transparent;
+  overflow-x: hidden;
 }
 .contact-wrap {
   max-width: 1080px;
@@ -531,6 +532,34 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: var(--dark);
+}
+.contact-ai-rail-toggle {
+  display: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: 1px solid var(--border2);
+  background: #fff;
+  color: var(--mid);
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, transform 0.15s ease;
+}
+.contact-ai-rail-toggle svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  transition: transform 0.2s ease;
+}
+.contact-ai-rail-toggle:hover {
+  border-color: rgba(112, 89, 220, 0.35);
+  color: var(--accent);
+}
+.msg-sidebar.is-expanded .contact-ai-rail-toggle svg {
+  transform: rotate(180deg);
 }
 .contact-ai-dash .msg-sidebar-head {
   display: none;
@@ -1055,55 +1084,94 @@
 @media (max-width: 840px) {
   .contact-ai-dash {
     grid-template-columns: 1fr !important;
-    row-gap: 22px;
-    padding: 0 16px;
+    row-gap: 10px;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+  .contact-ai-dash .msg-main {
+    order: 1;
+    min-width: 0;
+  }
+  .contact-ai-dash .msg-sidebar {
+    order: 2;
+    border-right: none;
+    border-top: 1px solid var(--border);
+    border-radius: 0;
+    background: linear-gradient(175deg, #eef0f8 0%, #f8f9fd 55%, #fff 100%);
+    min-width: 0;
   }
   .contact-ai-rail-inner {
-    flex-direction: column;
-    align-items: stretch;
     min-height: auto;
-    padding: 12px 12px 14px;
+    padding: 10px 12px 10px;
     gap: 0;
   }
   .contact-ai-rail-head {
-    width: 100%;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
   }
-  .contact-ai-dash .msg-avatar-wall {
+  .contact-ai-rail-toggle {
+    display: inline-flex;
+  }
+  .contact-ai-dash .msg-sidebar:not(.is-expanded) .msg-avatar-wall {
+    display: none !important;
+  }
+  .contact-ai-dash .msg-sidebar.is-expanded .msg-avatar-wall {
+    display: flex !important;
     flex: 0 1 auto !important;
-    flex-direction: column !important;
+    flex-direction: row !important;
     flex-wrap: nowrap !important;
-    max-height: min(240px, 44vh) !important;
-    min-height: auto !important;
-    overflow-y: auto !important;
-    overflow-x: hidden !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
     align-items: stretch !important;
     width: 100%;
     justify-content: flex-start !important;
-    padding: 8px 0 !important;
+    padding: 10px 0 8px !important;
+    gap: 10px !important;
+    scroll-snap-type: x proximity;
   }
-  .contact-ai-rail-note {
-    padding: 10px 6px 4px;
-  }
-  .contact-ai-rail-footer {
-    margin-top: 10px;
-    padding-top: 12px;
-    width: 100%;
-    justify-content: center;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .contact-ai-dash .msg-avatar-wall {
     scrollbar-width: thin;
   }
+  .contact-ai-dash .msg-sidebar.is-expanded .contact-ai-wall-row {
+    flex: 0 0 clamp(132px, 42vw, 154px);
+    width: auto;
+    min-width: 0;
+    box-sizing: border-box;
+    border: 1px solid var(--border2);
+    border-radius: 10px;
+    padding: 6px 8px;
+    background: rgba(255, 255, 255, 0.8);
+    scroll-snap-align: start;
+  }
+  .contact-ai-rail-note {
+    padding: 8px 2px 0;
+  }
+  .contact-ai-rail-footer {
+    margin-top: 8px;
+    padding-top: 8px;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: visible;
+  }
   .contact-ai-hub {
-    min-height: 220px;
-    padding: 8px 12px 4px;
+    min-height: 190px;
+    padding: 8px 10px 4px;
   }
   .contact-ai-panel {
-    margin-top: 16px;
-    padding: 14px 14px 16px;
+    margin-top: 12px;
+    padding: 12px 12px 14px;
   }
 }
 @media (max-width: 620px) {
+  .contact-ai-dash .msg-sidebar.is-expanded .contact-ai-wall-row {
+    flex-basis: clamp(126px, 52vw, 142px);
+    padding: 6px 7px;
+  }
   .contact-ai-mini-fields {
     grid-template-columns: 1fr !important;
   }
@@ -1178,6 +1246,9 @@
               <div class="contact-ai-rail-head">
                 <span class="contact-ai-rail-title">Mensajes</span>
                 <span class="msg-sidebar-badge" id="sentBadge">0</span>
+                <button type="button" class="contact-ai-rail-toggle" id="contactRailToggle" aria-expanded="false" aria-label="Mostrar u ocultar mensajes">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
               </div>
               <div class="msg-avatar-wall" id="avatarWall"></div>
               <p class="contact-ai-rail-note">Envía aquí tu mensaje: otros ya hablaron conmigo así.</p>
@@ -1660,6 +1731,31 @@ function closeMobileNav() {
 
   renderAvatarWall();
   if (messageEl) wireEmojiMenu(messageEl);
+  const rail = document.querySelector('.contact-ai-dash .msg-sidebar');
+  const railToggle = document.getElementById('contactRailToggle');
+  const railMq = window.matchMedia('(max-width: 840px)');
+
+  function setRailExpanded(expanded) {
+    if (!rail || !railToggle) return;
+    rail.classList.toggle('is-expanded', expanded);
+    railToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
+  function syncRailForViewport() {
+    if (!rail || !railToggle) return;
+    if (railMq.matches) setRailExpanded(false);
+    else {
+      rail.classList.add('is-expanded');
+      railToggle.setAttribute('aria-expanded', 'true');
+    }
+  }
+  if (rail && railToggle) {
+    railToggle.addEventListener('click', () => {
+      setRailExpanded(!rail.classList.contains('is-expanded'));
+    });
+    if (typeof railMq.addEventListener === 'function') railMq.addEventListener('change', syncRailForViewport);
+    else if (typeof railMq.addListener === 'function') railMq.addListener(syncRailForViewport);
+    syncRailForViewport();
+  }
 
   nameInput.addEventListener('input', () => {
     const L = letterFromName(nameInput.value);
