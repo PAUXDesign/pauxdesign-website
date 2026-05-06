@@ -2888,11 +2888,25 @@ button.proj-gallery-item {
 .dc-avatar-row-mid {
   min-width: 0;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .dc-avatar-row-from {
   display: block;
   font-size: 11px;
+  font-weight: 600;
   color: var(--dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dc-avatar-row-sub {
+  display: block;
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--mid);
+  line-height: 1.25;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -7315,8 +7329,7 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
 
 /* Dashboard contact · inbox chat + avatar strip */
 (function initDashboardContactInbox() {
-  const STORAGE = 'paux_dashboard_contact_avatars';
-  const COLORS = ['#7059dc', '#3d7eae', '#2e9f6b', '#c45c9a', '#d97a35', '#5c6bbd'];
+  const STORAGE_RAIL = 'paux_contact_rail_v2';
   const WALL_SHOWCASE = [
     { letter: 'S', seed: 'demo:spain', from: 'From Spain', time: '09:12' },
     { letter: 'A', seed: 'demo:argentina', from: 'From Argentina', time: '11:45' },
@@ -7324,6 +7337,7 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     { letter: 'U', seed: 'demo:usa', from: 'From USA', time: '14:22' },
     { letter: 'G', seed: 'demo:germany', from: 'From Germany', time: '16:03' },
   ];
+  const COLORS = ['#7059dc', '#3d7eae', '#2e9f6b', '#c45c9a', '#d97a35', '#5c6bbd'];
   function hashHue(str) {
     let h = 0;
     for (let i = 0; i < str.length; i++) h = ((h << 5) - h) + str.charCodeAt(i);
@@ -7338,14 +7352,31 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     const ch = [...t][0];
     return ch.toUpperCase();
   }
-  function loadSent() {
-    try {
-      const a = JSON.parse(localStorage.getItem(STORAGE) || '[]');
-      return Array.isArray(a) ? a : [];
-    } catch (e) { return []; }
+  function normalizeRailEntry(e) {
+    if (!e || typeof e !== 'object') return null;
+    const nRaw = typeof e.n === 'string' ? e.n.trim() : '';
+    const lStored = typeof e.l === 'string' ? e.l.trim() : '';
+    const t = typeof e.t === 'number' && !Number.isNaN(e.t) ? e.t : 0;
+    const tz = typeof e.tz === 'string' ? e.tz : '';
+    const s = typeof e.s === 'string' && e.s ? e.s : `${nRaw || lStored || 'guest'}`;
+    const letter = lStored ? letterFrom(lStored) : (nRaw ? letterFrom(nRaw) : '?');
+    const displayName = nRaw || lStored || letter;
+    return { n: displayName, l: letter, s, t, tz };
   }
-  function saveSent(arr) {
-    try { localStorage.setItem(STORAGE, JSON.stringify(arr.slice(-32))); } catch (e) {}
+  function loadRailEntries() {
+    try {
+      const cur = localStorage.getItem(STORAGE_RAIL);
+      if (cur) {
+        const a = JSON.parse(cur);
+        if (Array.isArray(a)) {
+          return a.map(normalizeRailEntry).filter(Boolean).sort((x, y) => (x.t || 0) - (y.t || 0));
+        }
+      }
+    } catch (e) {}
+    return [];
+  }
+  function saveRailEntries(entries) {
+    try { localStorage.setItem(STORAGE_RAIL, JSON.stringify(entries.slice(-64))); } catch (e) {}
   }
   function esc(s) {
     const d = document.createElement('div');
@@ -7413,6 +7444,15 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
   function formatClock(ts) {
     return new Date(ts).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
+  function formatWallWhen(ts) {
+    if (ts == null || Number.isNaN(ts) || ts <= 0) return '—';
+    const d = new Date(ts);
+    const now = new Date();
+    if (d.toDateString() === now.toDateString()) {
+      return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    }
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  }
   function appendUserChatRow(thread, name, letter, seed, body, ts, tz) {
     if (!thread) return;
     const row = document.createElement('div');
@@ -7452,8 +7492,8 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     const wall = document.getElementById('dc-avatar-cloud');
     const pill = document.getElementById('dc-sent-pill');
     if (!wall) return;
-    const sent = loadSent();
-    const rows = WALL_SHOWCASE.map((row) => {
+    const sent = loadRailEntries();
+    const fixedRows = WALL_SHOWCASE.map((row) => {
       const color = bg(row.seed + row.letter);
       return (
         `<div class="dc-avatar-row">` +
@@ -7463,8 +7503,20 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
         `</div>`
       );
     });
-    wall.innerHTML = rows.join('');
-    if (pill) pill.textContent = String(sent.length);
+    const sentRows = sent.map((entry) => {
+      const color = bg(entry.s);
+      const where = entry.tz ? regionDisplay(entry.tz) : '';
+      const sub = where ? `<span class="dc-avatar-row-sub">${esc(where)}</span>` : '';
+      return (
+        `<div class="dc-avatar-row">` +
+          `<span class="dc-av" style="background:${color}">${esc(entry.l)}</span>` +
+          `<div class="dc-avatar-row-mid"><span class="dc-avatar-row-from">${esc(entry.n)}</span>${sub}</div>` +
+          `<span class="dc-avatar-row-when">${esc(formatWallWhen(entry.t))}</span>` +
+        `</div>`
+      );
+    });
+    wall.innerHTML = fixedRows.join('') + sentRows.join('');
+    if (pill) pill.textContent = String(WALL_SHOWCASE.length + sent.length);
   }
 
   const feed = document.getElementById('dc-dash-feed');
@@ -7614,10 +7666,12 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     const tz = browserTimeZone();
     appendUserChatRow(feed, name, letterFrom(name), name + email, body, now, tz);
 
-    const st = loadSent();
-    st.push({ l: letterFrom(name), s: name + email });
-    saveSent(st);
+    const st = loadRailEntries();
+    st.push({ n: name, l: letterFrom(name), s: name + email, t: now, tz });
+    saveRailEntries(st);
     renderAvatars();
+    const railWall = document.getElementById('dc-avatar-cloud');
+    if (railWall) requestAnimationFrame(() => { railWall.scrollTop = railWall.scrollHeight; });
 
     showTypingRow();
     revealPostSubmit();

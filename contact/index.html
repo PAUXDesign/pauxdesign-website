@@ -682,6 +682,29 @@
   flex: 1;
   min-width: 0;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.contact-ai-wall-name {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--dark);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.contact-ai-wall-sub {
+  font-family: var(--font-meta);
+  font-size: 9px;
+  font-weight: 500;
+  color: var(--mid);
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .contact-ai-wall-from {
   font-family: var(--font-meta);
@@ -1432,7 +1455,14 @@ function closeMobileNav() {
 }
 
 (() => {
-  const STORAGE_SENT = 'paux_contact_avatars_en';
+  const STORAGE_RAIL = 'paux_contact_rail_v2';
+  const WALL_SHOWCASE = [
+    { letter: 'S', seed: 'demo:spain', from: 'From Spain', time: '09:12' },
+    { letter: 'A', seed: 'demo:argentina', from: 'From Argentina', time: '11:45' },
+    { letter: 'P', seed: 'demo:portugal', from: 'From Portugal', time: '08:30' },
+    { letter: 'U', seed: 'demo:usa', from: 'From USA', time: '14:22' },
+    { letter: 'G', seed: 'demo:germany', from: 'From Germany', time: '16:03' },
+  ];
   const PAULA_AV_HTML = '<div class="msg-av msg-av-host" aria-hidden="true"><img src="/Public/Images/paula.jpg" alt="" width="32" height="32" loading="lazy" decoding="async"></div>';
   const COPY = {
     justNow: 'Just now',
@@ -1602,28 +1632,45 @@ function closeMobileNav() {
     return avatarColors[idx];
   }
 
-  const WALL_SHOWCASE = [
-    { letter: 'S', seed: 'demo:spain', from: 'From Spain', time: '09:12' },
-    { letter: 'A', seed: 'demo:argentina', from: 'From Argentina', time: '11:45' },
-    { letter: 'P', seed: 'demo:portugal', from: 'From Portugal', time: '08:30' },
-    { letter: 'U', seed: 'demo:usa', from: 'From USA', time: '14:22' },
-    { letter: 'G', seed: 'demo:germany', from: 'From Germany', time: '16:03' },
-  ];
-
-  function loadSentStack() {
-    try {
-      const raw = localStorage.getItem(STORAGE_SENT);
-      const a = raw ? JSON.parse(raw) : [];
-      return Array.isArray(a) ? a : [];
-    } catch (e) {
-      return [];
-    }
+  function normalizeRailEntry(e) {
+    if (!e || typeof e !== 'object') return null;
+    const nRaw = typeof e.n === 'string' ? e.n.trim() : '';
+    const lStored = typeof e.l === 'string' ? e.l.trim() : '';
+    const t = typeof e.t === 'number' && !Number.isNaN(e.t) ? e.t : 0;
+    const tz = typeof e.tz === 'string' ? e.tz : '';
+    const s = typeof e.s === 'string' && e.s ? e.s : `${nRaw || lStored || 'guest'}`;
+    const letter = lStored ? letterFromName(lStored) : (nRaw ? letterFromName(nRaw) : '?');
+    const displayName = nRaw || lStored || letter;
+    return { n: displayName, l: letter, s, t, tz };
   }
 
-  function saveSentStack(entries) {
+  function loadRailEntries() {
     try {
-      localStorage.setItem(STORAGE_SENT, JSON.stringify(entries.slice(-32)));
+      const cur = localStorage.getItem(STORAGE_RAIL);
+      if (cur) {
+        const a = JSON.parse(cur);
+        if (Array.isArray(a)) {
+          return a.map(normalizeRailEntry).filter(Boolean).sort((x, y) => (x.t || 0) - (y.t || 0));
+        }
+      }
     } catch (e) {}
+    return [];
+  }
+
+  function saveRailEntries(entries) {
+    try {
+      localStorage.setItem(STORAGE_RAIL, JSON.stringify(entries.slice(-64)));
+    } catch (e) {}
+  }
+
+  function formatWallWhen(ts) {
+    if (ts == null || Number.isNaN(ts) || ts <= 0) return '—';
+    const d = new Date(ts);
+    const now = new Date();
+    if (d.toDateString() === now.toDateString()) {
+      return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    }
+    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
 
   function escapeHtml(s) {
@@ -1636,21 +1683,32 @@ function closeMobileNav() {
     const wall = document.getElementById('avatarWall');
     const badge = document.getElementById('sentBadge');
     if (!wall) return;
-    const sent = loadSentStack();
-    const totalReal = sent.length;
-    const parts = WALL_SHOWCASE.map((row) => {
+    const sent = loadRailEntries();
+    const fixedParts = WALL_SHOWCASE.map((row) => {
       const bg = avatarBg(row.seed + row.letter);
       const dot = `<span class="msg-av-dot" style="background:${bg}">${escapeHtml(row.letter)}</span>`;
       return (
         `<div class="contact-ai-wall-row">` +
-          `${dot}<div class="contact-ai-wall-mid"><span class="contact-ai-wall-from">${escapeHtml(row.from)}</span></div>` +
+          `${dot}<div class="contact-ai-wall-mid"><span class="contact-ai-wall-name">${escapeHtml(row.from)}</span></div>` +
           `<span class="contact-ai-wall-when">${escapeHtml(row.time)}</span>` +
         `</div>`
       );
     });
-    wall.innerHTML = parts.join('');
+    const sentParts = sent.map((entry) => {
+      const bg = avatarBg(entry.s);
+      const dot = `<span class="msg-av-dot" style="background:${bg}">${escapeHtml(entry.l)}</span>`;
+      const where = entry.tz ? regionDisplay(entry.tz) : '';
+      const sub = where ? `<span class="contact-ai-wall-sub">${escapeHtml(where)}</span>` : '';
+      return (
+        `<div class="contact-ai-wall-row">` +
+          `${dot}<div class="contact-ai-wall-mid"><span class="contact-ai-wall-name">${escapeHtml(entry.n)}</span>${sub}</div>` +
+          `<span class="contact-ai-wall-when">${escapeHtml(formatWallWhen(entry.t))}</span>` +
+        `</div>`
+      );
+    });
+    wall.innerHTML = fixedParts.join('') + sentParts.join('');
     if (badge) {
-      badge.textContent = String(totalReal);
+      badge.textContent = String(WALL_SHOWCASE.length + sent.length);
       badge.title = COPY.badgeTotalTitle;
     }
   }
@@ -1814,12 +1872,14 @@ function closeMobileNav() {
     sending = true;
     submitBtn.disabled = true;
 
-    const sent = loadSentStack();
+    const sent = loadRailEntries();
     const now = Date.now();
     const tz = browserTimeZone();
-    sent.push({ l: letterFromName(name), s: name + email, t: now, tz });
-    saveSentStack(sent);
+    sent.push({ n: name, l: letterFromName(name), s: name + email, t: now, tz });
+    saveRailEntries(sent);
     renderAvatarWall();
+    const wallEl = document.getElementById('avatarWall');
+    if (wallEl) requestAnimationFrame(() => { wallEl.scrollTop = wallEl.scrollHeight; });
 
     const threadEl = document.getElementById('contactThread');
     const safeMsg = msgText;
