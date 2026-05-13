@@ -2727,6 +2727,53 @@ button.proj-gallery-item {
   background: #fff;
   box-shadow: var(--shadow-1);
 }
+.dc-inbox-grid:has(.dc-msg-sidebar--icons) {
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 0 12px;
+}
+.dc-msg-sidebar.dc-msg-sidebar--icons {
+  max-width: 88px;
+}
+.dc-msg-sidebar.dc-msg-sidebar--icons .dc-rail-icons-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 12px 6px 14px;
+  min-height: 0;
+}
+.dc-msg-sidebar.dc-msg-sidebar--icons .contact-ai-rail-footer {
+  margin: 0;
+  padding: 0;
+  border: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.dc-msg-sidebar.dc-msg-sidebar--icons .contact-ai-rail-icons {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.dc-msg-sidebar.dc-msg-sidebar--icons .contact-ai-rail-icons .msg-ico-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+.dc-msg-sidebar.dc-msg-sidebar--icons .contact-ai-host-av {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(38, 30, 72, 0.1);
+}
+.dc-msg-sidebar.dc-msg-sidebar--icons .contact-ai-host-av img {
+  border-radius: 50%;
+}
 .dc-msg-sidebar {
   background: linear-gradient(175deg, #eef0f8 0%, #f0f2fa 52%, #eceef8 100%);
   border-right: none;
@@ -3563,6 +3610,18 @@ button.proj-gallery-item {
     border-radius: 10px;
     padding: 6px 8px;
     background: rgba(255,255,255,0.82);
+  }
+  .dc-msg-sidebar.dc-msg-sidebar--icons {
+    max-width: none;
+  }
+  .dc-msg-sidebar.dc-msg-sidebar--icons:not(.is-expanded) .contact-ai-rail-footer,
+  .dc-msg-sidebar.dc-msg-sidebar--icons .contact-ai-rail-footer {
+    display: flex !important;
+  }
+  .dc-msg-sidebar.dc-msg-sidebar--icons .dc-rail-icons-inner {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 12px 12px;
   }
 }
 @media (max-width: 620px) {
@@ -5992,30 +6051,20 @@ button.proj-gallery-item {
         </div>
 
         <div class="dc-inbox-grid">
-          <aside class="dc-msg-sidebar">
-            <div class="dc-msg-sidebar-head">
-              <div class="dc-msg-sidebar-label">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                <p class="dc-msg-sidebar-title">Messages</p>
-                <span class="dc-msg-count-pill" id="dc-sent-pill">0</span>
-                <button type="button" class="dc-rail-toggle" id="dc-rail-toggle" aria-expanded="false" aria-label="Toggle messages panel">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-              </div>
-            </div>
-            <div class="dc-avatar-cloud" id="dc-avatar-cloud"></div>
-            <p class="contact-ai-rail-note">Send your message here - others already reached out this way.</p>
-            <div class="contact-ai-rail-footer">
-              <div class="contact-ai-host-av">
-                <img src="/Public/Images/paula.jpg" alt="Paula Alonso">
-              </div>
-              <div class="contact-ai-rail-icons" aria-label="Quick contact">
-                <a class="msg-ico-btn" href="mailto:contact@pauxdesign.uk" title="Email" aria-label="Email">
-                  <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
-                </a>
-                <a class="msg-ico-btn" href="https://www.linkedin.com/in/paula-alonso-design/" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn">
-                  <svg class="contact-ai-rail-ico-solid" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-                </a>
+          <aside class="dc-msg-sidebar dc-msg-sidebar--icons is-expanded" aria-label="Contact">
+            <div class="dc-rail-icons-inner">
+              <div class="contact-ai-rail-footer">
+                <div class="contact-ai-host-av">
+                  <img src="/Public/Images/paula.jpg" alt="Paula Alonso">
+                </div>
+                <div class="contact-ai-rail-icons" aria-label="Quick contact">
+                  <a class="msg-ico-btn" href="mailto:contact@pauxdesign.uk" title="Email" aria-label="Email">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+                  </a>
+                  <a class="msg-ico-btn" href="https://www.linkedin.com/in/paula-alonso-design/" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn">
+                    <svg class="contact-ai-rail-ico-solid" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                  </a>
+                </div>
               </div>
             </div>
           </aside>
@@ -7329,14 +7378,6 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
 
 /* Dashboard contact · inbox chat + avatar strip */
 (function initDashboardContactInbox() {
-  const STORAGE_RAIL = 'paux_contact_rail_v2';
-  const WALL_SHOWCASE = [
-    { letter: 'S', seed: 'demo:spain', from: 'From Spain', time: '09:12' },
-    { letter: 'A', seed: 'demo:argentina', from: 'From Argentina', time: '11:45' },
-    { letter: 'P', seed: 'demo:portugal', from: 'From Portugal', time: '08:30' },
-    { letter: 'U', seed: 'demo:usa', from: 'From USA', time: '14:22' },
-    { letter: 'G', seed: 'demo:germany', from: 'From Germany', time: '16:03' },
-  ];
   const COLORS = ['#7059dc', '#3d7eae', '#2e9f6b', '#c45c9a', '#d97a35', '#5c6bbd'];
   function hashHue(str) {
     let h = 0;
@@ -7351,32 +7392,6 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     if (!t) return '?';
     const ch = [...t][0];
     return ch.toUpperCase();
-  }
-  function normalizeRailEntry(e) {
-    if (!e || typeof e !== 'object') return null;
-    const nRaw = typeof e.n === 'string' ? e.n.trim() : '';
-    const lStored = typeof e.l === 'string' ? e.l.trim() : '';
-    const t = typeof e.t === 'number' && !Number.isNaN(e.t) ? e.t : 0;
-    const tz = typeof e.tz === 'string' ? e.tz : '';
-    const s = typeof e.s === 'string' && e.s ? e.s : `${nRaw || lStored || 'guest'}`;
-    const letter = lStored ? letterFrom(lStored) : (nRaw ? letterFrom(nRaw) : '?');
-    const displayName = nRaw || lStored || letter;
-    return { n: displayName, l: letter, s, t, tz };
-  }
-  function loadRailEntries() {
-    try {
-      const cur = localStorage.getItem(STORAGE_RAIL);
-      if (cur) {
-        const a = JSON.parse(cur);
-        if (Array.isArray(a)) {
-          return a.map(normalizeRailEntry).filter(Boolean).sort((x, y) => (x.t || 0) - (y.t || 0));
-        }
-      }
-    } catch (e) {}
-    return [];
-  }
-  function saveRailEntries(entries) {
-    try { localStorage.setItem(STORAGE_RAIL, JSON.stringify(entries.slice(-64))); } catch (e) {}
   }
   function esc(s) {
     const d = document.createElement('div');
@@ -7444,15 +7459,6 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
   function formatClock(ts) {
     return new Date(ts).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
   }
-  function formatWallWhen(ts) {
-    if (ts == null || Number.isNaN(ts) || ts <= 0) return '—';
-    const d = new Date(ts);
-    const now = new Date();
-    if (d.toDateString() === now.toDateString()) {
-      return d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-    }
-    return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-  }
   function appendUserChatRow(thread, name, letter, seed, body, ts, tz) {
     if (!thread) return;
     const row = document.createElement('div');
@@ -7488,69 +7494,13 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     document.getElementById('dc-typing-row')?.remove();
   }
 
-  function renderAvatars() {
-    const wall = document.getElementById('dc-avatar-cloud');
-    const pill = document.getElementById('dc-sent-pill');
-    if (!wall) return;
-    const sent = loadRailEntries().slice().sort((a, b) => (b.t || 0) - (a.t || 0));
-    const fixedRows = WALL_SHOWCASE.map((row) => {
-      const color = bg(row.seed + row.letter);
-      return (
-        `<div class="dc-avatar-row">` +
-          `<span class="dc-av" style="background:${color}">${esc(row.letter)}</span>` +
-          `<div class="dc-avatar-row-mid"><span class="dc-avatar-row-from">${esc(row.from)}</span></div>` +
-          `<span class="dc-avatar-row-when">${esc(row.time)}</span>` +
-        `</div>`
-      );
-    });
-    const sentRows = sent.map((entry) => {
-      const color = bg(entry.s);
-      const where = entry.tz ? regionDisplay(entry.tz) : '';
-      const sub = where ? `<span class="dc-avatar-row-sub">${esc(where)}</span>` : '';
-      return (
-        `<div class="dc-avatar-row">` +
-          `<span class="dc-av" style="background:${color}">${esc(entry.l)}</span>` +
-          `<div class="dc-avatar-row-mid"><span class="dc-avatar-row-from">${esc(entry.n)}</span>${sub}</div>` +
-          `<span class="dc-avatar-row-when">${esc(formatWallWhen(entry.t))}</span>` +
-        `</div>`
-      );
-    });
-    wall.innerHTML = sentRows.join('') + fixedRows.join('');
-    if (pill) pill.textContent = String(WALL_SHOWCASE.length + sent.length);
-  }
-
   const feed = document.getElementById('dc-dash-feed');
   const form = document.getElementById('dashboard-contact-form');
   const nameEl = document.getElementById('cf-name');
   const emailEl = document.getElementById('cf-email');
   const msgEl = document.getElementById('cf-message');
   const letterPeek = document.getElementById('dc-user-letter');
-  const rail = document.querySelector('.dc-inbox-grid .dc-msg-sidebar');
-  const railToggle = document.getElementById('dc-rail-toggle');
-  const railMq = window.matchMedia('(max-width: 940px)');
   if (!feed || !form || !nameEl || !emailEl || !msgEl) return;
-
-  function setRailExpanded(expanded) {
-    if (!rail || !railToggle) return;
-    rail.classList.toggle('is-expanded', expanded);
-    railToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-  }
-  function syncRailForViewport() {
-    if (!rail || !railToggle) return;
-    if (railMq.matches) setRailExpanded(false);
-    else {
-      rail.classList.add('is-expanded');
-      railToggle.setAttribute('aria-expanded', 'true');
-    }
-  }
-  if (rail && railToggle) {
-    railToggle.addEventListener('click', () => {
-      setRailExpanded(!rail.classList.contains('is-expanded'));
-    });
-    if (typeof railMq.addEventListener === 'function') railMq.addEventListener('change', syncRailForViewport);
-    else if (typeof railMq.addListener === 'function') railMq.addListener(syncRailForViewport);
-    syncRailForViewport();
-  }
 
   function revealPostSubmit() {
     const panel = document.querySelector('.dc-msg-sheet');
@@ -7564,8 +7514,6 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
       wrap.removeAttribute('aria-hidden');
     }
   }
-
-  renderAvatars();
 
   function syncPeek() {
     const L = letterFrom(nameEl.value);
@@ -7665,13 +7613,6 @@ document.querySelectorAll('#cf-role-chips .chip').forEach(c => {
     const now = Date.now();
     const tz = browserTimeZone();
     appendUserChatRow(feed, name, letterFrom(name), name + email, body, now, tz);
-
-    const st = loadRailEntries();
-    st.push({ n: name, l: letterFrom(name), s: name + email, t: now, tz });
-    saveRailEntries(st);
-    renderAvatars();
-    const railWall = document.getElementById('dc-avatar-cloud');
-    if (railWall) requestAnimationFrame(() => { railWall.scrollTop = 0; });
 
     showTypingRow();
     revealPostSubmit();

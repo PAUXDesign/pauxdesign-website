@@ -1211,6 +1211,81 @@
   }
 }
 
+/* Rail compacto: columna fina, foto arriba, iconos verticales (EN/ES contact) */
+.contact-ai-dash:has(.msg-sidebar--icons) {
+  grid-template-columns: 88px minmax(0, 1fr) !important;
+  column-gap: 12px !important;
+  padding: 0 12px 0 0 !important;
+}
+.msg-sidebar.msg-sidebar--icons {
+  max-width: 88px;
+}
+.msg-sidebar.msg-sidebar--icons .contact-ai-rail-inner {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 12px 6px 14px;
+  gap: 0;
+}
+.msg-sidebar.msg-sidebar--icons .contact-ai-rail-footer {
+  margin-top: 0;
+  padding: 0;
+  border-top: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.msg-sidebar.msg-sidebar--icons .contact-ai-rail-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  width: 100%;
+}
+.msg-sidebar.msg-sidebar--icons .contact-ai-rail-icons .msg-ico-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+}
+.msg-sidebar.msg-sidebar--icons .contact-ai-host-av {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 2px 10px rgba(38, 30, 72, 0.1);
+}
+.msg-sidebar.msg-sidebar--icons .contact-ai-host-av img {
+  border-radius: 50%;
+}
+@media (max-width: 840px) {
+  .contact-ai-dash:has(.msg-sidebar--icons) {
+    grid-template-columns: 1fr !important;
+    padding: 0 !important;
+  }
+  .msg-sidebar.msg-sidebar--icons {
+    max-width: none;
+  }
+  .contact-ai-dash .msg-sidebar.msg-sidebar--icons .contact-ai-rail-inner {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 12px 12px;
+  }
+  .contact-ai-dash .msg-sidebar.msg-sidebar--icons .contact-ai-rail-footer {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
 </style>
 </head>
 <body class="page-grid-bg">
@@ -1256,17 +1331,8 @@
         <input type="hidden" name="_captcha" value="false">
 
         <div class="msg-dash contact-ai-dash">
-          <aside class="msg-sidebar" aria-label="Quienes ya escribieron">
+          <aside class="msg-sidebar msg-sidebar--icons" aria-label="Contacto">
             <div class="contact-ai-rail-inner">
-              <div class="contact-ai-rail-head">
-                <span class="contact-ai-rail-title">Mensajes</span>
-                <span class="msg-sidebar-badge" id="sentBadge">0</span>
-                <button type="button" class="contact-ai-rail-toggle" id="contactRailToggle" aria-expanded="false" aria-label="Mostrar u ocultar mensajes">
-                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
-                </button>
-              </div>
-              <div class="msg-avatar-wall" id="avatarWall"></div>
-              <p class="contact-ai-rail-note">Envía aquí tu mensaje: otros ya hablaron conmigo así.</p>
               <div class="contact-ai-rail-footer">
                 <div class="contact-ai-host-av">
                   <img src="/Public/Images/paula.jpg" alt="Paula Alonso">
@@ -1433,7 +1499,6 @@ function closeMobileNav() {
 }
 
 (() => {
-  const STORAGE_SENT = 'paux_contact_avatars_es';
   const PAULA_AV_HTML = '<div class="msg-av msg-av-host" aria-hidden="true"><img src="/Public/Images/paula.jpg" alt="" width="32" height="32" loading="lazy" decoding="async"></div>';
   const COPY = {
     justNow: 'Ahora mismo',
@@ -1443,7 +1508,6 @@ function closeMobileNav() {
     fromPrefix: 'Desde ',
     unknownRegion: 'tu zona',
     afterSendLead: 'Tu mensaje ya está enviado. Si necesitas algo más, puedes volver cuando quieras desde el inicio.',
-    badgeTotalTitle: 'Total de mensajes enviados desde este navegador',
   };
   const TZ_LABEL_ES = {
     'Europe/London': 'Londres, Reino Unido',
@@ -1496,21 +1560,6 @@ function closeMobileNav() {
     const p = regionPhrase(tz);
     if (p) return p;
     return `${COPY.fromPrefix}${COPY.unknownRegion}`;
-  }
-
-  function formatRelative(ts) {
-    if (ts == null || Number.isNaN(ts)) return COPY.recently;
-    const sec = Math.max(0, Math.floor((Date.now() - ts) / 1000));
-    if (sec < 50) return COPY.justNow;
-    const min = Math.floor(sec / 60);
-    if (min < 60) return `Hace ${min} min`;
-    const hrs = Math.floor(min / 60);
-    if (hrs < 36) return `Hace ${hrs} h`;
-    const days = Math.floor(hrs / 24);
-    if (days < 14) return `Hace ${days} d`;
-    const weeks = Math.floor(days / 7);
-    if (weeks < 8) return `Hace ${weeks} sem`;
-    return new Date(ts).toLocaleDateString('es', { day: 'numeric', month: 'short' });
   }
 
   function formatClock(ts) {
@@ -1606,57 +1655,10 @@ function closeMobileNav() {
     return avatarColors[idx];
   }
 
-  const WALL_SHOWCASE = [
-    { letter: 'E', seed: 'demo:spain', from: 'Desde España', time: '09:12' },
-    { letter: 'A', seed: 'demo:argentina', from: 'Desde Argentina', time: '11:45' },
-    { letter: 'P', seed: 'demo:portugal', from: 'Desde Portugal', time: '08:30' },
-    { letter: 'U', seed: 'demo:usa', from: 'Desde EE. UU.', time: '14:22' },
-    { letter: 'G', seed: 'demo:germany', from: 'Desde Alemania', time: '16:03' },
-  ];
-
-  function loadSentStack() {
-    try {
-      const raw = localStorage.getItem(STORAGE_SENT);
-      const a = raw ? JSON.parse(raw) : [];
-      return Array.isArray(a) ? a : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function saveSentStack(entries) {
-    try {
-      localStorage.setItem(STORAGE_SENT, JSON.stringify(entries.slice(-32)));
-    } catch (e) {}
-  }
-
   function escapeHtml(s) {
     const div = document.createElement('div');
     div.textContent = s;
     return div.innerHTML;
-  }
-
-  function renderAvatarWall() {
-    const wall = document.getElementById('avatarWall');
-    const badge = document.getElementById('sentBadge');
-    if (!wall) return;
-    const sent = loadSentStack();
-    const totalReal = sent.length;
-    const parts = WALL_SHOWCASE.map((row) => {
-      const bg = avatarBg(row.seed + row.letter);
-      const dot = `<span class="msg-av-dot" style="background:${bg}">${escapeHtml(row.letter)}</span>`;
-      return (
-        `<div class="contact-ai-wall-row">` +
-          `${dot}<div class="contact-ai-wall-mid"><span class="contact-ai-wall-from">${escapeHtml(row.from)}</span></div>` +
-          `<span class="contact-ai-wall-when">${escapeHtml(row.time)}</span>` +
-        `</div>`
-      );
-    });
-    wall.innerHTML = parts.join('');
-    if (badge) {
-      badge.textContent = String(totalReal);
-      badge.title = COPY.badgeTotalTitle;
-    }
   }
 
   function wireEmojiMenu(messageEl) {
@@ -1744,33 +1746,7 @@ function closeMobileNav() {
     }
   }
 
-  renderAvatarWall();
   if (messageEl) wireEmojiMenu(messageEl);
-  const rail = document.querySelector('.contact-ai-dash .msg-sidebar');
-  const railToggle = document.getElementById('contactRailToggle');
-  const railMq = window.matchMedia('(max-width: 840px)');
-
-  function setRailExpanded(expanded) {
-    if (!rail || !railToggle) return;
-    rail.classList.toggle('is-expanded', expanded);
-    railToggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-  }
-  function syncRailForViewport() {
-    if (!rail || !railToggle) return;
-    if (railMq.matches) setRailExpanded(false);
-    else {
-      rail.classList.add('is-expanded');
-      railToggle.setAttribute('aria-expanded', 'true');
-    }
-  }
-  if (rail && railToggle) {
-    railToggle.addEventListener('click', () => {
-      setRailExpanded(!rail.classList.contains('is-expanded'));
-    });
-    if (typeof railMq.addEventListener === 'function') railMq.addEventListener('change', syncRailForViewport);
-    else if (typeof railMq.addListener === 'function') railMq.addListener(syncRailForViewport);
-    syncRailForViewport();
-  }
 
   nameInput.addEventListener('input', () => {
     const L = letterFromName(nameInput.value);
@@ -1818,14 +1794,9 @@ function closeMobileNav() {
     sending = true;
     submitBtn.disabled = true;
 
-    const sent = loadSentStack();
+    const threadEl = document.getElementById('contactThread');
     const now = Date.now();
     const tz = browserTimeZone();
-    sent.push({ l: letterFromName(name), s: name + email, t: now, tz });
-    saveSentStack(sent);
-    renderAvatarWall();
-
-    const threadEl = document.getElementById('contactThread');
     const safeMsg = msgText;
     appendUserChatRow(threadEl, name, letterFromName(name), name + email, safeMsg, now, tz);
     showTypingRow(threadEl);
